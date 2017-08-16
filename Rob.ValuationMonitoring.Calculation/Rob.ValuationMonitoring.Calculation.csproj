@@ -47,7 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\UpdateUnauditedPriceCommandHandler.cs" />
+    <Compile Include="Commands\UpdateUnauditedPriceCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueObjects\UnauditedPrice.cs" />
     <Compile Include="ValuationLineAggregate.cs" />
     <Compile Include="ValuationLineId.cs" />
   </ItemGroup>

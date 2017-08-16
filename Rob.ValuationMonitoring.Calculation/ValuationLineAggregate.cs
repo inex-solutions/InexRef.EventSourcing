@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EventFlow.Aggregates;
+using Rob.ValuationMonitoring.Calculation.ValueObjects;
 
 namespace Rob.ValuationMonitoring.Calculation
 {
@@ -11,6 +12,11 @@ namespace Rob.ValuationMonitoring.Calculation
     {
         public ValuationLineAggregate(ValuationLineId id) : base(id)
         {
+        }
+
+        public void UpdateUnauditedPrice(UnauditedPrice price)
+        {
+            
         }
     }
 }

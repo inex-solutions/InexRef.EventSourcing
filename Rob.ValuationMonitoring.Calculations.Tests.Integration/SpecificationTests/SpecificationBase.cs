@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Rob.ValuationMonitoring.Calculations.Tests.Unit.SpecificationTests
+namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests
 {
     [TestFixture]
     public abstract class SpecificationBase

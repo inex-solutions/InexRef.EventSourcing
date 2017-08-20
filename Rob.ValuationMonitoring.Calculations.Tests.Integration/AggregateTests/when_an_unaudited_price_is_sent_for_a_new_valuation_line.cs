@@ -3,10 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Rob.ValuationMonitoring.Calculation.Commands;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
-using Rob.ValuationMonitoring.Calculations.Tests.Unit.SpecificationTests;
+using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
 using Shouldly;
 
-namespace Rob.ValuationMonitoring.Calculations.Tests.Unit.AggregateTests
+namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
 {
     public class when_an_unaudited_price_is_sent_for_a_new_valuation_line : ValuationMonitoringSpecificationBase
     {

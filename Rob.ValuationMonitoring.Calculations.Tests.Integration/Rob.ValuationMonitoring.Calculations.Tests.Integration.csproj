@@ -7,8 +7,8 @@
     <ProjectGuid>{F1B5DDB4-C369-45B3-808E-B275F752DCCA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rob.ValuationMonitoring.Calculations.Tests.Unit</RootNamespace>
-    <AssemblyName>Rob.ValuationMonitoring.Calculations.Tests.Unit</AssemblyName>
+    <RootNamespace>Rob.ValuationMonitoring.Calculations.Tests.Integration</RootNamespace>
+    <AssemblyName>Rob.ValuationMonitoring.Calculations.Tests.Integration</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -12,9 +12,9 @@ using EventFlow.MsSql.EventStores;
 using EventFlow.MsSql.Extensions;
 using Rob.ValuationMonitoring.Calculation;
 using Rob.ValuationMonitoring.Calculation.ReadModels;
-using Rob.ValuationMonitoring.Calculations.Tests.Unit.SpecificationTests;
+using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
 
-namespace Rob.ValuationMonitoring.Calculations.Tests.Unit
+namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
 {
     public abstract class ValuationMonitoringSpecificationBase : SpecificationBaseAsync
     {
@@ -39,7 +39,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Unit
                 .AddCommandHandlers(typeof(ValuationLineAggregate).Assembly)
                 .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString(@"Server=localhost;Database=Rob.ValuationMonitoring;Trusted_Connection=True"))
                 .UseEventStore<MsSqlEventPersistence>()
-             //   .UseMssqlReadModel<ValuationLineReadModel, ValuationLineLocator>()
+                .UseMssqlReadModel<LatestUnauditedPriceReadModel, ValuationLineLocator>()
                 .CreateResolver();
 
             CommandBus = Resolver.Resolve<ICommandBus>();

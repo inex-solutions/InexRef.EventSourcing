@@ -65,14 +65,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\UpdateAuditedPriceCommand.cs" />
+    <Compile Include="Commands\UpdateAuditedPriceCommandHandler.cs" />
     <Compile Include="Commands\UpdateUnauditedPriceCommandHandler.cs" />
     <Compile Include="Commands\UpdateUnauditedPriceCommand.cs" />
+    <Compile Include="Events\AuditedPriceReceivedEvent.cs" />
     <Compile Include="Events\UnauditedPriceReceivedEvent.cs" />
     <Compile Include="Events\ValuationEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadModels\LatestUnauditedPriceReadModelLocator.cs" />
     <Compile Include="ReadModels\LatestUnauditedPriceReadModel.cs" />
     <Compile Include="ValuationLine.cs" />
+    <Compile Include="ValueObjects\AuditedPrice.cs" />
+    <Compile Include="ValueObjects\Price.cs" />
     <Compile Include="ValueObjects\UnauditedPrice.cs" />
     <Compile Include="ValuationLineAggregate.cs" />
     <Compile Include="ValuationLineId.cs" />

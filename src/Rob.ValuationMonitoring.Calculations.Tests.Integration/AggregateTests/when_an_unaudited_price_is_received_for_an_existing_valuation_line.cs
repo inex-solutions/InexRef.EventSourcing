@@ -8,7 +8,7 @@ using Shouldly;
 
 namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
 {
-    public class when_an_unaudited_price_is_sent_for_an_existing_valuation_line : ValuationMonitoringSpecificationBase
+    public class when_an_unaudited_price_is_received_for_an_existing_valuation_line : ValuationMonitoringSpecificationBase
     {
         private UnauditedPrice NewPrice;
 

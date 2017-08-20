@@ -70,7 +70,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AggregateTests\when_an_unaudited_price_is_sent_for_an_existing_valuation_line.cs" />
+    <Compile Include="AggregateTests\when_an_audited_price_is_received_for_an_existing_valuation_line.cs" />
+    <Compile Include="AggregateTests\when_an_unaudited_price_is_received_for_an_existing_valuation_line.cs" />
+    <Compile Include="AggregateTests\when_an_unaudited_price_is_received_for_a_new_valuation_line.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadModelTests\LastUnauditedPriceReadModelTests\LastUnauditedPriceReadModelTestBase.cs" />
     <Compile Include="ReadModelTests\LastUnauditedPriceReadModelTests\when_an_unaudited_price_is_sent_for_a_new_valuation_line.cs" />
@@ -80,7 +82,6 @@
     <Compile Include="SpecificationTests\SpecificationBaseAsync.cs" />
     <Compile Include="SpecificationTests\ThenAttribute.cs" />
     <Compile Include="ValuationMonitoringSpecificationBase.cs" />
-    <Compile Include="AggregateTests\when_an_unaudited_price_is_sent_for_a_new_valuation_line.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

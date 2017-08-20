@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EventFlow.Aggregates;
 using Rob.ValuationMonitoring.Calculation.Events;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
@@ -13,7 +9,11 @@ namespace Rob.ValuationMonitoring.Calculation
         AggregateRoot<ValuationLineAggregate, ValuationLineId>,
         IEmit<UnauditedPriceReceivedEvent>
     {
+        public Price ReferencePrice { get; private set; }
+
         public UnauditedPrice LastUnauditedPrice { get; private set; }
+
+        public decimal ValuationChange { get; private set; }
 
         public ValuationLineAggregate(ValuationLineId id) : base(id)
         {
@@ -25,9 +25,45 @@ namespace Rob.ValuationMonitoring.Calculation
             Emit(new UnauditedPriceReceivedEvent(price));
         }
 
+        public void UpdateAuditedPrice(AuditedPrice price)
+        {
+            Console.WriteLine($"UpdateAuditedPrice: {price}");
+            Emit(new AuditedPriceReceivedEvent(price));
+        }
+
         public void Apply(UnauditedPriceReceivedEvent aggregateEvent)
         {
-            LastUnauditedPrice = aggregateEvent.UnauditedPrice;
+            var unauditedPrice = aggregateEvent.UnauditedPrice;
+
+            if (LastUnauditedPrice ==  null
+                || unauditedPrice.PriceDateTime > LastUnauditedPrice.PriceDateTime)
+            {
+                LastUnauditedPrice = unauditedPrice;
+            }
+
+            CalculateValuationChange();
+        }
+
+        public void Apply(AuditedPriceReceivedEvent aggregateEvent)
+        {
+            var auditedPrice = aggregateEvent.AuditedPrice;
+
+            if (ReferencePrice == null
+                || auditedPrice.PriceDateTime > ReferencePrice.PriceDateTime)
+            {
+                ReferencePrice = auditedPrice;
+            }
+
+            CalculateValuationChange();
+        }
+
+        private void CalculateValuationChange()
+        {
+            if (LastUnauditedPrice != null
+                && ReferencePrice != null)
+            {
+                ValuationChange = (LastUnauditedPrice.Value - ReferencePrice.Value) / ReferencePrice.Value;
+            }
         }
     }
 }

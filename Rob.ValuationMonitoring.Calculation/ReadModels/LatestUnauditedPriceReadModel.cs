@@ -27,8 +27,7 @@ namespace Rob.ValuationMonitoring.Calculation.ReadModels
 
         public DateTimeOffset UpdatedTime { get; set; }
 
-        [MsSqlReadModelVersionColumn]
-        public int LastAggregateSequenceNumber { get; set; }
+        public int SequenceNumber { get; set; }
 
         public void Apply(IReadModelContext context, IDomainEvent<ValuationLineAggregate, ValuationLineId, UnauditedPriceReceivedEvent> domainEvent)
         {
@@ -37,10 +36,11 @@ namespace Rob.ValuationMonitoring.Calculation.ReadModels
             {
                 UnauditedPrice = domainEvent.AggregateEvent.UnauditedPrice.Value;
                 PriceDateTime = domainEvent.AggregateEvent.UnauditedPrice.PriceDateTime;
+                SequenceNumber = domainEvent.AggregateSequenceNumber;
                 Currency = domainEvent.AggregateEvent.UnauditedPrice.Currency;
                 ValuationLineId = domainEvent.AggregateEvent.UnauditedPrice.Id;
                 AggregateId = domainEvent.AggregateIdentity.Value;
-                LastAggregateSequenceNumber = domainEvent.AggregateSequenceNumber;
+                
                 UpdatedTime = DateTime.Now;
 
                 if (CreateTime == null)

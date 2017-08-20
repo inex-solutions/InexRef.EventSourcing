@@ -18,7 +18,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
 {
     public abstract class ValuationMonitoringSpecificationBase : SpecificationBaseAsync
     {
-        protected Calculation.ValuationLineId Id { get; set; }
+        protected Calculation.ValuationLineId AggregateId { get; set; }
 
         protected IRootResolver Resolver { get; private set; }
 

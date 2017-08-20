@@ -111,11 +111,10 @@ GO
 
 USE  [Rob.ValuationMonitoring]
 CREATE TABLE [dbo].[ReadModel-ValuationLine](
-	[ValuationLineId] NVARCHAR(64) NOT NULL,
 	[UnauditedPrice] DECIMAL(19,4) NOT NULL,
 	[Currency] NVARCHAR(3) NOT NULL,
 	[PriceDateTime] DATETIME2 NOT NULL,
-
+	[ValuationLineId] [nvarchar](64) NOT NULL,
 	-- -------------------------------------------------
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
 	[AggregateId] [nvarchar](64) NOT NULL,

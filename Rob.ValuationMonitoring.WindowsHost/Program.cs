@@ -77,7 +77,7 @@ namespace Rob.ValuationMonitoring.WindowsHost
                 // state of our aggregate root
                 var queryProcessor = resolver.Resolve<IQueryProcessor>();
                 var valuationLineReadModel = await queryProcessor.ProcessAsync(
-                        new ReadModelByIdQuery<ValuationLineReadModel>(id),
+                        new ReadModelByIdQuery<ValuationLineReadModel>("PORG1"),
                         CancellationToken.None)
                     .ConfigureAwait(false);
 

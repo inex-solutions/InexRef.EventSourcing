@@ -19,11 +19,14 @@ namespace Rob.ValuationMonitoring.Calculation.ReadModels
 
         public string Currency { get; set; }
 
+        public string ValuationLineId { get; set; }
+
         public void Apply(IReadModelContext context, IDomainEvent<ValuationLineAggregate, ValuationLineId, UnauditedPriceReceivedEvent> domainEvent)
         {
             UnauditedPrice = domainEvent.AggregateEvent.UnauditedPrice.Value;
             PriceDateTime = domainEvent.AggregateEvent.UnauditedPrice.PriceDateTime;
             Currency = domainEvent.AggregateEvent.UnauditedPrice.Currency;
+            ValuationLineId = domainEvent.AggregateIdentity.Value;
         }
     }
 }

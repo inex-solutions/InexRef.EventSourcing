@@ -15,7 +15,7 @@ namespace Rob.ValuationMonitoring.Calculation.ReadModels
                 yield break;
             }
 
-            yield return messageAddedEvent.AggregateIdentity.ToString();
+            yield return messageAddedEvent.AggregateEvent.UnauditedPrice.Id;
         }
     }
 }

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rob.ValuationMonitoring.Cal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rob.ValuationMonitoring.Calculations.Tests.Unit", "Rob.ValuationMonitoring.Calculations.Tests.Unit\Rob.ValuationMonitoring.Calculations.Tests.Unit.csproj", "{F1B5DDB4-C369-45B3-808E-B275F752DCCA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rob.ValuationMonitoring.WindowsHost", "Rob.ValuationMonitoring.WindowsHost\Rob.ValuationMonitoring.WindowsHost.csproj", "{CD1ADBDE-6166-4A9E-B2B7-1CD2441CEED1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{F1B5DDB4-C369-45B3-808E-B275F752DCCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1B5DDB4-C369-45B3-808E-B275F752DCCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1B5DDB4-C369-45B3-808E-B275F752DCCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD1ADBDE-6166-4A9E-B2B7-1CD2441CEED1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD1ADBDE-6166-4A9E-B2B7-1CD2441CEED1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD1ADBDE-6166-4A9E-B2B7-1CD2441CEED1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD1ADBDE-6166-4A9E-B2B7-1CD2441CEED1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

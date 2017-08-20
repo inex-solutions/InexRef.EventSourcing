@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1C2E7FC8-2179-41A9-8B49-033F0EE21105}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rob.ValuationMonitoring.Calculation</RootNamespace>
-    <AssemblyName>Rob.ValuationMonitoring.Calculation</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <ProjectGuid>{CD1ADBDE-6166-4A9E-B2B7-1CD2441CEED1}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Rob.ValuationMonitoring.WindowsHost</RootNamespace>
+    <AssemblyName>Rob.ValuationMonitoring.WindowsHost</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -46,17 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\UpdateUnauditedPriceCommandHandler.cs" />
-    <Compile Include="Commands\UpdateUnauditedPriceCommand.cs" />
-    <Compile Include="Events\UnauditedPriceReceivedEvent.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadModels\ValuationLineReadModel.cs" />
-    <Compile Include="ValueObjects\UnauditedPrice.cs" />
-    <Compile Include="ValuationLineAggregate.cs" />
-    <Compile Include="ValuationLineId.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rob.ValuationMonitoring.Calculation\Rob.ValuationMonitoring.Calculation.csproj">
+      <Project>{1C2E7FC8-2179-41A9-8B49-033F0EE21105}</Project>
+      <Name>Rob.ValuationMonitoring.Calculation</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

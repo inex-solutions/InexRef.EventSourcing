@@ -7,17 +7,32 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
 {
     public abstract class LastUnauditedPriceReadModelTestBase : ValuationMonitoringSpecificationBase
     {
+        private LatestUnauditedPriceReadModel latestUnauditedPriceReadModel;
+
         protected UnauditedPrice Price { get; set; }
 
         protected string ValuationLineId { get; set; }
 
-        protected LatestUnauditedPriceReadModel GetLastUnauditedPriceReadModel(string valuationLineId)
+        protected LatestUnauditedPriceReadModel LatestUnauditedPriceReadModel
         {
-            var queryProcessor = Resolver.Resolve<IQueryProcessor>();
-            return queryProcessor.ProcessAsync(
-                    new ReadModelByIdQuery<LatestUnauditedPriceReadModel>(valuationLineId),
-                    CancellationToken.None)
-                .GetAwaiter().GetResult();
+            get
+            {
+                if (latestUnauditedPriceReadModel == null)
+                {
+                    var queryProcessor = Resolver.Resolve<IQueryProcessor>();
+                    latestUnauditedPriceReadModel = queryProcessor.ProcessAsync(
+                            new ReadModelByIdQuery<LatestUnauditedPriceReadModel>(ValuationLineId),
+                            CancellationToken.None)
+                        .GetAwaiter().GetResult();
+                }
+
+                return latestUnauditedPriceReadModel;
+            }
+        }
+
+        protected void ResetLatestUnauditedPriceReadModel()
+        {
+            latestUnauditedPriceReadModel = null;
         }
     }
 }

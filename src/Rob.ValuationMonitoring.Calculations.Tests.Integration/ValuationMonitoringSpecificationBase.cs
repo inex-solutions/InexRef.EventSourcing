@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Autofac;
@@ -18,6 +19,8 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
 {
     public abstract class ValuationMonitoringSpecificationBase : SpecificationBaseAsync
     {
+        private static int _count;
+
         protected Calculation.ValuationLineId AggregateId { get; set; }
 
         protected IRootResolver Resolver { get; private set; }
@@ -60,6 +63,12 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
         protected ValuationLineAggregate GetAggregate(ValuationLineId valuationLineId)
         {
             return AggregateStore.LoadAsync<ValuationLineAggregate, ValuationLineId>(valuationLineId, CancellationToken.None).GetAwaiter().GetResult();
+        }
+
+        protected string CreateValuationLineId()
+        {
+            return $"PORG-{DateTime.Now:yyyyMMddHHmmssfff}-{_count++}";
+
         }
     }
 }

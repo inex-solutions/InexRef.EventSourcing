@@ -13,28 +13,28 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
         protected override async Task Given()
         {
             AggregateId = Calculation.ValuationLineId.New;
-            ValuationLineId = $"PORG-{DateTime.Now:yyyyMMddHHmmssfff}";
+            ValuationLineId = CreateValuationLineId();
             Price = new UnauditedPrice(ValuationLineId, DateTime.Parse("01-Dec-2016"), "GBP", 12.3499M);
         }
 
         protected override async Task When() => await CommandBus.PublishAsync(new UpdateUnauditedPriceCommand(AggregateId, Price), CancellationToken.None).ConfigureAwait(false);
 
         [Then]
-        public void a_read_model_is_created_for_the_valuation_line() => GetLastUnauditedPriceReadModel(ValuationLineId).ShouldNotBeNull();
+        public void a_read_model_is_created_for_the_valuation_line() => LatestUnauditedPriceReadModel.ShouldNotBeNull();
 
         [Then]
-        public void the_read_model_should_have_the_correct_price() => GetLastUnauditedPriceReadModel(ValuationLineId).UnauditedPrice.ShouldBe(Price.Value);
+        public void the_read_model_should_have_the_correct_price() => LatestUnauditedPriceReadModel.UnauditedPrice.ShouldBe(Price.Value);
 
         [Then]
-        public void the_read_model_should_have_the_correct_currency() => GetLastUnauditedPriceReadModel(ValuationLineId).Currency.ShouldBe(Price.Currency);
+        public void the_read_model_should_have_the_correct_currency() => LatestUnauditedPriceReadModel.Currency.ShouldBe(Price.Currency);
 
         [Then]
-        public void the_read_model_should_have_the_correct_id() => GetLastUnauditedPriceReadModel(ValuationLineId).ValuationLineId.ShouldBe(ValuationLineId);
+        public void the_read_model_should_have_the_correct_id() => LatestUnauditedPriceReadModel.ValuationLineId.ShouldBe(ValuationLineId);
 
         [Then]
-        public void the_read_model_should_have_the_correct_price_date_time() => GetLastUnauditedPriceReadModel(ValuationLineId).PriceDateTime.ShouldBe(Price.PriceDateTime);
+        public void the_read_model_should_have_the_correct_price_date_time() => LatestUnauditedPriceReadModel.PriceDateTime.ShouldBe(Price.PriceDateTime);
 
         [Then]
-        public void the_read_model_should_have_a_create_date_time() => GetLastUnauditedPriceReadModel(ValuationLineId).CreateTime.ShouldNotBeNull();
+        public void the_read_model_should_have_a_create_date_time() => LatestUnauditedPriceReadModel.CreateTime.ShouldNotBeNull();
     }
 }

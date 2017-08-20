@@ -50,7 +50,7 @@ namespace Rob.ValuationMonitoring.WindowsHost
                 .AddCommandHandlers(typeof(ValuationLineAggregate).Assembly)
                 .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString(@"Server=localhost;Database=Rob.ValuationMonitoring;Trusted_Connection=True"))
                 .UseEventStore<MsSqlEventPersistence>()
-                .UseMssqlReadModel<ValuationLineReadModel, ValuationLineLocator>()
+                .UseMssqlReadModel<LatestUnauditedPriceReadModel, ValuationLineLocator>()
                 .CreateResolver())
             {
                 // uncomment the following to create the event flow schema
@@ -64,7 +64,7 @@ namespace Rob.ValuationMonitoring.WindowsHost
                 var id = new ValuationLineId("valuationline-64a102cb-0740-4f1a-a9ad-a4e92cad4ffb");
 
                 // Publish a command
-                UnauditedPrice price = new UnauditedPrice("PORG1", DateTime.Now, "GBP", 12.3499M);
+                UnauditedPrice price = new UnauditedPrice("PORG1", DateTime.Parse("11-Jan-2017"), "GBP", 5M);
                 await commandBus.PublishAsync(new UpdateUnauditedPriceCommand(id, price), CancellationToken.None);
 
                 // Resolve the query handler and use the built-in query for fetching
@@ -72,7 +72,7 @@ namespace Rob.ValuationMonitoring.WindowsHost
                 // state of our aggregate root
                 var queryProcessor = resolver.Resolve<IQueryProcessor>();
                 var valuationLineReadModel = await queryProcessor.ProcessAsync(
-                        new ReadModelByIdQuery<ValuationLineReadModel>("PORG1"),
+                        new ReadModelByIdQuery<LatestUnauditedPriceReadModel>("PORG1"),
                         CancellationToken.None)
                     .ConfigureAwait(false);
 

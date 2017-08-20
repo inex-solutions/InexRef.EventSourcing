@@ -34,12 +34,12 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
 
             Resolver = EventFlowOptions.New
                 .UseAutofacContainerBuilder(containerBuilder)
-                .RegisterServices(sr => sr.RegisterType(typeof(ValuationLineLocator)))
+                .RegisterServices(sr => sr.RegisterType(typeof(LatestUnauditedPriceReadModelLocator)))
                 .AddEvents(typeof(ValuationLineAggregate).Assembly)
                 .AddCommandHandlers(typeof(ValuationLineAggregate).Assembly)
                 .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString(@"Server=localhost;Database=Rob.ValuationMonitoring;Trusted_Connection=True"))
                 .UseEventStore<MsSqlEventPersistence>()
-                .UseMssqlReadModel<LatestUnauditedPriceReadModel, ValuationLineLocator>()
+                .UseMssqlReadModel<LatestUnauditedPriceReadModel, LatestUnauditedPriceReadModelLocator>()
                 .CreateResolver();
 
             CommandBus = Resolver.Resolve<ICommandBus>();

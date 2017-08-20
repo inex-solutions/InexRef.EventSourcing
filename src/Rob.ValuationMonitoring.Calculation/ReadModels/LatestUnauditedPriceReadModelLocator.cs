@@ -5,7 +5,7 @@ using Rob.ValuationMonitoring.Calculation.Events;
 
 namespace Rob.ValuationMonitoring.Calculation.ReadModels
 {
-    public class ValuationLineLocator : IReadModelLocator
+    public class LatestUnauditedPriceReadModelLocator : IReadModelLocator
     {
         public IEnumerable<string> GetReadModelIds(IDomainEvent domainEvent)
         {

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EventFlow.Aggregates;
+﻿using EventFlow.Aggregates;
+using Rob.ValuationMonitoring.Calculation.ValueObjects;
 
 namespace Rob.ValuationMonitoring.Calculation.Events
 {
     public class UnauditedPriceReceivedEvent : IAggregateEvent<ValuationLineAggregate, ValuationLineId>
     {
-        public decimal UnauditedPrice { get; }
+        public UnauditedPrice UnauditedPrice { get; }
 
-        public UnauditedPriceReceivedEvent(decimal unauditedPrice)
+        public UnauditedPriceReceivedEvent(UnauditedPrice unauditedPrice)
         {
             UnauditedPrice = unauditedPrice;
         }

@@ -13,7 +13,9 @@ namespace Rob.ValuationMonitoring.Calculation
         AggregateRoot<ValuationLineAggregate, ValuationLineId>,
         IEmit<UnauditedPriceReceivedEvent>
     {
-        private decimal _price;
+        private readonly List<UnauditedPrice> _prices = new List<UnauditedPrice>();
+
+        public IReadOnlyCollection<UnauditedPrice> Prices => _prices;
 
         public ValuationLineAggregate(ValuationLineId id) : base(id)
         {
@@ -22,12 +24,12 @@ namespace Rob.ValuationMonitoring.Calculation
         public void UpdateUnauditedPrice(UnauditedPrice price)
         {
             Console.WriteLine($"UpdateUnauditedPrice: {price}");
-            Emit(new UnauditedPriceReceivedEvent(price.Value));
+            Emit(new UnauditedPriceReceivedEvent(price));
         }
 
         public void Apply(UnauditedPriceReceivedEvent aggregateEvent)
         {
-            _price = aggregateEvent.UnauditedPrice;
+            _prices.Add(aggregateEvent.UnauditedPrice);
         }
     }
 }

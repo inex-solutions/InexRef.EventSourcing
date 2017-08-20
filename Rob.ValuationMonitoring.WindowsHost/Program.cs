@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using Autofac;
 using EventFlow;
+using EventFlow.Autofac.Extensions;
 using EventFlow.EventStores;
 using EventFlow.Extensions;
 using EventFlow.Queries;
@@ -37,17 +39,20 @@ namespace Rob.ValuationMonitoring.WindowsHost
 
         private static async void Run(string[] args)
         {
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterType<Test>().As<ITest>();
+
             using (var resolver = EventFlowOptions.New
+                .UseAutofacContainerBuilder(containerBuilder)
                 .AddEvents(typeof(ValuationLineAggregate).Assembly)
                 .AddCommandHandlers(typeof(ValuationLineAggregate).Assembly)
                 .UseInMemoryReadStoreFor<ValuationLineReadModel>()
-                
                 .CreateResolver())
             {
                 var commandBus = resolver.Resolve<ICommandBus>();
                 var eventStore = resolver.Resolve<IEventStore>();
                 var readModelStore = resolver.Resolve<IInMemoryReadStore<ValuationLineReadModel>>();
-
+                
                 var id = new ValuationLineId("PORG1");
 
                 // Publish a command
@@ -66,7 +71,19 @@ namespace Rob.ValuationMonitoring.WindowsHost
                 Console.WriteLine($"Unaudited Price from Read Model: {valuationLineReadModel.UnauditedPrice}");
                 Console.WriteLine($"Events in Event Store: {eventStore.LoadEvents<ValuationLineAggregate, ValuationLineId>(id).Count}");
                 Console.WriteLine($"First Event: {eventStore.LoadEvents<ValuationLineAggregate, ValuationLineId>(id).First()}");
+                var test = resolver.Resolve<ITest>();
+                Console.WriteLine($"Test class resolution resolved: {test}");
             }
         }
+    }
+
+    public interface ITest
+    {
+        
+    }
+
+    public class Test : ITest
+    {
+        
     }
 }

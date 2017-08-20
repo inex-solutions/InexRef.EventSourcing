@@ -16,7 +16,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
 
         protected override async Task Given()
         {
-            ValuationLineId = $"PORG-{DateTime.Now:yyyyMMddHHmmssfff}";
+            ValuationLineId = CreateValuationLineId();
             AggregateId = Calculation.ValuationLineId.New;
             OldPrice = new UnauditedPrice(ValuationLineId, DateTime.Parse("01-Jan-2017"), "GBP", 8.5M);
             await CommandBus.PublishAsync(new UpdateUnauditedPriceCommand(AggregateId, OldPrice), CancellationToken.None).ConfigureAwait(false);

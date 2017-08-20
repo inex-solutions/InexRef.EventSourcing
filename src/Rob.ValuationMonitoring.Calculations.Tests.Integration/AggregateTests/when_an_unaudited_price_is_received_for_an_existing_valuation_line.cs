@@ -14,10 +14,11 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
 
         protected override async Task Given()
         {
+            var valuationLineId = CreateValuationLineId();
             AggregateId = Calculation.ValuationLineId.New;
-            var oldPrice = new UnauditedPrice("PORG1", DateTime.Now, "GBP", 12.3499M);
+            var oldPrice = new UnauditedPrice(valuationLineId, DateTime.Now, "GBP", 12.3499M);
             await CommandBus.PublishAsync(new UpdateUnauditedPriceCommand(AggregateId, oldPrice), CancellationToken.None).ConfigureAwait(false);
-            NewPrice = new UnauditedPrice("PORG1", DateTime.Now, "GBP", 15.00M);
+            NewPrice = new UnauditedPrice(valuationLineId, DateTime.Now, "GBP", 15.00M);
         }
 
         protected override async Task When() => await CommandBus.PublishAsync(new UpdateUnauditedPriceCommand(AggregateId, NewPrice), CancellationToken.None).ConfigureAwait(false);

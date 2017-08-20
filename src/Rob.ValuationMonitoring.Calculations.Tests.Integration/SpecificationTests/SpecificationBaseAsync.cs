@@ -6,7 +6,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTe
     [TestFixture]
     public abstract class SpecificationBaseAsync
     {
-        [SetUp]
+        [OneTimeSetUp]
         public async Task Init()
         {
             SetUp();
@@ -22,7 +22,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTe
 
         protected abstract Task Given();
 
-        [TearDown]
+        [OneTimeTearDown]
         public void TearDown()
         {
             Cleanup();

@@ -67,8 +67,8 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
 
         protected string CreateValuationLineId()
         {
-            return $"PORG-{DateTime.Now:yyyyMMddHHmmssfff}-{_count++}";
-
+            var count = Interlocked.Increment(ref _count);
+            return $"PORG-{DateTime.Now:yyyyMMddHHmmssfff}-{count}";
         }
     }
 }

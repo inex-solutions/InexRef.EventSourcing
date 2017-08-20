@@ -9,10 +9,7 @@ using EventFlow.Extensions;
 using EventFlow.MsSql;
 using EventFlow.MsSql.EventStores;
 using EventFlow.MsSql.Extensions;
-using EventFlow.MsSql.ReadStores;
 using EventFlow.Queries;
-using EventFlow.ReadStores.InMemory;
-using EventFlow.Sql.ReadModels;
 using Rob.ValuationMonitoring.Calculation;
 using Rob.ValuationMonitoring.Calculation.Commands;
 using Rob.ValuationMonitoring.Calculation.ReadModels;
@@ -45,7 +42,6 @@ namespace Rob.ValuationMonitoring.WindowsHost
         private static async void Run(string[] args)
         {
             var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterType<Test>().As<ITest>();
 
             using (var resolver = EventFlowOptions.New
                 .UseAutofacContainerBuilder(containerBuilder)
@@ -58,18 +54,17 @@ namespace Rob.ValuationMonitoring.WindowsHost
                 .CreateResolver())
             {
                 // uncomment the following to create the event flow schema
-                var msSqlDatabaseMigrator = resolver.Resolve<IMsSqlDatabaseMigrator>();
-                EventFlowEventStoresMsSql.MigrateDatabase(msSqlDatabaseMigrator);
+                //var msSqlDatabaseMigrator = resolver.Resolve<IMsSqlDatabaseMigrator>();
+                //EventFlowEventStoresMsSql.MigrateDatabase(msSqlDatabaseMigrator);
 
                 var commandBus = resolver.Resolve<ICommandBus>();
                 var eventStore = resolver.Resolve<IEventStore>();
-         //       var readModelStore = resolver.Resolve<IMssqlReadModelStore<ValuationLineReadModel>>();
-                
-            //    var id = new ValuationLineId("PORG1");
-                var id = ValuationLineId.New;
+
+              //  var id = ValuationLineId.New;
+                var id = new ValuationLineId("valuationline-64a102cb-0740-4f1a-a9ad-a4e92cad4ffb");
 
                 // Publish a command
-                UnauditedPrice price = new UnauditedPrice("PORG1", DateTime.Now, "GBP", 12.34M);
+                UnauditedPrice price = new UnauditedPrice("PORG1", DateTime.Now, "GBP", 12.3499M);
                 await commandBus.PublishAsync(new UpdateUnauditedPriceCommand(id, price), CancellationToken.None);
 
                 // Resolve the query handler and use the built-in query for fetching
@@ -84,19 +79,7 @@ namespace Rob.ValuationMonitoring.WindowsHost
                 Console.WriteLine($"Unaudited Price from Read Model: {valuationLineReadModel.UnauditedPrice}");
                 Console.WriteLine($"Events in Event Store: {eventStore.LoadEvents<ValuationLineAggregate, ValuationLineId>(id).Count}");
                 Console.WriteLine($"First Event: {eventStore.LoadEvents<ValuationLineAggregate, ValuationLineId>(id).First()}");
-                var test = resolver.Resolve<ITest>();
-                Console.WriteLine($"Test class resolution resolved: {test}");
             }
         }
-    }
-
-    public interface ITest
-    {
-        
-    }
-
-    public class Test : ITest
-    {
-        
     }
 }

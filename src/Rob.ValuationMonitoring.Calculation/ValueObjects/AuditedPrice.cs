@@ -5,7 +5,7 @@ namespace Rob.ValuationMonitoring.Calculation.ValueObjects
 {
     public class AuditedPrice : Price
     {
-        public AuditedPrice(string id, DateTime priceDateTime, string currency, decimal value) : base(id, priceDateTime, currency, value)
+        public AuditedPrice(string id, DateTime priceDateTime, string currency, decimal value, DateTime asOfDateTime) : base(id, priceDateTime, currency, value, asOfDateTime)
         {
         }
     }

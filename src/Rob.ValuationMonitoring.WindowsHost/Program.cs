@@ -64,7 +64,7 @@ namespace Rob.ValuationMonitoring.WindowsHost
                 var id = new ValuationLineId("valuationline-64a102cb-0740-4f1a-a9ad-a4e92cad4ffb");
 
                 // Publish a command
-                UnauditedPrice price = new UnauditedPrice("PORG1", DateTime.Parse("11-Jan-2017"), "GBP", 5M);
+                UnauditedPrice price = new UnauditedPrice("PORG1", DateTime.Parse("11-Jan-2017"), "GBP", 5M, DateTime.Now);
                 await commandBus.PublishAsync(new UpdateUnauditedPriceCommand(id, price), CancellationToken.None);
 
                 // Resolve the query handler and use the built-in query for fetching

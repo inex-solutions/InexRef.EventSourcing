@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Autofac;
 using EventFlow;
 using EventFlow.Aggregates;
 using EventFlow.Autofac.Extensions;
+using EventFlow.Commands;
 using EventFlow.Configuration;
+using EventFlow.Core;
 using EventFlow.EventStores;
 using EventFlow.Extensions;
 using EventFlow.MsSql;
@@ -63,6 +66,11 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
         protected ValuationLineAggregate GetAggregate(ValuationLineId valuationLineId)
         {
             return AggregateStore.LoadAsync<ValuationLineAggregate, ValuationLineId>(valuationLineId, CancellationToken.None).GetAwaiter().GetResult();
+        }
+
+        protected virtual async Task Publish(ICommand<ValuationLineAggregate, ValuationLineId, ISourceId> command)
+        {
+            await CommandBus.PublishAsync(command, CancellationToken.None) .ConfigureAwait(false);
         }
 
         protected string CreateValuationLineId()

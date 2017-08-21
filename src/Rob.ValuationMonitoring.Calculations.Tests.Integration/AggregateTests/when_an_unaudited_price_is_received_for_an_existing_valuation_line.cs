@@ -17,11 +17,11 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
             var valuationLineId = CreateValuationLineId();
             AggregateId = Calculation.ValuationLineId.New;
             var oldPrice = new UnauditedPrice(valuationLineId, DateTime.Now, "GBP", 12.3499M);
-            await CommandBus.PublishAsync(new UpdateUnauditedPriceCommand(AggregateId, oldPrice), CancellationToken.None).ConfigureAwait(false);
+            await Publish(new UpdateUnauditedPriceCommand(AggregateId, oldPrice));
             NewPrice = new UnauditedPrice(valuationLineId, DateTime.Now, "GBP", 15.00M);
         }
 
-        protected override async Task When() => await CommandBus.PublishAsync(new UpdateUnauditedPriceCommand(AggregateId, NewPrice), CancellationToken.None).ConfigureAwait(false);
+        protected override async Task When() => await Publish(new UpdateUnauditedPriceCommand(AggregateId, NewPrice));
 
         [Then]
         public void two_events_for_this_valuation_line_are_now_present_in_the_event_store() => GetEventsFromStore(AggregateId).Count.ShouldBe(2);

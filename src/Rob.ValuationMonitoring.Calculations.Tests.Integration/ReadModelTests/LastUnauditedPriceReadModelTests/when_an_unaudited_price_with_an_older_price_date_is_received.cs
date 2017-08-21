@@ -18,14 +18,13 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
             AggregateId = Calculation.ValuationLineId.New;
             ValuationLineId = CreateValuationLineId();
             Price = new UnauditedPrice(ValuationLineId, DateTime.Parse("01-Jan-2017"), "GBP", 10.0M);
-            await CommandBus.PublishAsync(new UpdateUnauditedPriceCommand(AggregateId, Price), CancellationToken.None).ConfigureAwait(false);
-
+            await Publish(new UpdateUnauditedPriceCommand(AggregateId, Price));
             OriginalReadModel = LatestUnauditedPriceReadModel;
-            ResetLatestUnauditedPriceReadModel();
+
             Price = new UnauditedPrice(ValuationLineId, DateTime.Parse("31-Dec-2016"), "GBP", 15.0M);
         }
 
-        protected override async Task When() => await CommandBus.PublishAsync(new UpdateUnauditedPriceCommand(AggregateId, Price), CancellationToken.None).ConfigureAwait(false);
+        protected override async Task When() => await Publish(new UpdateUnauditedPriceCommand(AggregateId, Price));
 
         [Then]
         public void the_read_model_should_have_the_original_price() => LatestUnauditedPriceReadModel.UnauditedPrice.ShouldBe(OriginalReadModel.UnauditedPrice);

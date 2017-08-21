@@ -19,7 +19,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
             Price = new UnauditedPrice(valuationLineId, DateTime.Now, "GBP", 12.3499M);
         }
 
-        protected override async Task When() => await CommandBus.PublishAsync(new UpdateUnauditedPriceCommand(AggregateId, Price), CancellationToken.None).ConfigureAwait(false);
+        protected override async Task When() => await Publish(new UpdateUnauditedPriceCommand(AggregateId, Price));
 
         [Then]
         public void a_single_event_for_this_valuation_line_is_created_in_the_event_store() => GetEventsFromStore(AggregateId).Count.ShouldBe(1);

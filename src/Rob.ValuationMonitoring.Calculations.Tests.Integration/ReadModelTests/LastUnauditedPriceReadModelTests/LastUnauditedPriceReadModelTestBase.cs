@@ -1,5 +1,9 @@
 using System.Threading;
+using System.Threading.Tasks;
+using EventFlow.Commands;
+using EventFlow.Core;
 using EventFlow.Queries;
+using Rob.ValuationMonitoring.Calculation;
 using Rob.ValuationMonitoring.Calculation.ReadModels;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
 
@@ -28,6 +32,12 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
 
                 return latestUnauditedPriceReadModel;
             }
+        }
+
+        protected override async Task Publish(ICommand<ValuationLineAggregate, ValuationLineId, ISourceId> command)
+        {
+            ResetLatestUnauditedPriceReadModel();
+            await base.Publish(command);
         }
 
         protected void ResetLatestUnauditedPriceReadModel()

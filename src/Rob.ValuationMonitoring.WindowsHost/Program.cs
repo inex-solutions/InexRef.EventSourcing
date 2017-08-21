@@ -46,11 +46,13 @@ namespace Rob.ValuationMonitoring.WindowsHost
             using (var resolver = EventFlowOptions.New
                 .UseAutofacContainerBuilder(containerBuilder)
                 .RegisterServices(sr => sr.RegisterType(typeof(LatestUnauditedPriceReadModelLocator)))
+                .RegisterServices(sr => sr.RegisterType(typeof(RawEventReadModelLocator)))
                 .AddEvents(typeof(ValuationLineAggregate).Assembly)
                 .AddCommandHandlers(typeof(ValuationLineAggregate).Assembly)
                 .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString(@"Server=localhost;Database=Rob.ValuationMonitoring;Trusted_Connection=True"))
                 .UseEventStore<MsSqlEventPersistence>()
                 .UseMssqlReadModel<LatestUnauditedPriceReadModel, LatestUnauditedPriceReadModelLocator>()
+                .UseInMemoryReadStoreFor<RawEventReadModel, RawEventReadModelLocator>()
                 .CreateResolver())
             {
                 // uncomment the following to create the event flow schema

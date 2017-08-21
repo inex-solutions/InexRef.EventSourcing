@@ -36,6 +36,8 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
 
         protected static IAggregateStore AggregateStore { get; private set; }
 
+        protected AsOfQueries AsOfQueries { get; private set; }
+
         static ValuationMonitoringSpecificationBase()
         {
             var containerBuilder = new ContainerBuilder();
@@ -43,11 +45,13 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
             Resolver = EventFlowOptions.New
                 .UseAutofacContainerBuilder(containerBuilder)
                 .RegisterServices(sr => sr.RegisterType(typeof(LatestUnauditedPriceReadModelLocator)))
+                .RegisterServices(sr => sr.RegisterType(typeof(RawEventReadModelLocator)))
                 .AddEvents(typeof(ValuationLineAggregate).Assembly)
                 .AddCommandHandlers(typeof(ValuationLineAggregate).Assembly)
                 .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString(@"Server=localhost;Database=Rob.ValuationMonitoring;Trusted_Connection=True"))
                 .UseEventStore<MsSqlEventPersistence>()
                 .UseMssqlReadModel<LatestUnauditedPriceReadModel, LatestUnauditedPriceReadModelLocator>()
+                .UseInMemoryReadStoreFor<RawEventReadModel, RawEventReadModelLocator>()
                 .CreateResolver();
 
             CommandBus = Resolver.Resolve<ICommandBus>();
@@ -59,6 +63,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
         {
             AggregateId = Calculation.ValuationLineId.New;
             ValuationLineId = CreateValuationLineId();
+            AsOfQueries = new AsOfQueries(Resolver);
         }
 
         protected IReadOnlyCollection<IDomainEvent<ValuationLineAggregate, ValuationLineId>> GetEventsFromStore(ValuationLineId valuationLineId)

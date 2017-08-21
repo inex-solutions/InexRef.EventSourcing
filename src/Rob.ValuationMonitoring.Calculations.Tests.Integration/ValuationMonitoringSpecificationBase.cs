@@ -28,15 +28,15 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
 
         protected string ValuationLineId { get; set; }
 
-        protected IRootResolver Resolver { get; private set; }
+        protected static IRootResolver Resolver { get; private set; }
 
-        protected ICommandBus CommandBus { get; private set; }
+        protected static ICommandBus CommandBus { get; private set; }
 
-        protected IEventStore EventStore { get; private set; }
+        protected static IEventStore EventStore { get; private set; }
 
-        protected IAggregateStore AggregateStore { get; private set; }
+        protected static IAggregateStore AggregateStore { get; private set; }
 
-        protected override void SetUp()
+        static ValuationMonitoringSpecificationBase()
         {
             var containerBuilder = new ContainerBuilder();
 
@@ -53,14 +53,12 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
             CommandBus = Resolver.Resolve<ICommandBus>();
             EventStore = Resolver.Resolve<IEventStore>();
             AggregateStore = Resolver.Resolve<IAggregateStore>();
-
-            AggregateId = Calculation.ValuationLineId.New;
-            ValuationLineId = CreateValuationLineId();
         }
 
-        protected override void Cleanup()
+        protected override void SetUp()
         {
-            Resolver.Dispose();
+            AggregateId = Calculation.ValuationLineId.New;
+            ValuationLineId = CreateValuationLineId();
         }
 
         protected IReadOnlyCollection<IDomainEvent<ValuationLineAggregate, ValuationLineId>> GetEventsFromStore(ValuationLineId valuationLineId)

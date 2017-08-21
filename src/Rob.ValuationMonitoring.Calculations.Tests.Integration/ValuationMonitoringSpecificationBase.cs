@@ -26,6 +26,8 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
 
         protected Calculation.ValuationLineId AggregateId { get; set; }
 
+        protected string ValuationLineId { get; set; }
+
         protected IRootResolver Resolver { get; private set; }
 
         protected ICommandBus CommandBus { get; private set; }
@@ -51,6 +53,9 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
             CommandBus = Resolver.Resolve<ICommandBus>();
             EventStore = Resolver.Resolve<IEventStore>();
             AggregateStore = Resolver.Resolve<IAggregateStore>();
+
+            AggregateId = Calculation.ValuationLineId.New;
+            ValuationLineId = CreateValuationLineId();
         }
 
         protected override void Cleanup()

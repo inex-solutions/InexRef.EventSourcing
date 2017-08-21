@@ -15,8 +15,6 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
 
         protected override async Task Given()
         {
-            AggregateId = Calculation.ValuationLineId.New;
-            ValuationLineId = CreateValuationLineId();
             Price = new UnauditedPrice(ValuationLineId, DateTime.Parse("01-Jan-2017"), "GBP", 10.0M);
             await Publish(new UpdateUnauditedPriceCommand(AggregateId, Price));
             OriginalReadModel = LatestUnauditedPriceReadModel;

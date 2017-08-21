@@ -15,8 +15,6 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
 
         protected UnauditedPrice Price { get; set; }
 
-        protected string ValuationLineId { get; set; }
-
         protected LatestUnauditedPriceReadModel LatestUnauditedPriceReadModel
         {
             get

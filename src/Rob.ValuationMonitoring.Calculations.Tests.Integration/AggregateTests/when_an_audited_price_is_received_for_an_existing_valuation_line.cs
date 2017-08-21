@@ -12,12 +12,9 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
     {
         private AuditedPrice AuditedPrice;
         private UnauditedPrice OldPrice;
-        private string ValuationLineId;
-
+       
         protected override async Task Given()
         {
-            ValuationLineId = CreateValuationLineId();
-            AggregateId = Calculation.ValuationLineId.New;
             OldPrice = new UnauditedPrice(ValuationLineId, DateTime.Parse("01-Jan-2017"), "GBP", 8.5M);
             await Publish(new UpdateUnauditedPriceCommand(AggregateId, OldPrice));
             AuditedPrice = new AuditedPrice(ValuationLineId, DateTime.Parse("31-Dec-2016"), "GBP", 10.0M);

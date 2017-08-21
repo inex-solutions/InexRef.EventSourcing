@@ -14,11 +14,9 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
 
         protected override async Task Given()
         {
-            var valuationLineId = CreateValuationLineId();
-            AggregateId = Calculation.ValuationLineId.New;
-            var oldPrice = new UnauditedPrice(valuationLineId, DateTime.Now, "GBP", 12.3499M);
+            var oldPrice = new UnauditedPrice(ValuationLineId, DateTime.Now, "GBP", 12.3499M);
             await Publish(new UpdateUnauditedPriceCommand(AggregateId, oldPrice));
-            NewPrice = new UnauditedPrice(valuationLineId, DateTime.Now, "GBP", 15.00M);
+            NewPrice = new UnauditedPrice(ValuationLineId, DateTime.Now, "GBP", 15.00M);
         }
 
         protected override async Task When() => await Publish(new UpdateUnauditedPriceCommand(AggregateId, NewPrice));

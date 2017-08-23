@@ -5,7 +5,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTe
     [TestFixture]
     public abstract class SpecificationBase
     {
-        [SetUp]
+        [OneTimeSetUp]
         public void Init()
         {
             SetUp();
@@ -21,7 +21,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTe
 
         protected abstract void Given();
 
-        [TearDown]
+        [OneTimeTearDown]
         public void TearDown()
         {
             Cleanup();

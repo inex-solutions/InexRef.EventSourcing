@@ -73,6 +73,7 @@
     <Compile Include="Events\AuditedPriceReceivedEvent.cs" />
     <Compile Include="Events\UnauditedPriceReceivedEvent.cs" />
     <Compile Include="Events\ValuationEvent.cs" />
+    <Compile Include="Events\ValuationLineCreatedEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadModels\LatestUnauditedPriceReadModelLocator.cs" />
     <Compile Include="ReadModels\LatestUnauditedPriceReadModel.cs" />

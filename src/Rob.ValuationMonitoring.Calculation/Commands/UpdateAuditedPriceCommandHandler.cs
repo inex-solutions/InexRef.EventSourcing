@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using EventFlow.Commands;
+using Rob.ValuationMonitoring.Calculation.ValueObjects;
 
 namespace Rob.ValuationMonitoring.Calculation.Commands
 {
@@ -8,7 +9,11 @@ namespace Rob.ValuationMonitoring.Calculation.Commands
     {
         public override Task ExecuteAsync(ValuationLineAggregate aggregate, UpdateAuditedPriceCommand command, CancellationToken cancellationToken)
         {
-            aggregate.UpdateAuditedPrice(command.AuditedPrice);
+            if (aggregate.IsNew)
+            {
+                aggregate.OnCreate(command.Code, command.Name);
+            }
+            aggregate.UpdateAuditedPrice(new AuditedPrice(command.Code, command.PriceDateTime, command.Currency, command.Value, command.AsOfDateTime));
             return Task.FromResult(0);
         }
     }

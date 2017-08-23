@@ -7,8 +7,14 @@ namespace Rob.ValuationMonitoring.Calculation
 {
     public class ValuationLineAggregate : 
         AggregateRoot<ValuationLineAggregate, ValuationLineId>,
-        IEmit<UnauditedPriceReceivedEvent>
+        IEmit<ValuationLineCreatedEvent>,
+        IEmit<UnauditedPriceReceivedEvent>,
+        IEmit<AuditedPriceReceivedEvent>
     {
+        public string ValuationLineCode { get; private set; }
+
+        public string ValuationLineName { get; private set; }
+
         public Price ReferencePrice { get; private set; }
 
         public UnauditedPrice LastUnauditedPrice { get; private set; }
@@ -19,15 +25,18 @@ namespace Rob.ValuationMonitoring.Calculation
         {
         }
 
+        public void OnCreate(string valuationLineCode, string valuationLineName)
+        {
+            Emit(new ValuationLineCreatedEvent(valuationLineCode, valuationLineName));
+        }
+
         public void UpdateUnauditedPrice(UnauditedPrice price)
         {
-            Console.WriteLine($"UpdateUnauditedPrice: {price}");
             Emit(new UnauditedPriceReceivedEvent(price));
         }
 
         public void UpdateAuditedPrice(AuditedPrice price)
         {
-            Console.WriteLine($"UpdateAuditedPrice: {price}");
             Emit(new AuditedPriceReceivedEvent(price));
         }
 
@@ -64,6 +73,12 @@ namespace Rob.ValuationMonitoring.Calculation
             {
                 ValuationChange = (LastUnauditedPrice.Value - ReferencePrice.Value) / ReferencePrice.Value;
             }
+        }
+
+        public void Apply(ValuationLineCreatedEvent aggregateEvent)
+        {
+            //ValuationLineCode = aggregateEvent.Code;
+            //ValuationLineName = aggregateEvent.Name;
         }
     }
 }

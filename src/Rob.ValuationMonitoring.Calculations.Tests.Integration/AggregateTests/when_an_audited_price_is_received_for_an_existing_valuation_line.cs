@@ -1,7 +1,5 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
-using Rob.ValuationMonitoring.Calculation.Commands;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
 using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
 using Shouldly;
@@ -16,11 +14,11 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
         protected override async Task Given()
         {
             OldPrice = new UnauditedPrice(ValuationLineId, DateTime.Parse("01-Jan-2017"), "GBP", 8.5M, DateTime.Now);
-            await Publish(new UpdateUnauditedPriceCommand(AggregateId, OldPrice));
+            await Publish(OldPrice.ToUpdateUnauditedPriceCommand(AggregateId));
             AuditedPrice = new AuditedPrice(ValuationLineId, DateTime.Parse("31-Dec-2016"), "GBP", 10.0M, DateTime.Now);
         }
 
-        protected override async Task When() => await Publish(new UpdateAuditedPriceCommand(AggregateId, AuditedPrice));
+        protected override async Task When() => await Publish(AuditedPrice.ToUpdateAuditedPriceCommand(AggregateId));
 
         [Then]
         public void two_events_for_this_valuation_line_are_now_present_in_the_event_store() => GetEventsFromStore(AggregateId).Count.ShouldBe(2);

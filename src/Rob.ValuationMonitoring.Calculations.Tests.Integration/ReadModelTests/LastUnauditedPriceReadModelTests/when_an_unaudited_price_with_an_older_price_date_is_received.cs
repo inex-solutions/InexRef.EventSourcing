@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Rob.ValuationMonitoring.Calculation.Commands;
 using Rob.ValuationMonitoring.Calculation.ReadModels;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
 using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
@@ -16,13 +15,13 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
         protected override async Task Given()
         {
             Price = new UnauditedPrice(ValuationLineId, DateTime.Parse("01-Jan-2017"), "GBP", 10.0M, DateTime.Now);
-            await Publish(new UpdateUnauditedPriceCommand(AggregateId, Price));
+            await Publish(Price.ToUpdateUnauditedPriceCommand(AggregateId));
             OriginalReadModel = LatestUnauditedPriceReadModel;
 
             Price = new UnauditedPrice(ValuationLineId, DateTime.Parse("31-Dec-2016"), "GBP", 15.0M, DateTime.Now);
         }
 
-        protected override async Task When() => await Publish(new UpdateUnauditedPriceCommand(AggregateId, Price));
+        protected override async Task When() => await Publish(Price.ToUpdateUnauditedPriceCommand(AggregateId));
 
         [Then]
         public void the_read_model_should_have_the_original_price() => LatestUnauditedPriceReadModel.UnauditedPrice.ShouldBe(OriginalReadModel.UnauditedPrice);

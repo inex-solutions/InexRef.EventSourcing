@@ -13,14 +13,10 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AsOfTests
     {
         protected override async Task Given()
         {
-            var price = new UnauditedPrice(ValuationLineId, DateTime.Parse("11-Jan-2017"), "GBP", 11.0M, DateTime.Parse("11-Jan-2017"));
-            await Publish(new UpdateUnauditedPriceCommand(AggregateId, price));
-            price = new UnauditedPrice(ValuationLineId, DateTime.Parse("12-Jan-2017"), "GBP", 12.0M, DateTime.Parse("12-Jan-2017"));
-            await Publish(new UpdateUnauditedPriceCommand(AggregateId, price));
-            price = new UnauditedPrice(ValuationLineId, DateTime.Parse("13-Jan-2017"), "GBP", 13.0M, DateTime.Parse("13-Jan-2017"));
-            await Publish(new UpdateUnauditedPriceCommand(AggregateId, price));
-            price = new UnauditedPrice(ValuationLineId, DateTime.Parse("12-Jan-2017"), "GBP", 20.0M, DateTime.Parse("01-Mar-2017"));
-            await Publish(new UpdateUnauditedPriceCommand(AggregateId, price));
+            await Publish(new UpdateUnauditedPriceCommand(AggregateId, ValuationLineId, DateTime.Parse("11-Jan-2017"), "GBP", 11.0M, DateTime.Parse("11-Jan-2017")));
+            await Publish(new UpdateUnauditedPriceCommand(AggregateId, ValuationLineId, DateTime.Parse("12-Jan-2017"), "GBP", 12.0M, DateTime.Parse("12-Jan-2017")));
+            await Publish(new UpdateUnauditedPriceCommand(AggregateId, ValuationLineId, DateTime.Parse("13-Jan-2017"), "GBP", 13.0M, DateTime.Parse("13-Jan-2017")));
+            await Publish(new UpdateUnauditedPriceCommand(AggregateId, ValuationLineId, DateTime.Parse("12-Jan-2017"), "GBP", 20.0M, DateTime.Parse("01-Mar-2017")));
         }
 
         protected override Task When()

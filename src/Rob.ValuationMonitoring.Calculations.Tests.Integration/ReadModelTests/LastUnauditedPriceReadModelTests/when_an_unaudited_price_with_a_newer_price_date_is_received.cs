@@ -16,13 +16,13 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
         protected override async Task Given()
         {
             Price = new UnauditedPrice(ValuationLineId, DateTime.Parse("01-Jan-2017"), "GBP", 10.0M, DateTime.Now);
-            await Publish(new UpdateUnauditedPriceCommand(AggregateId, Price));
+            await Publish(Price.ToUpdateUnauditedPriceCommand(AggregateId));
             OriginalReadModel = LatestUnauditedPriceReadModel;
 
             Price = new UnauditedPrice(ValuationLineId, DateTime.Parse("02-Jan-2017"), "GBP", 15.0M, DateTime.Now);
         }
 
-        protected override async Task When() => await Publish(new UpdateUnauditedPriceCommand(AggregateId, Price));
+        protected override async Task When() => await Publish(Price.ToUpdateUnauditedPriceCommand(AggregateId));
 
         [Then]
         public void the_read_model_should_have_the_newer_price() => LatestUnauditedPriceReadModel.UnauditedPrice.ShouldBe(Price.Value);

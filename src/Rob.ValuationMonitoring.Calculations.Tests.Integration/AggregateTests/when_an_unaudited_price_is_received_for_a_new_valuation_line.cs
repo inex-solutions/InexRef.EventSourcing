@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Rob.ValuationMonitoring.Calculation.Commands;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
+using Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.LastUnauditedPriceReadModelTests;
 using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
 using Shouldly;
 
@@ -17,7 +18,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
             Price = new UnauditedPrice(ValuationLineId, DateTime.Now, "GBP", 12.3499M, DateTime.Now);
         }
 
-        protected override async Task When() => await Publish(new UpdateUnauditedPriceCommand(AggregateId, Price));
+        protected override async Task When() => await Publish(Price.ToUpdateUnauditedPriceCommand(AggregateId));
 
         [Then]
         public void a_single_event_for_this_valuation_line_is_created_in_the_event_store() => GetEventsFromStore(AggregateId).Count.ShouldBe(1);

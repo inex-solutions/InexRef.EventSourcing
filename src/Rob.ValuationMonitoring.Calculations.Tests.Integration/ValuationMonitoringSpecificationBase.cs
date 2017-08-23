@@ -24,9 +24,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
     {
         private static int _count;
 
-        protected Calculation.ValuationLineId AggregateId { get; set; }
-
-        protected string ValuationLineId { get; set; }
+        protected ValuationLineId ValuationLineId { get; private set; }
 
         protected static IRootResolver Resolver { get; private set; }
 
@@ -44,14 +42,12 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
 
             Resolver = EventFlowOptions.New
                 .UseAutofacContainerBuilder(containerBuilder)
-                .RegisterServices(sr => sr.RegisterType(typeof(LatestUnauditedPriceReadModelLocator)))
-                .RegisterServices(sr => sr.RegisterType(typeof(RawEventReadModelLocator)))
                 .AddEvents(typeof(ValuationLineAggregate).Assembly)
                 .AddCommandHandlers(typeof(ValuationLineAggregate).Assembly)
                 .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString(@"Server=localhost;Database=Rob.ValuationMonitoring;Trusted_Connection=True"))
                 .UseEventStore<MsSqlEventPersistence>()
-                .UseMssqlReadModel<LatestUnauditedPriceReadModel, LatestUnauditedPriceReadModelLocator>()
-                .UseInMemoryReadStoreFor<RawEventReadModel, RawEventReadModelLocator>()
+                .UseMssqlReadModel<LatestUnauditedPriceReadModel>()
+                .UseInMemoryReadStoreFor<RawEventReadModel>()
                 .CreateResolver();
 
             CommandBus = Resolver.Resolve<ICommandBus>();
@@ -61,7 +57,6 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
 
         protected override void SetUp()
         {
-            AggregateId = Calculation.ValuationLineId.New;
             ValuationLineId = CreateValuationLineId();
             AsOfQueries = new AsOfQueries(Resolver);
         }
@@ -81,10 +76,10 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
             await CommandBus.PublishAsync(command, CancellationToken.None) .ConfigureAwait(false);
         }
 
-        protected string CreateValuationLineId()
+        protected ValuationLineId CreateValuationLineId()
         {
             var count = Interlocked.Increment(ref _count);
-            return $"PORG-{DateTime.Now:yyyyMMddHHmmssfff}-{count}";
+            return new ValuationLineId($"PORG-{DateTime.Now:yyyyMMddHHmmssfff}-{count}");
         }
     }
 }

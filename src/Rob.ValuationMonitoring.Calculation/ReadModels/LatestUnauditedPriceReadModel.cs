@@ -21,8 +21,6 @@ namespace Rob.ValuationMonitoring.Calculation.ReadModels
         [MsSqlReadModelIdentityColumn]
         public string ValuationLineId { get; set; }
 
-        public string AggregateId { get; set; }
-
         public DateTimeOffset? CreateTime { get; set; }
 
         public DateTimeOffset UpdatedTime { get; set; }
@@ -38,8 +36,7 @@ namespace Rob.ValuationMonitoring.Calculation.ReadModels
                 PriceDateTime = domainEvent.AggregateEvent.UnauditedPrice.PriceDateTime;
                 SequenceNumber = domainEvent.AggregateSequenceNumber;
                 Currency = domainEvent.AggregateEvent.UnauditedPrice.Currency;
-                ValuationLineId = domainEvent.AggregateEvent.UnauditedPrice.Id;
-                AggregateId = domainEvent.AggregateIdentity.Value;
+                ValuationLineId = domainEvent.AggregateIdentity.Value;
                 
                 UpdatedTime = DateTime.Now;
 

@@ -16,7 +16,7 @@ namespace Rob.ValuationMonitoring.Calculation
             _resolver = resolver;
         }
 
-        public decimal GetUnauditedPrice(string valuationLineId, DateTime priceDateTime, DateTime asOfDateTime)
+        public decimal GetUnauditedPrice(ValuationLineId valuationLineId, DateTime priceDateTime, DateTime asOfDateTime)
         {
             var queryProcessor = _resolver.Resolve<IQueryProcessor>();
             var rawEventReadModel = queryProcessor.ProcessAsync(

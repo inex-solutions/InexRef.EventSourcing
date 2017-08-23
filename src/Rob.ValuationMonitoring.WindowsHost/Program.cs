@@ -45,14 +45,12 @@ namespace Rob.ValuationMonitoring.WindowsHost
 
             using (var resolver = EventFlowOptions.New
                 .UseAutofacContainerBuilder(containerBuilder)
-                .RegisterServices(sr => sr.RegisterType(typeof(LatestUnauditedPriceReadModelLocator)))
-                .RegisterServices(sr => sr.RegisterType(typeof(RawEventReadModelLocator)))
                 .AddEvents(typeof(ValuationLineAggregate).Assembly)
                 .AddCommandHandlers(typeof(ValuationLineAggregate).Assembly)
                 .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString(@"Server=localhost;Database=Rob.ValuationMonitoring;Trusted_Connection=True"))
                 .UseEventStore<MsSqlEventPersistence>()
-                .UseMssqlReadModel<LatestUnauditedPriceReadModel, LatestUnauditedPriceReadModelLocator>()
-                .UseInMemoryReadStoreFor<RawEventReadModel, RawEventReadModelLocator>()
+                .UseMssqlReadModel<LatestUnauditedPriceReadModel>()
+                .UseInMemoryReadStoreFor<RawEventReadModel>()
                 .CreateResolver())
             {
                 // uncomment the following to create the event flow schema
@@ -62,18 +60,17 @@ namespace Rob.ValuationMonitoring.WindowsHost
                 var commandBus = resolver.Resolve<ICommandBus>();
                 var eventStore = resolver.Resolve<IEventStore>();
 
-              //  var id = ValuationLineId.New;
-                var id = new ValuationLineId("valuationline-64a102cb-0740-4f1a-a9ad-a4e92cad4ffb");
+                var id = new ValuationLineId("PORG1");
 
                 // Publish a command
-                await commandBus.PublishAsync(new UpdateUnauditedPriceCommand(id, "PORG1", DateTime.Parse("11-Jan-2017"), "GBP", 5M, DateTime.Now), CancellationToken.None);
+                await commandBus.PublishAsync(new UpdateUnauditedPriceCommand(id, DateTime.Parse("11-Jan-2017"), "GBP", 5M, DateTime.Now), CancellationToken.None);
 
                 // Resolve the query handler and use the built-in query for fetching
                 // read models by identity to get our read model representing the
                 // state of our aggregate root
                 var queryProcessor = resolver.Resolve<IQueryProcessor>();
                 var valuationLineReadModel = await queryProcessor.ProcessAsync(
-                        new ReadModelByIdQuery<LatestUnauditedPriceReadModel>("PORG1"),
+                        new ReadModelByIdQuery<LatestUnauditedPriceReadModel>(id.Value),
                         CancellationToken.None)
                     .ConfigureAwait(false);
 

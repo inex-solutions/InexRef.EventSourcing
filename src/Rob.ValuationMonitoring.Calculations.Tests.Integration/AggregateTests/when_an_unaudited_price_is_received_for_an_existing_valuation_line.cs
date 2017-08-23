@@ -15,16 +15,16 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
 
         protected override async Task Given()
         {
-            await Publish(new UpdateUnauditedPriceCommand(AggregateId, ValuationLineId, DateTime.Now, "GBP", 12.3499M, DateTime.Now));
-            NewPrice = new UnauditedPrice(ValuationLineId, DateTime.Now, "GBP", 15.00M, DateTime.Now);
+            await Publish(new UpdateUnauditedPriceCommand(ValuationLineId, DateTime.Now, "GBP", 12.3499M, DateTime.Now));
+            NewPrice = new UnauditedPrice(DateTime.Now, "GBP", 15.00M, DateTime.Now);
         }
 
-        protected override async Task When() => await Publish(NewPrice.ToUpdateUnauditedPriceCommand(AggregateId));
+        protected override async Task When() => await Publish(NewPrice.ToUpdateUnauditedPriceCommand(ValuationLineId));
 
         [Then]
-        public void two_events_for_this_valuation_line_are_now_present_in_the_event_store() => GetEventsFromStore(AggregateId).Count.ShouldBe(2);
+        public void two_events_for_this_valuation_line_are_now_present_in_the_event_store() => GetEventsFromStore(ValuationLineId).Count.ShouldBe(2);
 
         [Then]
-        public void the_valuation_line_should_report_the_new_price_as_its_latest_price() => GetAggregate(AggregateId).LastUnauditedPrice.ShouldBe(NewPrice);
+        public void the_valuation_line_should_report_the_new_price_as_its_latest_price() => GetAggregate(ValuationLineId).LastUnauditedPrice.ShouldBe(NewPrice);
     }
 }

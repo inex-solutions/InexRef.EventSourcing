@@ -15,15 +15,15 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
 
         protected override async Task Given()
         {
-            Price = new UnauditedPrice(ValuationLineId, DateTime.Now, "GBP", 12.3499M, DateTime.Now);
+            Price = new UnauditedPrice(DateTime.Now, "GBP", 12.3499M, DateTime.Now);
         }
 
-        protected override async Task When() => await Publish(Price.ToUpdateUnauditedPriceCommand(AggregateId));
+        protected override async Task When() => await Publish(Price.ToUpdateUnauditedPriceCommand(ValuationLineId));
 
         [Then]
-        public void a_single_event_for_this_valuation_line_is_created_in_the_event_store() => GetEventsFromStore(AggregateId).Count.ShouldBe(1);
+        public void a_single_event_for_this_valuation_line_is_created_in_the_event_store() => GetEventsFromStore(ValuationLineId).Count.ShouldBe(1);
 
         [Then]
-        public void the_valuation_line_should_report_the_price_as_its_latest_price() => GetAggregate(AggregateId).LastUnauditedPrice.ShouldBe(Price);
+        public void the_valuation_line_should_report_the_price_as_its_latest_price() => GetAggregate(ValuationLineId).LastUnauditedPrice.ShouldBe(Price);
     }
 }

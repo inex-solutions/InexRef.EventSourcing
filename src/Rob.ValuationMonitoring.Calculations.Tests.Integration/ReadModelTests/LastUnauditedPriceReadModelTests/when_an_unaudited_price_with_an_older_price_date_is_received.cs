@@ -14,14 +14,14 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
 
         protected override async Task Given()
         {
-            Price = new UnauditedPrice(ValuationLineId, DateTime.Parse("01-Jan-2017"), "GBP", 10.0M, DateTime.Now);
-            await Publish(Price.ToUpdateUnauditedPriceCommand(AggregateId));
+            Price = new UnauditedPrice(DateTime.Parse("01-Jan-2017"), "GBP", 10.0M, DateTime.Now);
+            await Publish(Price.ToUpdateUnauditedPriceCommand(ValuationLineId));
             OriginalReadModel = LatestUnauditedPriceReadModel;
 
-            Price = new UnauditedPrice(ValuationLineId, DateTime.Parse("31-Dec-2016"), "GBP", 15.0M, DateTime.Now);
+            Price = new UnauditedPrice(DateTime.Parse("31-Dec-2016"), "GBP", 15.0M, DateTime.Now);
         }
 
-        protected override async Task When() => await Publish(Price.ToUpdateUnauditedPriceCommand(AggregateId));
+        protected override async Task When() => await Publish(Price.ToUpdateUnauditedPriceCommand(ValuationLineId));
 
         [Then]
         public void the_read_model_should_have_the_original_price() => LatestUnauditedPriceReadModel.UnauditedPrice.ShouldBe(OriginalReadModel.UnauditedPrice);
@@ -30,7 +30,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
         public void the_read_model_should_have_the_correct_currency() => LatestUnauditedPriceReadModel.Currency.ShouldBe(Price.Currency);
 
         [Then]
-        public void the_read_model_should_have_the_correct_id() => LatestUnauditedPriceReadModel.ValuationLineId.ShouldBe(ValuationLineId);
+        public void the_read_model_should_have_the_correct_id() => LatestUnauditedPriceReadModel.ValuationLineId.ShouldBe(ValuationLineId.Value);
 
         [Then]
         public void the_read_model_should_have_the_original_price_date_time() => LatestUnauditedPriceReadModel.PriceDateTime.ShouldBe(OriginalReadModel.PriceDateTime);

@@ -12,10 +12,10 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
     {
         protected override async Task Given()
         {
-            Price = new UnauditedPrice(ValuationLineId, DateTime.Parse("01-Dec-2016"), "GBP", 12.3499M, DateTime.Now);
+            Price = new UnauditedPrice(DateTime.Parse("01-Dec-2016"), "GBP", 12.3499M, DateTime.Now);
         }
 
-        protected override async Task When() => await Publish(Price.ToUpdateUnauditedPriceCommand(AggregateId));
+        protected override async Task When() => await Publish(Price.ToUpdateUnauditedPriceCommand(ValuationLineId));
 
         [Then]
         public void a_read_model_is_created_for_the_valuation_line() => LatestUnauditedPriceReadModel.ShouldNotBeNull();
@@ -27,7 +27,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
         public void the_read_model_should_have_the_correct_currency() => LatestUnauditedPriceReadModel.Currency.ShouldBe(Price.Currency);
 
         [Then]
-        public void the_read_model_should_have_the_correct_id() => LatestUnauditedPriceReadModel.ValuationLineId.ShouldBe(ValuationLineId);
+        public void the_read_model_should_have_the_correct_id() => LatestUnauditedPriceReadModel.ValuationLineId.ShouldBe(ValuationLineId.Value);
 
         [Then]
         public void the_read_model_should_have_the_correct_price_date_time() => LatestUnauditedPriceReadModel.PriceDateTime.ShouldBe(Price.PriceDateTime);

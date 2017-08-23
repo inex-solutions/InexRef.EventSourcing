@@ -8,12 +8,12 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
     {
         public static UpdateUnauditedPriceCommand ToUpdateUnauditedPriceCommand(this UnauditedPrice price, ValuationLineId valuationLineId)
         {
-            return new UpdateUnauditedPriceCommand(valuationLineId, price.Id, price.PriceDateTime, price.Currency, price.Value, price.AsOfDateTime);
+            return new UpdateUnauditedPriceCommand(valuationLineId, price.PriceDateTime, price.Currency, price.Value, price.AsOfDateTime);
         }
 
         public static UpdateAuditedPriceCommand ToUpdateAuditedPriceCommand(this AuditedPrice price, ValuationLineId valuationLineId)
         {
-            return new UpdateAuditedPriceCommand(valuationLineId, price.Id, price.PriceDateTime, price.Currency, price.Value, price.AsOfDateTime);
+            return new UpdateAuditedPriceCommand(valuationLineId, price.PriceDateTime, price.Currency, price.Value, price.AsOfDateTime);
         }
     }
 }

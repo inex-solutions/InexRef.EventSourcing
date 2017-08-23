@@ -9,7 +9,7 @@ namespace Rob.ValuationMonitoring.Calculation.Commands
     {
         public override Task ExecuteAsync(ValuationLineAggregate aggregate, UpdateAuditedPriceCommand command, CancellationToken cancellationToken)
         {
-            aggregate.UpdateAuditedPrice(new AuditedPrice(command.Id, command.PriceDateTime, command.Currency, command.Value, command.AsOfDateTime));
+            aggregate.UpdateAuditedPrice(new AuditedPrice(command.PriceDateTime, command.Currency, command.Value, command.AsOfDateTime));
             return Task.FromResult(0);
         }
     }

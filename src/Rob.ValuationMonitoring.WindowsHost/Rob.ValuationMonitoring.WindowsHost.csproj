@@ -74,6 +74,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Rob.ValuationMonitoring.Calculations.Tests.Integration\Rob.ValuationMonitoring.Calculations.Tests.Integration.csproj">
+      <Project>{F1B5DDB4-C369-45B3-808E-B275F752DCCA}</Project>
+      <Name>Rob.ValuationMonitoring.Calculations.Tests.Integration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rob.ValuationMonitoring.Calculation\Rob.ValuationMonitoring.Calculation.csproj">
       <Project>{1C2E7FC8-2179-41A9-8B49-033F0EE21105}</Project>
       <Name>Rob.ValuationMonitoring.Calculation</Name>

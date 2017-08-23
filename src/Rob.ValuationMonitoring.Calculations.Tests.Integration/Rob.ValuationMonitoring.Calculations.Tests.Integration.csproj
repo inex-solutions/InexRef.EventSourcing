@@ -76,7 +76,6 @@
     <Compile Include="AsOfTests\AsOfTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadModelTests\LastUnauditedPriceReadModelTests\LastUnauditedPriceReadModelTestBase.cs" />
-    <Compile Include="PriceTestExtensions.cs" />
     <Compile Include="ReadModelTests\LastUnauditedPriceReadModelTests\when_an_unaudited_price_is_sent_for_a_new_valuation_line.cs" />
     <Compile Include="ReadModelTests\LastUnauditedPriceReadModelTests\when_an_unaudited_price_with_an_older_price_date_is_received.cs" />
     <Compile Include="ReadModelTests\LastUnauditedPriceReadModelTests\when_an_unaudited_price_with_a_newer_price_date_is_received.cs" />

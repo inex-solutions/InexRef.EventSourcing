@@ -63,7 +63,8 @@ namespace Rob.ValuationMonitoring.WindowsHost
                 var id = new ValuationLineId("PORG1");
 
                 // Publish a command
-                await commandBus.PublishAsync(new UpdateUnauditedPriceCommand(id, DateTime.Parse("11-Jan-2017"), "GBP", 5M, DateTime.Now), CancellationToken.None);
+                var price = new UnauditedPrice(DateTime.Parse("11-Jan-2017"), "GBP", 5M, DateTime.Now);
+                await commandBus.PublishAsync(price.ToUpdateUnauditedPriceCommand(id), CancellationToken.None);
 
                 // Resolve the query handler and use the built-in query for fetching
                 // read models by identity to get our read model representing the

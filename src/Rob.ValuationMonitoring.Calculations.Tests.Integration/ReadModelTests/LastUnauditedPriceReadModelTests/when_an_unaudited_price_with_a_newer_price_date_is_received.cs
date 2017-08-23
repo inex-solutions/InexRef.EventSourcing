@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Rob.ValuationMonitoring.Calculation;
 using Rob.ValuationMonitoring.Calculation.Commands;
 using Rob.ValuationMonitoring.Calculation.ReadModels;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;

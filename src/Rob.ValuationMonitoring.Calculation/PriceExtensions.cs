@@ -1,10 +1,9 @@
-using Rob.ValuationMonitoring.Calculation;
 using Rob.ValuationMonitoring.Calculation.Commands;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
 
-namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
+namespace Rob.ValuationMonitoring.Calculation
 {
-    public static class PriceTestExtensions
+    public static class PriceExtensions
     {
         public static UpdateUnauditedPriceCommand ToUpdateUnauditedPriceCommand(this UnauditedPrice price, ValuationLineId valuationLineId)
         {

@@ -5,9 +5,10 @@ namespace Rob.ValuationMonitoring.Calculation.Commands
 {
     public class UpdateAuditedPriceCommand : Command<ValuationLineAggregate, ValuationLineId>
     {
+
         public UpdateAuditedPriceCommand(ValuationLineId id, DateTime priceDateTime, string currency, decimal value, DateTime asOfDateTime) 
             : base(id)
-        {
+        { 
             PriceDateTime = priceDateTime;
             Currency = currency;
             Value = value;

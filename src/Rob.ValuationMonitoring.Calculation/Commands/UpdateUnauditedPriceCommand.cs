@@ -1,3 +1,4 @@
+using System;
 using EventFlow.Commands;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
 
@@ -5,14 +6,20 @@ namespace Rob.ValuationMonitoring.Calculation.Commands
 {
     public class UpdateUnauditedPriceCommand : Command<ValuationLineAggregate, ValuationLineId>
     {
-        public UpdateUnauditedPriceCommand(
-            ValuationLineId aggregateId,
-            UnauditedPrice unauditedPrice)
+        public UpdateUnauditedPriceCommand(ValuationLineId aggregateId, string id, DateTime priceDateTime, string currency, decimal value, DateTime asOfDateTime)
             : base(aggregateId)
         {
-            UnauditedPrice = unauditedPrice;
+            Id = id;
+            PriceDateTime = priceDateTime;
+            Currency = currency;
+            Value = value;
+            AsOfDateTime = asOfDateTime;
         }
 
-        public UnauditedPrice UnauditedPrice { get; }
+        public string Id { get; }
+        public DateTime PriceDateTime { get; }
+        public DateTime AsOfDateTime { get; }
+        public string Currency { get; }
+        public decimal Value { get; }
     }
 }

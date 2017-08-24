@@ -14,6 +14,7 @@ using Rob.ValuationMonitoring.Calculation;
 using Rob.ValuationMonitoring.Calculation.Commands;
 using Rob.ValuationMonitoring.Calculation.ReadModels;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
+using Rob.ValuationMonitoring.Calculations.Tests.Integration;
 
 namespace Rob.ValuationMonitoring.WindowsHost
 {

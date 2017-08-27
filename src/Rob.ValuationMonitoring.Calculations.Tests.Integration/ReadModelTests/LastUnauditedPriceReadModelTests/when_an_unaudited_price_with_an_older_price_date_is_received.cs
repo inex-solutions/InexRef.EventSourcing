@@ -1,9 +1,7 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
-using Rob.ValuationMonitoring.Calculation;
+using Rob.ValuationMonitoring.Calculation.Commands;
 using Rob.ValuationMonitoring.Calculation.ReadModels;
-using Rob.ValuationMonitoring.Calculation.ValueObjects;
 using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
 using Shouldly;
 
@@ -15,20 +13,20 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
 
         protected override async Task Given()
         {
-            Price = new UnauditedPrice(DateTime.Parse("01-Jan-2017"), "GBP", 10.0M, DateTime.Now);
-            await Publish(Price.ToUpdateUnauditedPriceCommand(ValuationLineId));
+            UpdateUnauditedPriceCommand = new UpdateUnauditedPriceCommand(ValuationLineId, $"InitialName-{ValuationLineId}", DateTime.Parse("01-Jan-2017"), "GBP", 10.0M, DateTime.Now);
+            await Publish(UpdateUnauditedPriceCommand);
             OriginalReadModel = LatestUnauditedPriceReadModel;
 
-            Price = new UnauditedPrice(DateTime.Parse("31-Dec-2016"), "GBP", 15.0M, DateTime.Now);
+            UpdateUnauditedPriceCommand = new UpdateUnauditedPriceCommand(ValuationLineId, $"InitialName-{ValuationLineId}", DateTime.Parse("31-Dec-2016"), "GBP", 15.0M, DateTime.Now);
         }
 
-        protected override async Task When() => await Publish(Price.ToUpdateUnauditedPriceCommand(ValuationLineId));
+        protected override async Task When() => await Publish(UpdateUnauditedPriceCommand);
 
         [Then]
         public void the_read_model_should_have_the_original_price() => LatestUnauditedPriceReadModel.UnauditedPrice.ShouldBe(OriginalReadModel.UnauditedPrice);
 
         [Then]
-        public void the_read_model_should_have_the_correct_currency() => LatestUnauditedPriceReadModel.Currency.ShouldBe(Price.Currency);
+        public void the_read_model_should_have_the_correct_currency() => LatestUnauditedPriceReadModel.Currency.ShouldBe(OriginalReadModel.Currency);
 
         [Then]
         public void the_read_model_should_have_the_correct_id() => LatestUnauditedPriceReadModel.ValuationLineId.ShouldBe(ValuationLineId.Value);

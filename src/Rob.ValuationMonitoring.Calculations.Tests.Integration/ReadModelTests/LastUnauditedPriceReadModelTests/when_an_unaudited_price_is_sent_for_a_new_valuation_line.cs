@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Rob.ValuationMonitoring.Calculation.Commands;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
 using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
 using Shouldly;
@@ -10,25 +11,25 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
     {
         protected override async Task Given()
         {
-            Price = new UnauditedPrice(DateTime.Parse("01-Dec-2016"), "GBP", 12.3499M, DateTime.Now);
+            UpdateUnauditedPriceCommand = new UpdateUnauditedPriceCommand(ValuationLineId, $"InitialName-{ValuationLineId}", DateTime.Parse("01-Dec-2017"), "GBP", 12.3499M, DateTime.Now);
         }
 
-        protected override async Task When() => await Publish(Price.ToUpdateUnauditedPriceCommand(ValuationLineId));
+        protected override async Task When() => await Publish(UpdateUnauditedPriceCommand);
 
         [Then]
         public void a_read_model_is_created_for_the_valuation_line() => LatestUnauditedPriceReadModel.ShouldNotBeNull();
 
         [Then]
-        public void the_read_model_should_have_the_correct_price() => LatestUnauditedPriceReadModel.UnauditedPrice.ShouldBe(Price.Value);
+        public void the_read_model_should_have_the_correct_price() => LatestUnauditedPriceReadModel.UnauditedPrice.ShouldBe(UpdateUnauditedPriceCommand.Value);
 
         [Then]
-        public void the_read_model_should_have_the_correct_currency() => LatestUnauditedPriceReadModel.Currency.ShouldBe(Price.Currency);
+        public void the_read_model_should_have_the_correct_currency() => LatestUnauditedPriceReadModel.Currency.ShouldBe(UpdateUnauditedPriceCommand.Currency);
 
         [Then]
         public void the_read_model_should_have_the_correct_id() => LatestUnauditedPriceReadModel.ValuationLineId.ShouldBe(ValuationLineId.Value);
 
         [Then]
-        public void the_read_model_should_have_the_correct_price_date_time() => LatestUnauditedPriceReadModel.PriceDateTime.ShouldBe(Price.PriceDateTime);
+        public void the_read_model_should_have_the_correct_price_date_time() => LatestUnauditedPriceReadModel.PriceDateTime.ShouldBe(UpdateUnauditedPriceCommand.PriceDateTime);
 
         [Then]
         public void the_read_model_should_have_a_create_date_time() => LatestUnauditedPriceReadModel.CreateTime.ShouldNotBeNull();

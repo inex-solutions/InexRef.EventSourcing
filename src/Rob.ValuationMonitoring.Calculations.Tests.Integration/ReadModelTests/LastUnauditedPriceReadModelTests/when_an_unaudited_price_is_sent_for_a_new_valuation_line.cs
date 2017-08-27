@@ -1,8 +1,5 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
-using Rob.ValuationMonitoring.Calculation;
-using Rob.ValuationMonitoring.Calculation.Commands;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
 using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
 using Shouldly;

@@ -18,7 +18,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
         protected override async Task When() => await Publish(UpdatePriceCommand);
 
         [Then]
-        public void a_single_event_for_this_valuation_line_is_created_in_the_event_store() => GetEventsFromStore(ValuationLineId).Count.ShouldBe(1);
+        public void the_valuation_line_should_report_the_valuation_line_name_correctly() => GetAggregate(ValuationLineId).ValuationLineName.ShouldBe(UpdatePriceCommand.Name);
 
         [Then]
         public void the_valuation_line_should_report_the_price_as_its_latest_price() => GetAggregate(ValuationLineId).LastUnauditedPrice.ShouldBe(UpdatePriceCommand.ToUnauditedPrice());

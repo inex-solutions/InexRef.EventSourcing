@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="AggregateTests\when_an_audited_price_is_received_for_an_existing_valuation_line.cs" />
     <Compile Include="AggregateTests\when_an_unaudited_price_is_received_for_an_existing_valuation_line.cs" />
+    <Compile Include="AggregateTests\when_an_unaudited_price_is_received_for_an_existing_valuation_line_but_the_name_has_changed.cs" />
     <Compile Include="AggregateTests\when_an_unaudited_price_is_received_for_a_new_valuation_line.cs" />
     <Compile Include="AsOfTests\AsOfTests.cs" />
     <Compile Include="CommandExtensions.cs" />

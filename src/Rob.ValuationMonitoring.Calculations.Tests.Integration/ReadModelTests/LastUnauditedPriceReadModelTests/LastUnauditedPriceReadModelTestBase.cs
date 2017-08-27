@@ -6,7 +6,6 @@ using EventFlow.Queries;
 using Rob.ValuationMonitoring.Calculation;
 using Rob.ValuationMonitoring.Calculation.Commands;
 using Rob.ValuationMonitoring.Calculation.ReadModels;
-using Rob.ValuationMonitoring.Calculation.ValueObjects;
 
 namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.LastUnauditedPriceReadModelTests
 {

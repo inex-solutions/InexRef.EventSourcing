@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Rob.ValuationMonitoring.Calculation.Commands;
-using Rob.ValuationMonitoring.Calculation.ValueObjects;
 using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
 using Shouldly;
 
@@ -18,6 +17,9 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
 
         [Then]
         public void a_read_model_is_created_for_the_valuation_line() => LatestUnauditedPriceReadModel.ShouldNotBeNull();
+
+        [Then]
+        public void the_read_model_should_have_the_correct_valuation_line_name() => LatestUnauditedPriceReadModel.ValuationLineName.ShouldBe(UpdateUnauditedPriceCommand.Name);
 
         [Then]
         public void the_read_model_should_have_the_correct_price() => LatestUnauditedPriceReadModel.UnauditedPrice.ShouldBe(UpdateUnauditedPriceCommand.Value);

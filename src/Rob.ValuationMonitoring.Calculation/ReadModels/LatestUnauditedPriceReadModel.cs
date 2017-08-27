@@ -10,7 +10,9 @@ namespace Rob.ValuationMonitoring.Calculation.ReadModels
     [Table("ReadModel-LatestUnauditedPrice")]
     public class LatestUnauditedPriceReadModel : 
         IReadModel,
-        IAmReadModelFor<ValuationLineAggregate, ValuationLineId, UnauditedPriceReceivedEvent>
+        IAmReadModelFor<ValuationLineAggregate, ValuationLineId, UnauditedPriceReceivedEvent>,
+        IAmReadModelFor<ValuationLineAggregate, ValuationLineId, AuditedPriceReceivedEvent>,
+        IAmReadModelFor<ValuationLineAggregate, ValuationLineId, ValuationLineNameChangedEvent>
     {
         public decimal UnauditedPrice { get; set; }
 
@@ -26,6 +28,8 @@ namespace Rob.ValuationMonitoring.Calculation.ReadModels
         public DateTimeOffset UpdatedTime { get; set; }
 
         public int SequenceNumber { get; set; }
+
+        public string ValuationLineName { get; set; }
 
         public void Apply(IReadModelContext context, IDomainEvent<ValuationLineAggregate, ValuationLineId, UnauditedPriceReceivedEvent> domainEvent)
         {
@@ -45,6 +49,31 @@ namespace Rob.ValuationMonitoring.Calculation.ReadModels
                     CreateTime = UpdatedTime;
                 }
             }
+        }
+
+        public void Apply(IReadModelContext context, IDomainEvent<ValuationLineAggregate, ValuationLineId, AuditedPriceReceivedEvent> domainEvent)
+        {
+            var priceDateTime = domainEvent.AggregateEvent.AuditedPrice.PriceDateTime;
+            if (priceDateTime > PriceDateTime)
+            {
+                UnauditedPrice = domainEvent.AggregateEvent.AuditedPrice.Value;
+                PriceDateTime = domainEvent.AggregateEvent.AuditedPrice.PriceDateTime;
+                SequenceNumber = domainEvent.AggregateSequenceNumber;
+                Currency = domainEvent.AggregateEvent.AuditedPrice.Currency;
+                ValuationLineId = domainEvent.AggregateIdentity.Value;
+
+                UpdatedTime = DateTime.Now;
+
+                if (CreateTime == null)
+                {
+                    CreateTime = UpdatedTime;
+                }
+            }
+        }
+
+        public void Apply(IReadModelContext context, IDomainEvent<ValuationLineAggregate, ValuationLineId, ValuationLineNameChangedEvent> domainEvent)
+        {
+            ValuationLineName = domainEvent.AggregateEvent.Name;
         }
     }
 }

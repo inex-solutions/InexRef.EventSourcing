@@ -23,9 +23,6 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.AggregateTests
         protected override async Task When() => await Publish(AuditedPriceCommand);
 
         [Then]
-        public void two_events_for_this_valuation_line_are_now_present_in_the_event_store() => GetEventsFromStore(ValuationLineId).Count.ShouldBe(2);
-
-        [Then]
         public void the_valuation_line_should_report_the_audited_price_as_its_reference_price() => GetAggregate(ValuationLineId).ReferencePrice.ShouldBe(AuditedPriceCommand.ToAuditedPrice());
 
         [Then]

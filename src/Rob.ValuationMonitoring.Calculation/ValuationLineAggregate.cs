@@ -8,7 +8,8 @@ namespace Rob.ValuationMonitoring.Calculation
     public class ValuationLineAggregate : 
         AggregateRoot<ValuationLineAggregate, ValuationLineId>,
         IEmit<UnauditedPriceReceivedEvent>,
-        IEmit<AuditedPriceReceivedEvent>
+        IEmit<AuditedPriceReceivedEvent>,
+        IEmit<ValuationLineNameChangedEvent>
     {
         public string ValuationLineName { get; private set; }
 
@@ -30,6 +31,16 @@ namespace Rob.ValuationMonitoring.Calculation
         public void UpdateAuditedPrice(AuditedPrice price)
         {
             Emit(new AuditedPriceReceivedEvent(price));
+        }
+
+        public void UpdateValuationLineName(string valuationLineName)
+        {
+            Emit(new ValuationLineNameChangedEvent(valuationLineName));
+        }
+
+        public void Apply(ValuationLineNameChangedEvent aggregateEvent)
+        {
+            ValuationLineName = aggregateEvent.Name;
         }
 
         public void Apply(UnauditedPriceReceivedEvent aggregateEvent)
@@ -65,11 +76,6 @@ namespace Rob.ValuationMonitoring.Calculation
             {
                 ValuationChange = (LastUnauditedPrice.Value - ReferencePrice.Value) / ReferencePrice.Value;
             }
-        }
-
-        public void UpdateValuationLineName(string valuationLineName)
-        {
-            ValuationLineName = valuationLineName;
         }
     }
 }

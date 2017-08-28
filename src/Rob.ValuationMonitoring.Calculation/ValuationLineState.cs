@@ -65,5 +65,28 @@ namespace Rob.ValuationMonitoring.Calculation
                 ValuationChange = (LastUnauditedPrice.Value - ReferencePrice.Value) / ReferencePrice.Value;
             }
         }
+
+        public void UpdateFromSnapshot(ValuationLineSnapshot snapshot)
+        {
+            LastUnauditedPrice = snapshot.LastUnauditedPrice;
+            ReferencePrice = snapshot.ReferencePrice;
+            ValuationChange = snapshot.ValuationChange;
+            ValuationLineName = snapshot.ValuationLineName;
+            ValuationLineNameEffectiveDateTime = snapshot.ValuationLineNameEffectiveDateTime;
+        }
+
+        public ValuationLineSnapshot ToSnapshot()
+        {
+            var snapshot = new ValuationLineSnapshot
+            {
+                LastUnauditedPrice = LastUnauditedPrice,
+                ReferencePrice = ReferencePrice,
+                ValuationChange = ValuationChange,
+                ValuationLineName = ValuationLineName,
+                ValuationLineNameEffectiveDateTime = ValuationLineNameEffectiveDateTime,
+            };
+
+            return snapshot;
+        }
     }
 }

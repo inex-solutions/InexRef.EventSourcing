@@ -9,6 +9,7 @@ using EventFlow.Logs;
 using EventFlow.MsSql;
 using EventFlow.MsSql.EventStores;
 using EventFlow.MsSql.Extensions;
+using EventFlow.MsSql.SnapshotStores;
 using Rob.ValuationMonitoring.Calculation;
 using Rob.ValuationMonitoring.Calculation.ReadModels;
 
@@ -32,7 +33,14 @@ namespace Rob.ValuationMonitoring.WindowsHost
                 .UseMssqlReadModel<LatestUnauditedPriceReadModel>()
                 .UseInMemoryReadStoreFor<RawEventReadModel>()
                 .RegisterServices(r => r.Register(typeof(ILog), typeof(InfoConsoleLog)))
+                .AddSnapshots(typeof(ValuationLineSnapshot))
+                .UseMsSqlSnapshotStore()
                 .CreateResolver();
+
+            // uncomment the following to create the event flow schema
+            //var msSqlDatabaseMigrator = _resolver.Resolve<IMsSqlDatabaseMigrator>();
+            //EventFlowEventStoresMsSql.MigrateDatabase(msSqlDatabaseMigrator);
+            //EventFlowSnapshotStoresMsSql.MigrateDatabase(msSqlDatabaseMigrator);
         }
 
         public async Task ExecuteTest(ITest test)

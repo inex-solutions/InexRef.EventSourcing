@@ -3,12 +3,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EventFlow.Extensions;
+using EventFlow.MsSql;
+using EventFlow.MsSql.EventStores;
 using EventFlow.Queries;
 using Rob.ValuationMonitoring.Calculation;
 using Rob.ValuationMonitoring.Calculation.Commands;
 using Rob.ValuationMonitoring.Calculation.ReadModels;
-using Rob.ValuationMonitoring.Calculation.ValueObjects;
-using Rob.ValuationMonitoring.Calculations.Tests.Integration;
 
 namespace Rob.ValuationMonitoring.WindowsHost
 {
@@ -16,10 +16,6 @@ namespace Rob.ValuationMonitoring.WindowsHost
     {
         public override async Task Execute()
         {
-            // uncomment the following to create the event flow schema
-            //var msSqlDatabaseMigrator = resolver.Resolve<IMsSqlDatabaseMigrator>();
-            //EventFlowEventStoresMsSql.MigrateDatabase(msSqlDatabaseMigrator);
-
             var id = new ValuationLineId("PORG1");
 
             // Publish a command

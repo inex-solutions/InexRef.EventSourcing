@@ -1,16 +1,19 @@
 ﻿using System;
-using EventFlow.Aggregates;
+using System.Threading;
+using System.Threading.Tasks;
+using EventFlow.Snapshots;
+using EventFlow.Snapshots.Strategies;
 using Rob.ValuationMonitoring.Calculation.Events;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
 
 namespace Rob.ValuationMonitoring.Calculation
 {
-    public class ValuationLineAggregate : 
-        AggregateRoot<ValuationLineAggregate, ValuationLineId>
+    public class ValuationLineAggregate :
+        SnapshotAggregateRoot<ValuationLineAggregate, ValuationLineId, ValuationLineSnapshot>
     {
-        private readonly ValuationLineState _state = new ValuationLineState();
+        private ValuationLineState _state = new ValuationLineState();
 
-        public ValuationLineAggregate(ValuationLineId id) : base(id)
+        public ValuationLineAggregate(ValuationLineId id) : base(id, SnapshotEveryFewVersionsStrategy.With(100))
         {
             Register(_state);
         }
@@ -36,6 +39,18 @@ namespace Rob.ValuationMonitoring.Calculation
         public void UpdateValuationLineName(string valuationLineName, DateTime effectiveDate)
         {
             Emit(new ValuationLineNameChangedEvent(valuationLineName, effectiveDate));
+        }
+
+        protected override Task<ValuationLineSnapshot> CreateSnapshotAsync(CancellationToken cancellationToken)
+        {
+            return Task.FromResult(_state.ToSnapshot());
+        }
+
+        protected override Task LoadSnapshotAsync(ValuationLineSnapshot snapshot, ISnapshotMetadata metadata, CancellationToken cancellationToken)
+        {
+            _state.UpdateFromSnapshot(snapshot);
+
+            return Task.FromResult(0);
         }
     }
 }

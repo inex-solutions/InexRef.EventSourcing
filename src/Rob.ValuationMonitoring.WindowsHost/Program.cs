@@ -31,8 +31,8 @@ namespace Rob.ValuationMonitoring.WindowsHost
             using (var runner = new TestRunner())
             {
                 runner.SetupEnvironment();
-                await runner.ExecuteTest(new SimpleTest());
-                //await runner.ExecuteTest(new LoadTest());
+                //await runner.ExecuteTest(new SimpleTest());
+                await runner.ExecuteTest(new LoadTest());
             }
         }
     }

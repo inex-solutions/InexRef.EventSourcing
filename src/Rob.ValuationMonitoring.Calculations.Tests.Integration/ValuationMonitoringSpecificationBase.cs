@@ -48,6 +48,8 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration
                 .UseEventStore<MsSqlEventPersistence>()
                 .UseMssqlReadModel<LatestUnauditedPriceReadModel>()
                 .UseInMemoryReadStoreFor<RawEventReadModel>()
+                .AddSnapshots(typeof(ValuationLineSnapshot))
+                .UseMsSqlSnapshotStore()
                 .CreateResolver();
 
             CommandBus = Resolver.Resolve<ICommandBus>();

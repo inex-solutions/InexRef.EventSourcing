@@ -79,6 +79,7 @@
     <Compile Include="ReadModels\LatestUnauditedPriceReadModel.cs" />
     <Compile Include="ReadModels\RawEventReadModel.cs" />
     <Compile Include="ValuationLine.cs" />
+    <Compile Include="ValuationLineSnapshot.cs" />
     <Compile Include="ValueObjects\AuditedPrice.cs" />
     <Compile Include="ValueObjects\Price.cs" />
     <Compile Include="ValueObjects\UnauditedPrice.cs" />

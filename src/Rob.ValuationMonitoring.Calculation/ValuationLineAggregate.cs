@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using EventFlow.Aggregates;
+using EventFlow.Snapshots;
+using EventFlow.Snapshots.Strategies;
 using Rob.ValuationMonitoring.Calculation.Events;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
 
 namespace Rob.ValuationMonitoring.Calculation
 {
-    public class ValuationLineAggregate : 
-        AggregateRoot<ValuationLineAggregate, ValuationLineId>,
+    public class ValuationLineAggregate :
+        SnapshotAggregateRoot<ValuationLineAggregate, ValuationLineId, ValuationLineSnapshot>,
         IEmit<UnauditedPriceReceivedEvent>,
         IEmit<AuditedPriceReceivedEvent>,
         IEmit<ValuationLineNameChangedEvent>
@@ -22,7 +26,7 @@ namespace Rob.ValuationMonitoring.Calculation
 
         public decimal ValuationChange { get; private set; }
 
-        public ValuationLineAggregate(ValuationLineId id) : base(id)
+        public ValuationLineAggregate(ValuationLineId id) : base(id, SnapshotEveryFewVersionsStrategy.With(2))
         {
         }
 
@@ -83,6 +87,31 @@ namespace Rob.ValuationMonitoring.Calculation
             {
                 ValuationChange = (LastUnauditedPrice.Value - ReferencePrice.Value) / ReferencePrice.Value;
             }
+        }
+
+        protected override Task<ValuationLineSnapshot> CreateSnapshotAsync(CancellationToken cancellationToken)
+        {
+            var snapshot = new ValuationLineSnapshot
+            {
+                ReferencePrice = ReferencePrice,
+                LastUnauditedPrice = LastUnauditedPrice,
+                ValuationLineName = ValuationLineName,
+                ValuationChange = ValuationChange,
+                ValuationLineNameEffectiveDateTime = ValuationLineNameEffectiveDateTime
+            };
+
+            return Task.FromResult(snapshot);
+        }
+
+        protected override Task LoadSnapshotAsync(ValuationLineSnapshot snapshot, ISnapshotMetadata metadata, CancellationToken cancellationToken)
+        {
+            ReferencePrice = snapshot.ReferencePrice;
+            LastUnauditedPrice = snapshot.LastUnauditedPrice;
+            ValuationLineName = snapshot.ValuationLineName;
+            ValuationChange = snapshot.ValuationChange;
+            ValuationLineNameEffectiveDateTime = snapshot.ValuationLineNameEffectiveDateTime;
+
+            return Task.FromResult(0);
         }
     }
 }

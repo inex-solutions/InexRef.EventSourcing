@@ -12,10 +12,10 @@ namespace Rob.ValuationMonitoring.Calculation.Commands
             if (aggregate.IsNew 
                 || aggregate.ValuationLineName != command.Name)
             {
-                aggregate.UpdateValuationLineName(command.Name);
+                aggregate.UpdateValuationLineName(command.Name, command.EffectiveDateTime);
             }
 
-            aggregate.UpdateUnauditedPrice(new UnauditedPrice(command.PriceDateTime, command.Currency, command.Value, command.AsOfDateTime));
+            aggregate.UpdateUnauditedPrice(new UnauditedPrice(command.EffectiveDateTime, command.Currency, command.Value, command.AsOfDateTime));
 
             return Task.FromResult(0);
         }

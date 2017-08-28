@@ -11,6 +11,9 @@ namespace Rob.ValuationMonitoring.Calculation
         IEmit<AuditedPriceReceivedEvent>,
         IEmit<ValuationLineNameChangedEvent>
     {
+        //temporary workaround for illustrative purposes
+        public DateTime ValuationLineNameEffectiveDateTime { get; private set; }
+
         public string ValuationLineName { get; private set; }
 
         public Price ReferencePrice { get; private set; }
@@ -33,14 +36,18 @@ namespace Rob.ValuationMonitoring.Calculation
             Emit(new AuditedPriceReceivedEvent(price));
         }
 
-        public void UpdateValuationLineName(string valuationLineName)
+        public void UpdateValuationLineName(string valuationLineName, DateTime effectiveDate)
         {
-            Emit(new ValuationLineNameChangedEvent(valuationLineName));
+            Emit(new ValuationLineNameChangedEvent(valuationLineName, effectiveDate));
         }
 
         public void Apply(ValuationLineNameChangedEvent aggregateEvent)
         {
-            ValuationLineName = aggregateEvent.Name;
+            if (aggregateEvent.NameEffectiveDateTime > ValuationLineNameEffectiveDateTime)
+            {
+                ValuationLineNameEffectiveDateTime = aggregateEvent.NameEffectiveDateTime;
+                ValuationLineName = aggregateEvent.Name;
+            }
         }
 
         public void Apply(UnauditedPriceReceivedEvent aggregateEvent)

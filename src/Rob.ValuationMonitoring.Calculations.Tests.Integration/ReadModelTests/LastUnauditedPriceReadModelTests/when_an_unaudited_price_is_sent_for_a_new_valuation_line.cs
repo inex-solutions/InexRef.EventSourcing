@@ -31,7 +31,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.ReadModelTests.
         public void the_read_model_should_have_the_correct_id() => LatestUnauditedPriceReadModel.ValuationLineId.ShouldBe(ValuationLineId.Value);
 
         [Then]
-        public void the_read_model_should_have_the_correct_price_date_time() => LatestUnauditedPriceReadModel.PriceDateTime.ShouldBe(UpdateUnauditedPriceCommand.PriceDateTime);
+        public void the_read_model_should_have_the_correct_effective_date_time() => LatestUnauditedPriceReadModel.EffectiveDateTime.ShouldBe(UpdateUnauditedPriceCommand.EffectiveDateTime);
 
         [Then]
         public void the_read_model_should_have_a_create_date_time() => LatestUnauditedPriceReadModel.CreateTime.ShouldNotBeNull();

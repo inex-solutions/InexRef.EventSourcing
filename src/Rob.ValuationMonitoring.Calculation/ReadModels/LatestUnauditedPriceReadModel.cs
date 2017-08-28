@@ -16,7 +16,7 @@ namespace Rob.ValuationMonitoring.Calculation.ReadModels
     {
         public decimal UnauditedPrice { get; set; }
 
-        public DateTime PriceDateTime { get; set; }
+        public DateTime EffectiveDateTime { get; set; }
 
         public string Currency { get; set; }
 
@@ -31,13 +31,16 @@ namespace Rob.ValuationMonitoring.Calculation.ReadModels
 
         public string ValuationLineName { get; set; }
 
+        public DateTime ValuationLineNameEffectiveDateTime { get; set; }
+
         public void Apply(IReadModelContext context, IDomainEvent<ValuationLineAggregate, ValuationLineId, UnauditedPriceReceivedEvent> domainEvent)
         {
+            // this logic should not be here - it only exists because we are subscribing to *input* events of the aggregate
             var priceDateTime = domainEvent.AggregateEvent.UnauditedPrice.PriceDateTime;
-            if (priceDateTime > PriceDateTime)
+            if (priceDateTime > EffectiveDateTime)
             {
                 UnauditedPrice = domainEvent.AggregateEvent.UnauditedPrice.Value;
-                PriceDateTime = domainEvent.AggregateEvent.UnauditedPrice.PriceDateTime;
+                EffectiveDateTime = domainEvent.AggregateEvent.UnauditedPrice.PriceDateTime;
                 SequenceNumber = domainEvent.AggregateSequenceNumber;
                 Currency = domainEvent.AggregateEvent.UnauditedPrice.Currency;
                 ValuationLineId = domainEvent.AggregateIdentity.Value;
@@ -53,11 +56,12 @@ namespace Rob.ValuationMonitoring.Calculation.ReadModels
 
         public void Apply(IReadModelContext context, IDomainEvent<ValuationLineAggregate, ValuationLineId, AuditedPriceReceivedEvent> domainEvent)
         {
+            // this logic should not be here - it only exists because we are subscribing to *input* events of the aggregate
             var priceDateTime = domainEvent.AggregateEvent.AuditedPrice.PriceDateTime;
-            if (priceDateTime > PriceDateTime)
+            if (priceDateTime > EffectiveDateTime)
             {
                 UnauditedPrice = domainEvent.AggregateEvent.AuditedPrice.Value;
-                PriceDateTime = domainEvent.AggregateEvent.AuditedPrice.PriceDateTime;
+                EffectiveDateTime = domainEvent.AggregateEvent.AuditedPrice.PriceDateTime;
                 SequenceNumber = domainEvent.AggregateSequenceNumber;
                 Currency = domainEvent.AggregateEvent.AuditedPrice.Currency;
                 ValuationLineId = domainEvent.AggregateIdentity.Value;
@@ -73,7 +77,12 @@ namespace Rob.ValuationMonitoring.Calculation.ReadModels
 
         public void Apply(IReadModelContext context, IDomainEvent<ValuationLineAggregate, ValuationLineId, ValuationLineNameChangedEvent> domainEvent)
         {
-            ValuationLineName = domainEvent.AggregateEvent.Name;
+            // this logic should not be here - it only exists because we are subscribing to *input* events of the aggregate
+            if (domainEvent.AggregateEvent.NameEffectiveDateTime > ValuationLineNameEffectiveDateTime)
+            {
+                ValuationLineNameEffectiveDateTime = domainEvent.AggregateEvent.NameEffectiveDateTime;
+                ValuationLineName = domainEvent.AggregateEvent.Name;
+            }
         }
     }
 }

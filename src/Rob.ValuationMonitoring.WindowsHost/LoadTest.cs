@@ -15,7 +15,6 @@ namespace Rob.ValuationMonitoring.WindowsHost
             Console.WriteLine("LoadTest start");
             var valuations = GenerateUpdateUnauditedPriceCommands(valuationLineId, DateTime.Parse("01-Jan-2006"), DateTime.Parse("01-Jan-2007"));
 
-            var count = 0;
             foreach (var valuation in valuations)
             {
                 await Publish(valuation);

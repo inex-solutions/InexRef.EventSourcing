@@ -6,25 +6,22 @@ using Rob.ValuationMonitoring.Calculation.ValueObjects;
 namespace Rob.ValuationMonitoring.Calculation
 {
     public class ValuationLineAggregate : 
-        AggregateRoot<ValuationLineAggregate, ValuationLineId>,
-        IEmit<UnauditedPriceReceivedEvent>,
-        IEmit<AuditedPriceReceivedEvent>,
-        IEmit<ValuationLineNameChangedEvent>
+        AggregateRoot<ValuationLineAggregate, ValuationLineId>
     {
-        //temporary workaround for illustrative purposes
-        public DateTime ValuationLineNameEffectiveDateTime { get; private set; }
-
-        public string ValuationLineName { get; private set; }
-
-        public Price ReferencePrice { get; private set; }
-
-        public UnauditedPrice LastUnauditedPrice { get; private set; }
-
-        public decimal ValuationChange { get; private set; }
+        private readonly ValuationLineState _state = new ValuationLineState();
 
         public ValuationLineAggregate(ValuationLineId id) : base(id)
         {
+            Register(_state);
         }
+
+        public string ValuationLineName => _state.ValuationLineName;
+
+        public UnauditedPrice LastUnauditedPrice => _state.LastUnauditedPrice;
+
+        public Price ReferencePrice => _state.ReferencePrice;
+
+        public decimal ValuationChange => _state.ValuationChange;
 
         public void UpdateUnauditedPrice(UnauditedPrice price)
         {
@@ -39,50 +36,6 @@ namespace Rob.ValuationMonitoring.Calculation
         public void UpdateValuationLineName(string valuationLineName, DateTime effectiveDate)
         {
             Emit(new ValuationLineNameChangedEvent(valuationLineName, effectiveDate));
-        }
-
-        public void Apply(ValuationLineNameChangedEvent aggregateEvent)
-        {
-            if (aggregateEvent.NameEffectiveDateTime > ValuationLineNameEffectiveDateTime)
-            {
-                ValuationLineNameEffectiveDateTime = aggregateEvent.NameEffectiveDateTime;
-                ValuationLineName = aggregateEvent.Name;
-            }
-        }
-
-        public void Apply(UnauditedPriceReceivedEvent aggregateEvent)
-        {
-            var unauditedPrice = aggregateEvent.UnauditedPrice;
-
-            if (LastUnauditedPrice ==  null
-                || unauditedPrice.PriceDateTime > LastUnauditedPrice.PriceDateTime)
-            {
-                LastUnauditedPrice = unauditedPrice;
-            }
-
-            CalculateValuationChange();
-        }
-
-        public void Apply(AuditedPriceReceivedEvent aggregateEvent)
-        {
-            var auditedPrice = aggregateEvent.AuditedPrice;
-
-            if (ReferencePrice == null
-                || auditedPrice.PriceDateTime > ReferencePrice.PriceDateTime)
-            {
-                ReferencePrice = auditedPrice;
-            }
-
-            CalculateValuationChange();
-        }
-
-        private void CalculateValuationChange()
-        {
-            if (LastUnauditedPrice != null
-                && ReferencePrice != null)
-            {
-                ValuationChange = (LastUnauditedPrice.Value - ReferencePrice.Value) / ReferencePrice.Value;
-            }
         }
     }
 }

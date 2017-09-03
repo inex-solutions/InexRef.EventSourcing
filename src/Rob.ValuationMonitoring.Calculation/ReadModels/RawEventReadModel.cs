@@ -5,6 +5,7 @@ using System.Linq;
 using EventFlow.Aggregates;
 using EventFlow.ReadStores;
 using Rob.ValuationMonitoring.Calculation.Events;
+using Rob.ValuationMonitoring.Calculation.Events.Inbound;
 
 namespace Rob.ValuationMonitoring.Calculation.ReadModels
 {

@@ -19,7 +19,7 @@ namespace Rob.ValuationMonitoring.WindowsHost
             var id = new ValuationLineId("PORG1");
 
             // Publish a command
-            var priceCommand = new UpdateUnauditedPriceCommand(id, $"InitialName-{id}", DateTime.Parse("11-Jan-2017"), "GBP", 5M, DateTime.Now);
+            var priceCommand = new UpdateUnauditedPriceCommand(id, $"InitialName-{id}", DateTime.Parse("14-Jan-2017"), "GBP", 7M, DateTime.Now);
             await CommandBus.PublishAsync(priceCommand, CancellationToken.None);
 
             // Resolve the query handler and use the built-in query for fetching

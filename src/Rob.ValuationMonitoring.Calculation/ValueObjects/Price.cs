@@ -3,7 +3,7 @@ using EventFlow.ValueObjects;
 
 namespace Rob.ValuationMonitoring.Calculation.ValueObjects
 {
-    public abstract class Price : ValueObject
+    public class Price : ValueObject
     {
         public Price(DateTime priceDateTime, string currency, decimal value, DateTime asOfDateTime)
         {

@@ -1,7 +1,7 @@
 ﻿using EventFlow.Aggregates;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
 
-namespace Rob.ValuationMonitoring.Calculation.Events
+namespace Rob.ValuationMonitoring.Calculation.Events.Inbound
 {
     public class UnauditedPriceReceivedEvent : IAggregateEvent<ValuationLineAggregate, ValuationLineId>
     {

@@ -70,12 +70,14 @@
     <Compile Include="Commands\UpdateAuditedPriceCommandHandler.cs" />
     <Compile Include="Commands\UpdateUnauditedPriceCommandHandler.cs" />
     <Compile Include="Commands\UpdateUnauditedPriceCommand.cs" />
-    <Compile Include="Events\AuditedPriceReceivedEvent.cs" />
-    <Compile Include="Events\UnauditedPriceReceivedEvent.cs" />
+    <Compile Include="Events\Inbound\AuditedPriceReceivedEvent.cs" />
+    <Compile Include="Events\Outbound\PriceChangedEvent.cs" />
+    <Compile Include="Events\Inbound\UnauditedPriceReceivedEvent.cs" />
     <Compile Include="Events\ValuationEvent.cs" />
-    <Compile Include="Events\ValuationLineNameChangedEvent.cs" />
+    <Compile Include="Events\Inbound\ValuationLineNameChangedEvent.cs" />
     <Compile Include="PriceExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadModels\LatestPriceOnlyReadModel.cs" />
     <Compile Include="ReadModels\LatestUnauditedPriceReadModel.cs" />
     <Compile Include="ReadModels\RawEventReadModel.cs" />
     <Compile Include="ValuationLine.cs" />

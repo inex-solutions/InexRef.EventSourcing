@@ -5,6 +5,8 @@ using EventFlow.Aggregates;
 using EventFlow.Snapshots;
 using EventFlow.Snapshots.Strategies;
 using Rob.ValuationMonitoring.Calculation.Events;
+using Rob.ValuationMonitoring.Calculation.Events.Inbound;
+using Rob.ValuationMonitoring.Calculation.Events.Outbound;
 using Rob.ValuationMonitoring.Calculation.ValueObjects;
 
 namespace Rob.ValuationMonitoring.Calculation
@@ -13,7 +15,8 @@ namespace Rob.ValuationMonitoring.Calculation
         SnapshotAggregateRoot<ValuationLineAggregate, ValuationLineId, ValuationLineSnapshot>,
         IEmit<UnauditedPriceReceivedEvent>,
         IEmit<AuditedPriceReceivedEvent>,
-        IEmit<ValuationLineNameChangedEvent>
+        IEmit<ValuationLineNameChangedEvent>,
+        IEmit<PriceChangedEvent>
     {
         //temporary workaround for illustrative purposes
         public DateTime ValuationLineNameEffectiveDateTime { get; private set; }
@@ -62,9 +65,12 @@ namespace Rob.ValuationMonitoring.Calculation
                 || unauditedPrice.PriceDateTime > LastUnauditedPrice.PriceDateTime)
             {
                 LastUnauditedPrice = unauditedPrice;
+                Emit(new PriceChangedEvent(unauditedPrice));
+
             }
 
             CalculateValuationChange();
+
         }
 
         public void Apply(AuditedPriceReceivedEvent aggregateEvent)
@@ -112,6 +118,11 @@ namespace Rob.ValuationMonitoring.Calculation
             ValuationLineNameEffectiveDateTime = snapshot.ValuationLineNameEffectiveDateTime;
 
             return Task.FromResult(0);
+        }
+
+        public void Apply(PriceChangedEvent aggregateEvent)
+        {
+            
         }
     }
 }

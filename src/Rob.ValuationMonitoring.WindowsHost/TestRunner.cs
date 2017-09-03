@@ -31,6 +31,7 @@ namespace Rob.ValuationMonitoring.WindowsHost
                 .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString(@"Server=localhost;Database=Rob.ValuationMonitoring;Trusted_Connection=True"))
                 .UseEventStore<MsSqlEventPersistence>()
                 .UseMssqlReadModel<LatestUnauditedPriceReadModel>()
+                .UseMssqlReadModel<LatestPriceOnlyReadModel>()
                 .UseInMemoryReadStoreFor<RawEventReadModel>()
                 .RegisterServices(r => r.Register(typeof(ILog), typeof(InfoConsoleLog)))
                 .AddSnapshots(typeof(ValuationLineSnapshot))

@@ -75,6 +75,11 @@
     <Compile Include="Events\Inbound\UnauditedPriceReceivedEvent.cs" />
     <Compile Include="Events\ValuationEvent.cs" />
     <Compile Include="Events\Inbound\ValuationLineNameChangedEvent.cs" />
+    <Compile Include="NotEventFlow\AggregateRoot.cs" />
+    <Compile Include="NotEventFlow\Command.cs" />
+    <Compile Include="NotEventFlow\Event.cs" />
+    <Compile Include="NotEventFlow\IAggregateRootInternal.cs" />
+    <Compile Include="NotEventFlow\IMessage.cs" />
     <Compile Include="PriceExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadModels\LatestPriceOnlyReadModel.cs" />

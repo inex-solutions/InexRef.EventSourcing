@@ -76,6 +76,7 @@
     <Compile Include="AggregateTests\when_an_unaudited_price_is_received_for_a_new_valuation_line.cs" />
     <Compile Include="AsOfTests\AsOfTests.cs" />
     <Compile Include="CommandExtensions.cs" />
+    <Compile Include="NotEventFlow\AggregateRootTestBase.cs" />
     <Compile Include="PriceExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadModelTests\LastUnauditedPriceReadModelTests\LastUnauditedPriceReadModelTestBase.cs" />

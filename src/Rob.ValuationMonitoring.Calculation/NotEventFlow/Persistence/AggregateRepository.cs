@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rob.ValuationMonitoring.Calculation.NotEventFlow.Messages;
 
 namespace Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence
 {
@@ -21,11 +22,23 @@ namespace Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence
             _eventStore.SaveEvents(aggregate.Id, aggregate.GetUncommittedEvents(), expectedVersion);
         }
 
-        public TAggregate GetById(Guid id)
+        public TAggregate Get(Guid id)
         {
             IAggregateRootInternal aggregate = new TAggregate();
             var events = _eventStore.LoadEvents(id).ToList();
             aggregate.Load(id, events);
+            return (TAggregate)aggregate;
+        }
+
+        public TAggregate GetOrCreateNew(Guid id)
+        {
+            IAggregateRootInternal aggregate = new TAggregate();
+            IEnumerable<Event> events;
+            if (!_eventStore.TryLoadEvents(id, out events))
+            {
+                events = new List<Event>();
+            }
+            aggregate.Load(id, events.ToList());
             return (TAggregate)aggregate;
         }
     }

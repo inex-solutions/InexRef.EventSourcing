@@ -6,6 +6,8 @@ namespace Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence
     {
         void Save(TAggregate aggregate, int expectedVersion);
 
-        TAggregate GetById(Guid id);
+        TAggregate Get(Guid id);
+
+        TAggregate GetOrCreateNew(Guid id);
     }
 }

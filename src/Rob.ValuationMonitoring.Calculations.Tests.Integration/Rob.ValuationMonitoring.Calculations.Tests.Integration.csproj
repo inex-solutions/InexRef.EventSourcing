@@ -80,8 +80,10 @@
     <Compile Include="NotEventFlow\AddAmountCommand.cs" />
     <Compile Include="NotEventFlow\AmountAddedEvent.cs" />
     <Compile Include="NotEventFlow\IntegrationTests\IntegrationTestBase.cs" />
+    <Compile Include="NotEventFlow\IntegrationTests\IntegrationTestHandlers.cs" />
     <Compile Include="NotEventFlow\IntegrationTests\when_the_balance_iis_reset_on_an_account_containing_two_pounds.cs" />
     <Compile Include="NotEventFlow\IntegrationTests\when_two_pounds_is_added_to_an_existing_but_empty_account.cs" />
+    <Compile Include="NotEventFlow\IntegrationTests\when_two_pounds_is_added_to_a_non_existent_account.cs" />
     <Compile Include="NotEventFlow\PersistenceTests\AggregateRepositoryTestBase.cs" />
     <Compile Include="NotEventFlow\AggregateTests\AggregateRootTestBase.cs" />
     <Compile Include="NotEventFlow\PersistenceTests\when_an_account_containing_two_pounds_is_saved_and_reloaded.cs" />

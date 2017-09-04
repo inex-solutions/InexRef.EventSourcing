@@ -35,6 +35,20 @@ namespace Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence
                 });
         }
 
+        public bool TryLoadEvents(Guid aggregateId, out IEnumerable<Event> events)
+        {
+            IEnumerable<StoredEvent> storedEvents;
+
+            if (!_storedEvents.TryGetValue(aggregateId, out storedEvents))
+            {
+                events = null;
+                return false;
+            }
+
+            events = storedEvents.Select(@event => @event.EventData);
+            return true;
+        }
+
         public IEnumerable<Event> LoadEvents(Guid aggregateId)
         {
             IEnumerable<StoredEvent> events;
@@ -45,48 +59,6 @@ namespace Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence
             }
 
             return events.Select(@event => @event.EventData);
-        }
-    }
-
-    internal class StoredEvent
-    {
-        public int Version { get; }
-
-        public Guid AggregateId { get; }
-
-        public Event EventData { get; }
-
-        public StoredEvent(Guid aggregateId, int version, Event eventData)
-        {
-            AggregateId = aggregateId;
-            Version = version;
-            EventData = eventData;
-        }
-    }
-
-    public class EventStoreConcurrencyException : Exception
-    {
-        public EventStoreConcurrencyException()
-        {
-            
-        }
-
-        public EventStoreConcurrencyException(string message) : base(message)
-        {
-            
-        }
-    }
-
-    public class AggregateNotFoundException : Exception
-    {
-        public AggregateNotFoundException()
-        {
-
-        }
-
-        public AggregateNotFoundException(string message) : base(message)
-        {
-
         }
     }
 }

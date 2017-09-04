@@ -16,7 +16,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow.Pe
             aggregate.AddAmount(2.00M);
             Subject.Save(aggregate, aggregate.Version);
 
-            ReloadedAccountAggregateRoot = Subject.GetById(AggregateId);
+            ReloadedAccountAggregateRoot = Subject.Get(AggregateId);
             ReloadedAccountAggregateRoot.AddAmount(5.00M);
         }
 

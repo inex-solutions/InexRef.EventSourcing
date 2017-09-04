@@ -12,12 +12,12 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow.Pe
             aggregate.AddAmount(2.00M);
             Subject.Save(aggregate, aggregate.Version);
 
-            ReloadedAccountAggregateRoot = Subject.GetById(AggregateId);
+            ReloadedAccountAggregateRoot = Subject.Get(AggregateId);
             ReloadedAccountAggregateRoot.AddAmount(5.00M);
             Subject.Save(ReloadedAccountAggregateRoot, ReloadedAccountAggregateRoot.Version);
         }
 
-        protected override void When() => ReloadedAccountAggregateRoot = Subject.GetById(AggregateId);
+        protected override void When() => ReloadedAccountAggregateRoot = Subject.Get(AggregateId);
 
         [Then]
         public void then_when_reloaded_the_account_contains_seven_pounds() => ReloadedAccountAggregateRoot.Balance.ShouldBe(7.00M);

@@ -14,6 +14,6 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow.In
         protected override void When() => Subject.Handle(new AddAmountCommand(AggregateId, 2.00M));
 
         [Then]
-        public void the_account_balance_is_two_pounds() => Repository.GetById(AggregateId).Balance.ShouldBe(2.00M);
+        public void the_account_balance_is_two_pounds() => Repository.Get(AggregateId).Balance.ShouldBe(2.00M);
     }
 }

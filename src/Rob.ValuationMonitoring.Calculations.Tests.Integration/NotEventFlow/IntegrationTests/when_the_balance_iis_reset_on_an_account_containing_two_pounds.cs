@@ -15,6 +15,6 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow.In
         protected override void When() => Subject.Handle(new ResetBalanceCommand(AggregateId));
 
         [Then]
-        public void the_account_balance_is_zero() => Repository.GetById(AggregateId).Balance.ShouldBe(0.00M);
+        public void the_account_balance_is_zero() => Repository.Get(AggregateId).Balance.ShouldBe(0.00M);
     }
 }

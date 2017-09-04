@@ -7,7 +7,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow.In
     {
         protected override void Given() { }
 
-        protected override void When() => Subject.Handle(new AddAmountCommand(AggregateId, 2.00M));
+        protected override void When() => Subject.Send(new AddAmountCommand(AggregateId, 2.00M));
 
         [Then]
         public void a_new_account_is_created_with_a_balance_of_two_pounds() => Repository.Get(AggregateId).Balance.ShouldBe(2.00M);

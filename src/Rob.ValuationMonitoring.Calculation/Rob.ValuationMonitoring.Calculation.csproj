@@ -79,6 +79,12 @@
     <Compile Include="Events\ValuationEvent.cs" />
     <Compile Include="Events\Inbound\ValuationLineNameChangedEvent.cs" />
     <Compile Include="NotEventFlow\AggregateRoot.cs" />
+    <Compile Include="NotEventFlow\Bus\Bus.cs" />
+    <Compile Include="NotEventFlow\Bus\HandlerNotFoundException.cs" />
+    <Compile Include="NotEventFlow\Bus\HandlerRegistrationException.cs" />
+    <Compile Include="NotEventFlow\Bus\IBus.cs" />
+    <Compile Include="NotEventFlow\Bus\ICommandBus.cs" />
+    <Compile Include="NotEventFlow\Bus\IEventBus.cs" />
     <Compile Include="NotEventFlow\Messages\Command.cs" />
     <Compile Include="NotEventFlow\Messages\Event.cs" />
     <Compile Include="NotEventFlow\IAggregateRootInternal.cs" />

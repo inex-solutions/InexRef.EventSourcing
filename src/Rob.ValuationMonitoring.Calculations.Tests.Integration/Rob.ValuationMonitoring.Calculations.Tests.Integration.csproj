@@ -77,16 +77,21 @@
     <Compile Include="AsOfTests\AsOfTests.cs" />
     <Compile Include="CommandExtensions.cs" />
     <Compile Include="NotEventFlow\AccountAggregateRoot.cs" />
+    <Compile Include="NotEventFlow\AddAmountCommand.cs" />
     <Compile Include="NotEventFlow\AmountAddedEvent.cs" />
+    <Compile Include="NotEventFlow\IntegrationTests\IntegrationTestBase.cs" />
+    <Compile Include="NotEventFlow\IntegrationTests\when_the_balance_iis_reset_on_an_account_containing_two_pounds.cs" />
+    <Compile Include="NotEventFlow\IntegrationTests\when_two_pounds_is_added_to_an_existing_but_empty_account.cs" />
     <Compile Include="NotEventFlow\PersistenceTests\AggregateRepositoryTestBase.cs" />
     <Compile Include="NotEventFlow\AggregateTests\AggregateRootTestBase.cs" />
     <Compile Include="NotEventFlow\PersistenceTests\when_an_account_containing_two_pounds_is_saved_and_reloaded.cs" />
     <Compile Include="NotEventFlow\PersistenceTests\when_a_saved_account_containing_two_pounds_is_loaded_has_five_pounds_added_and_saved.cs" />
     <Compile Include="NotEventFlow\PersistenceTests\when_a_saved_account_is_resaved_but_with_the_wrong_version_number.cs" />
-    <Compile Include="NotEventFlow\ResetBalanceEvent.cs" />
+    <Compile Include="NotEventFlow\BalanceResetEvent.cs" />
     <Compile Include="NotEventFlow\AggregateTests\when_I_add_an_one_pound_to_an_empty_account.cs" />
     <Compile Include="NotEventFlow\AggregateTests\when_I_add_one_pound_to_an_account_containing_one_pound.cs" />
     <Compile Include="NotEventFlow\AggregateTests\when_I_reset_an_account_containing_one_pound.cs" />
+    <Compile Include="NotEventFlow\ResetBalanceCommand.cs" />
     <Compile Include="PriceExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadModelTests\LastUnauditedPriceReadModelTests\LastUnauditedPriceReadModelTestBase.cs" />
@@ -108,8 +113,6 @@
       <Name>Rob.ValuationMonitoring.Calculation</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NotEventFlow\IntegrationTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -25,7 +25,7 @@ namespace Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence
                 addValue: eventsToStore,
                 updateValueFactory: (id, enumerable) =>
                 {
-                    var version = enumerable.Last().Version;
+                    var version = enumerable.LastOrDefault()?.Version ?? 0;
                     if (version != expectedVersion)
                     {
                         throw new EventStoreConcurrencyException($"Concurrency error saving aggregate {id} (expected version {expectedVersion}, actual {version})");

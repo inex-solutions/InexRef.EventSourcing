@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EventFlow.Aggregates;
 using Rob.ValuationMonitoring.Calculation.NotEventFlow;
 using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
 using Shouldly;

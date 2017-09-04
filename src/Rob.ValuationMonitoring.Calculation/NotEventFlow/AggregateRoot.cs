@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using ReflectionMagic;
 
 namespace Rob.ValuationMonitoring.Calculation.NotEventFlow
 {
     public abstract class AggregateRoot : IAggregateRootInternal
     {
         private readonly List<Event> _uncommittedEvents = new List<Event>();
-
-        public abstract Guid Id { get; }
-
-        public int Version { get; internal set; }
 
         public IEnumerable<Event> GetUncommittedEvents()
         {
@@ -23,7 +20,7 @@ namespace Rob.ValuationMonitoring.Calculation.NotEventFlow
 
         private void Apply(Event @event, bool isNew)
         {
-
+            this.AsDynamic().HandleEvent(@event, isNew);
         }
 
         void IAggregateRootInternal.Load(IEnumerable<Event> history)

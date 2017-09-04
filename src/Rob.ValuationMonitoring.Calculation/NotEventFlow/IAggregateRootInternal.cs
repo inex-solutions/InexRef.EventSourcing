@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Rob.ValuationMonitoring.Calculation.NotEventFlow.Messages;
 
 namespace Rob.ValuationMonitoring.Calculation.NotEventFlow
 {
     public interface IAggregateRootInternal
     {
-        void Load(IEnumerable<Event> history);
+        void Load(Guid id, IEnumerable<Event> history);
     }
 }

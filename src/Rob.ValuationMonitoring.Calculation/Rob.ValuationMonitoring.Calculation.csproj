@@ -79,10 +79,14 @@
     <Compile Include="Events\ValuationEvent.cs" />
     <Compile Include="Events\Inbound\ValuationLineNameChangedEvent.cs" />
     <Compile Include="NotEventFlow\AggregateRoot.cs" />
-    <Compile Include="NotEventFlow\Command.cs" />
-    <Compile Include="NotEventFlow\Event.cs" />
+    <Compile Include="NotEventFlow\Messages\Command.cs" />
+    <Compile Include="NotEventFlow\Messages\Event.cs" />
     <Compile Include="NotEventFlow\IAggregateRootInternal.cs" />
-    <Compile Include="NotEventFlow\IMessage.cs" />
+    <Compile Include="NotEventFlow\Messages\IMessage.cs" />
+    <Compile Include="NotEventFlow\Persistence\AggregateRepository.cs" />
+    <Compile Include="NotEventFlow\Persistence\IAggregateRepository.cs" />
+    <Compile Include="NotEventFlow\Persistence\InMemoryEventStore.cs" />
+    <Compile Include="NotEventFlow\Persistence\IEventStore.cs" />
     <Compile Include="PriceExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadModels\LatestPriceOnlyReadModel.cs" />

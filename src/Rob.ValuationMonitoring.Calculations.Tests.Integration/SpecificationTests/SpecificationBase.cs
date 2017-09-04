@@ -14,7 +14,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTe
         }
 
         protected virtual void SetUp()
-        {    
+        {
         }
 
         protected abstract void When();
@@ -30,5 +30,10 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTe
         protected virtual void Cleanup()
         {
         }
+    }
+
+    public abstract class SpecificationBase<TSubject> : SpecificationBase
+    {
+        protected TSubject Subject { get; set; }
     }
 }

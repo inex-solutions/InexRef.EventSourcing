@@ -19,20 +19,20 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow
 
         public void AddAmount(decimal amount)
         {
-            Apply(new AddAmountEvent(amount));
+            Apply(new AmountAddedEvent(amount));
         }
 
         public void ResetBalance()
         {
-            Apply(new ResetBalanceEvent());
+            Apply(new BalanceResetEvent());
         }
 
-        public void HandleEvent(AddAmountEvent @event, bool isNew)
+        public void HandleEvent(AmountAddedEvent @event, bool isNew)
         {
             Balance += @event.Amount;
         }
 
-        public void HandleEvent(ResetBalanceEvent @event, bool isNew)
+        public void HandleEvent(BalanceResetEvent @event, bool isNew)
         {
             Balance = 0;
         }

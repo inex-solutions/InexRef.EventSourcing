@@ -2,6 +2,7 @@
 using Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence;
 using Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow.AggregateTests;
 using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
+using Shouldly;
 
 namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow.PersistenceTests
 {

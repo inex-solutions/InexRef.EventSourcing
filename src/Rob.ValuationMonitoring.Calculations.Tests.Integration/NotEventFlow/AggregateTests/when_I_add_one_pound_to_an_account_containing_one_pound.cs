@@ -1,4 +1,3 @@
-using Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow.PersistenceTests;
 using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
 using Shouldly;
 

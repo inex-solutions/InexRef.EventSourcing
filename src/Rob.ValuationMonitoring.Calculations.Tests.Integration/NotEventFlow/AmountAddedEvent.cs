@@ -3,8 +3,13 @@ using Rob.ValuationMonitoring.Calculation.NotEventFlow.Messages;
 
 namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow
 {
-    public class ResetBalanceEvent : Event
+    public class AmountAddedEvent : Event
     {
-        
+        public decimal Amount { get; }
+
+        public AmountAddedEvent(decimal amount)
+        {
+            Amount = amount;
+        }
     }
 }

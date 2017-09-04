@@ -13,10 +13,10 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow.In
 
         protected override void SetUp()
         {
-            AggregateId = Guid.NewGuid();
-            Repository = new AggregateRepository<AccountAggregateRoot>(new InMemoryEventStore());
-            var handlers = new IntegrationTestHandlers(Repository);
             Subject = new Bus();
+            AggregateId = Guid.NewGuid();
+            Repository = new AggregateRepository<AccountAggregateRoot>(new InMemoryEventStore(Subject));
+            var handlers = new IntegrationTestHandlers(Repository);
             Subject.RegisterHandler<AddAmountCommand>(handlers.Handle);
             Subject.RegisterHandler<ResetBalanceCommand>(handlers.Handle);
         }

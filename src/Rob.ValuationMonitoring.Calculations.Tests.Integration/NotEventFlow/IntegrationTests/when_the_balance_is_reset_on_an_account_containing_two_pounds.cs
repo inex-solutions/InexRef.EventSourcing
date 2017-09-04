@@ -17,4 +17,16 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow.In
         [Then]
         public void the_account_balance_is_zero() => Repository.Get(AggregateId).Balance.ShouldBe(0.00M);
     }
+
+    public class BalanceReadModel
+    {
+        public void Handle(BalanceUpdatedEvent @event)
+        {
+            
+        }
+    }
+
+    public class BalanceUpdatedEvent
+    {
+    }
 }

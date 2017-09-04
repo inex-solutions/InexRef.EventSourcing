@@ -3,13 +3,20 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using EventFlow.Exceptions;
+using Rob.ValuationMonitoring.Calculation.NotEventFlow.Bus;
 using Rob.ValuationMonitoring.Calculation.NotEventFlow.Messages;
 
 namespace Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence
 {
     public class InMemoryEventStore : IEventStore
     {
+        private readonly IEventBus _eventBus;
         private readonly ConcurrentDictionary<Guid, IEnumerable<StoredEvent>> _storedEvents = new ConcurrentDictionary<Guid, IEnumerable<StoredEvent>>();
+
+        public InMemoryEventStore(IEventBus eventBus)
+        {
+            _eventBus = eventBus;
+        }
 
         public void SaveEvents(Guid aggregateId, IEnumerable<Event> events, int expectedVersion)
         {
@@ -31,7 +38,15 @@ namespace Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence
                         throw new EventStoreConcurrencyException($"Concurrency error saving aggregate {id} (expected version {expectedVersion}, actual {version})");
                     }
 
-                    return enumerable.Concat(eventsToStore);
+                    var eventsToStoreList = eventsToStore.ToList();
+
+                    //HACK: what if we fail to send? We've already saved. Here's the tricky bit :)
+                    foreach (var eventToStore in eventsToStoreList)
+                    {
+                        _eventBus.PublishEvent(eventToStore.EventData);
+                    }
+
+                    return enumerable.Concat(eventsToStoreList);
                 });
         }
 

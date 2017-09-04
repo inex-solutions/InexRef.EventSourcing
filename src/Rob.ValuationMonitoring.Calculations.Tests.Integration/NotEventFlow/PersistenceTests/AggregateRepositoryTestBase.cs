@@ -1,4 +1,5 @@
 using System;
+using Rob.ValuationMonitoring.Calculation.NotEventFlow.Bus;
 using Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence;
 using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
 
@@ -13,7 +14,7 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow.Pe
         protected override void SetUp()
         {
             AggregateId = Guid.NewGuid();
-            Subject = new AggregateRepository<AccountAggregateRoot>(new InMemoryEventStore());
+            Subject = new AggregateRepository<AccountAggregateRoot>(new InMemoryEventStore(new Bus()));
         }
     }
 }

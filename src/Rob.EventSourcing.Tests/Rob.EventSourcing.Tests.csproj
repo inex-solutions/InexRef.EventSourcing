@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{285E7479-1F0E-4D0B-992B-2A41CA207250}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rob.EventSourcing.Tests</RootNamespace>
+    <AssemblyName>Rob.EventSourcing.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=3.8.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.8.1\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Shouldly, Version=2.8.3.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shouldly.2.8.3\lib\net451\Shouldly.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountAggregateRoot.cs" />
+    <Compile Include="AddAmountCommand.cs" />
+    <Compile Include="AggregateTests\AggregateRootTestBase.cs" />
+    <Compile Include="AggregateTests\when_I_add_an_one_pound_to_an_empty_account.cs" />
+    <Compile Include="AggregateTests\when_I_add_one_pound_to_an_account_containing_one_pound.cs" />
+    <Compile Include="AggregateTests\when_I_reset_an_account_containing_one_pound.cs" />
+    <Compile Include="AmountAddedEvent.cs" />
+    <Compile Include="BalanceResetEvent.cs" />
+    <Compile Include="IntegrationTests\IntegrationTestBase.cs" />
+    <Compile Include="IntegrationTests\IntegrationTestHandlers.cs" />
+    <Compile Include="IntegrationTests\when_the_balance_is_reset_on_an_account_containing_two_pounds.cs" />
+    <Compile Include="IntegrationTests\when_two_pounds_is_added_to_an_existing_but_empty_account.cs" />
+    <Compile Include="IntegrationTests\when_two_pounds_is_added_to_a_non_existent_account.cs" />
+    <Compile Include="PersistenceTests\AggregateRepositoryTestBase.cs" />
+    <Compile Include="PersistenceTests\when_an_account_containing_two_pounds_is_saved_and_reloaded.cs" />
+    <Compile Include="PersistenceTests\when_a_saved_account_containing_two_pounds_is_loaded_has_five_pounds_added_and_saved.cs" />
+    <Compile Include="PersistenceTests\when_a_saved_account_is_resaved_but_with_the_wrong_version_number.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResetBalanceCommand.cs" />
+    <Compile Include="SpecificationTests\Catch.cs" />
+    <Compile Include="SpecificationTests\SpecificationBase.cs" />
+    <Compile Include="SpecificationTests\SpecificationBaseAsync.cs" />
+    <Compile Include="SpecificationTests\ThenAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rob.EventSourcing\Rob.EventSourcing.csproj">
+      <Project>{83871704-2589-4981-88EB-11613994A5F9}</Project>
+      <Name>Rob.EventSourcing</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

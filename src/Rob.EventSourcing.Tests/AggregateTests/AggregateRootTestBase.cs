@@ -1,6 +1,6 @@
-﻿using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
+﻿using Rob.EventSourcing.Tests.SpecificationTests;
 
-namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow.AggregateTests
+namespace Rob.EventSourcing.Tests.AggregateTests
 {
     public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase where TAggregateRoot : new() 
     {

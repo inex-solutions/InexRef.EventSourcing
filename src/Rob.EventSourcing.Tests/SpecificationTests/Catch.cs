@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests
+namespace Rob.EventSourcing.Tests.SpecificationTests
 {
     public static class Catch
     {

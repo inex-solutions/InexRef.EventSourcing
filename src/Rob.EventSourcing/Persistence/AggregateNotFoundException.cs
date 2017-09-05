@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Persistence
+namespace Rob.EventSourcing.Persistence
 {
     public class AggregateNotFoundException : Exception
     {

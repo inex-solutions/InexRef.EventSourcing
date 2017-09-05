@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Rob.ValuationMonitoring.EventSourcing.Messages;
+using Rob.EventSourcing.Messages;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Persistence
+namespace Rob.EventSourcing.Persistence
 {
     public interface IEventStore
     {

@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.6.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.6.1\lib\net45\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.8.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.8.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
@@ -55,6 +58,9 @@
     <Compile Include="AggregateTests\when_I_reset_an_account_containing_one_pound.cs" />
     <Compile Include="AmountAddedEvent.cs" />
     <Compile Include="BalanceResetEvent.cs" />
+    <Compile Include="IntegrationTests\BalanceEntry.cs" />
+    <Compile Include="IntegrationTests\BalanceReadModel.cs" />
+    <Compile Include="IntegrationTests\BalanceUpdatedEvent.cs" />
     <Compile Include="IntegrationTests\IntegrationTestBase.cs" />
     <Compile Include="IntegrationTests\IntegrationTestHandlers.cs" />
     <Compile Include="IntegrationTests\when_the_balance_is_reset_on_an_account_containing_two_pounds.cs" />
@@ -78,6 +84,10 @@
     <ProjectReference Include="..\Rob.EventSourcing\Rob.EventSourcing.csproj">
       <Project>{83871704-2589-4981-88EB-11613994A5F9}</Project>
       <Name>Rob.EventSourcing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rob.EventSourcing\Rob.EventSourcing.csproj">
+      <Project>{83871704-2589-4981-88EB-11613994A5F9}</Project>
+      <Name>Rob.ValuationMonitoring.EventSourcing</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

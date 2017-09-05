@@ -1,12 +1,13 @@
-using Rob.ValuationMonitoring.EventSourcing.Messages;
+using System;
+using Rob.EventSourcing.Messages;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Tests
+namespace Rob.EventSourcing.Tests
 {
     public class AmountAddedEvent : Event
     {
         public decimal Amount { get; }
 
-        public AmountAddedEvent(decimal amount)
+        public AmountAddedEvent(Guid id, decimal amount) : base(id)
         {
             Amount = amount;
         }

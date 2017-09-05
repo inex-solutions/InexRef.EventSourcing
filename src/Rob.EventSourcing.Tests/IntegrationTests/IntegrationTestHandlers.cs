@@ -1,7 +1,6 @@
-﻿using Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow;
-using Rob.ValuationMonitoring.EventSourcing.Persistence;
+﻿using Rob.EventSourcing.Persistence;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Tests.IntegrationTests
+namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     public class IntegrationTestHandlers
     {

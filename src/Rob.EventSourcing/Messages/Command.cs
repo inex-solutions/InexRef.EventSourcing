@@ -1,6 +1,6 @@
 using System;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Messages
+namespace Rob.EventSourcing.Messages
 {
     public abstract class Command : IMessage
     {

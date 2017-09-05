@@ -1,7 +1,7 @@
-using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
+using Rob.EventSourcing.Tests.SpecificationTests;
 using Shouldly;
 
-namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow.AggregateTests
+namespace Rob.EventSourcing.Tests.AggregateTests
 {
     public class when_I_add_one_pound_to_an_account_containing_one_pound : AggregateRootTestBase<AccountAggregateRoot>
     {

@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests
+namespace Rob.EventSourcing.Tests.SpecificationTests
 {
     public class ThenAttribute : TestAttribute
     {

@@ -1,7 +1,7 @@
 using System;
-using Rob.ValuationMonitoring.EventSourcing.Messages;
+using Rob.EventSourcing.Messages;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Persistence
+namespace Rob.EventSourcing.Persistence
 {
     internal class StoredEvent
     {

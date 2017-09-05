@@ -1,7 +1,7 @@
 using System;
-using Rob.ValuationMonitoring.EventSourcing.Messages;
+using Rob.EventSourcing.Messages;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Tests
+namespace Rob.EventSourcing.Tests
 {
     public class AddAmountCommand : Command
     {

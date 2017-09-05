@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Rob.ValuationMonitoring.EventSourcing;
-using Rob.ValuationMonitoring.EventSourcing.Messages;
-using Rob.ValuationMonitoring.EventSourcing.Persistence;
+using Rob.EventSourcing.Bus;
+using Rob.EventSourcing.Messages;
 
-namespace Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence
+namespace Rob.EventSourcing.Persistence
 {
     public class AggregateRepository<TAggregate> : IAggregateRepository<TAggregate>
         where TAggregate : AggregateRoot, new()
     {
         private readonly IEventStore _eventStore;
+        private readonly IBus _bus;
 
-        public AggregateRepository(IEventStore eventStore)
+        public AggregateRepository(IEventStore eventStore, IBus bus)
         {
             _eventStore = eventStore;
+            _bus = bus;
         }
 
         public void Save(TAggregate aggregate, int expectedVersion)
@@ -27,6 +26,7 @@ namespace Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence
         public TAggregate Get(Guid id)
         {
             IAggregateRootInternal aggregate = new TAggregate();
+            aggregate.SetDependencies(_bus);
             var events = _eventStore.LoadEvents(id).ToList();
             aggregate.Load(id, events);
             return (TAggregate)aggregate;
@@ -35,6 +35,7 @@ namespace Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence
         public TAggregate GetOrCreateNew(Guid id)
         {
             IAggregateRootInternal aggregate = new TAggregate();
+            aggregate.SetDependencies(_bus);
             IEnumerable<Event> events;
             if (!_eventStore.TryLoadEvents(id, out events))
             {

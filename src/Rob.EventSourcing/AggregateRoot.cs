@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using ReflectionMagic;
-using Rob.ValuationMonitoring.EventSourcing.Messages;
+using Rob.EventSourcing.Bus;
+using Rob.EventSourcing.Messages;
 
-namespace Rob.ValuationMonitoring.EventSourcing
+namespace Rob.EventSourcing
 {
     public abstract class AggregateRoot : IAggregateRootInternal
     {
@@ -12,6 +13,13 @@ namespace Rob.ValuationMonitoring.EventSourcing
         public Guid Id { get; protected set; }
 
         public int Version { get; protected set; }
+
+        public IBus Bus { get; protected set; }
+
+        public AggregateRoot()
+        {
+            Bus = new NullBus();
+        }
 
         public IEnumerable<Event> GetUncommittedEvents()
         {
@@ -45,6 +53,11 @@ namespace Rob.ValuationMonitoring.EventSourcing
             {
                 Apply(@event, false);
             }
+        }
+
+        void IAggregateRootInternal.SetDependencies(IBus bus)
+        {
+            Bus = bus;
         }
     }
 }

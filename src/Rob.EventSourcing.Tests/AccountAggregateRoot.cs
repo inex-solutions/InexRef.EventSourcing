@@ -1,9 +1,7 @@
 using System;
-using Rob.ValuationMonitoring.Calculation.NotEventFlow;
-using Rob.ValuationMonitoring.EventSourcing;
-using Rob.ValuationMonitoring.EventSourcing.Tests;
+using Rob.EventSourcing.Tests.IntegrationTests;
 
-namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow
+namespace Rob.EventSourcing.Tests
 {
     public class AccountAggregateRoot : AggregateRoot
     {
@@ -21,22 +19,24 @@ namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow
 
         public void AddAmount(decimal amount)
         {
-            Apply(new AmountAddedEvent(amount));
+            Apply(new AmountAddedEvent(Id, amount));
         }
 
         public void ResetBalance()
         {
-            Apply(new BalanceResetEvent());
+            Apply(new BalanceResetEvent(Id));
         }
 
         public void HandleEvent(AmountAddedEvent @event, bool isNew)
         {
             Balance += @event.Amount;
+            Bus.PublishEvent(new BalanceUpdatedEvent(Id, Balance));
         }
 
         public void HandleEvent(BalanceResetEvent @event, bool isNew)
         {
             Balance = 0;
+            Bus.PublishEvent(new BalanceResetEvent(Id));
         }
     }
 }

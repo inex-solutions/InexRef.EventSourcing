@@ -1,8 +1,7 @@
-using Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow;
-using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
+using Rob.EventSourcing.Tests.SpecificationTests;
 using Shouldly;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Tests.PersistenceTests
+namespace Rob.EventSourcing.Tests.PersistenceTests
 {
     public class when_an_account_containing_two_pounds_is_saved_and_reloaded : AggregateRepositoryTestBase
     {

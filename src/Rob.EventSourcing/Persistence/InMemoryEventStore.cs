@@ -2,11 +2,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Rob.ValuationMonitoring.EventSourcing.Bus;
-using Rob.ValuationMonitoring.EventSourcing.Messages;
-using Rob.ValuationMonitoring.EventSourcing.Persistence;
+using Rob.EventSourcing.Bus;
+using Rob.EventSourcing.Messages;
 
-namespace Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence
+namespace Rob.EventSourcing.Persistence
 {
     public class InMemoryEventStore : IEventStore
     {

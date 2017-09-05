@@ -2,11 +2,11 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Rob.ValuationMonitoring.EventSourcing.Messages;
+using Rob.EventSourcing.Messages;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Bus
+namespace Rob.EventSourcing.Bus
 {
-    public class Bus : IBus
+    public class InMemoryBus : IBus
     {
         public readonly ConcurrentDictionary<Type, List<Action<Event>>> _eventHandlers = new ConcurrentDictionary<Type, List<Action<Event>>>();
         public readonly ConcurrentDictionary<Type, Action<Command>> _commandHandlers = new ConcurrentDictionary<Type, Action<Command>>();
@@ -14,7 +14,7 @@ namespace Rob.ValuationMonitoring.EventSourcing.Bus
         public void Subscribe<T>(Action<T> handler) where T : Event
         {
             // WARNING - this inner list isn't thread safe
-            Action<Event> eventHandler = (Action<Event>)handler;
+            Action<Event> eventHandler = @event => handler((T) @event);
             _eventHandlers.AddOrUpdate(
                 key: typeof(T),
                 addValue: new List<Action<Event>>(new[] { eventHandler }), 
@@ -25,11 +25,11 @@ namespace Rob.ValuationMonitoring.EventSourcing.Bus
                 });
         }
 
-        public void PublishEvent<T>(T @event) where T : Event
+        public void PublishEvent(Event @event)
         {
             List<Action<Event>> handlers;
 
-            if (_eventHandlers.TryGetValue(typeof(T), out handlers))
+            if (_eventHandlers.TryGetValue(@event.GetType(), out handlers))
             {
                 foreach (var handler in handlers)
                 {

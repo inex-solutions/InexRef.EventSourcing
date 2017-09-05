@@ -1,9 +1,12 @@
-using Rob.ValuationMonitoring.EventSourcing.Messages;
+using System;
+using Rob.EventSourcing.Messages;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Tests
+namespace Rob.EventSourcing.Tests
 {
     public class BalanceResetEvent : Event
     {
-        
+        public BalanceResetEvent(Guid id) : base(id)
+        {
+        }
     }
 }

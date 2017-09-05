@@ -1,10 +1,9 @@
 using System;
-using Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence;
-using Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow;
-using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
-using Rob.ValuationMonitoring.EventSourcing.Persistence;
+using Autofac;
+using Rob.EventSourcing.Persistence;
+using Rob.EventSourcing.Tests.SpecificationTests;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Tests.PersistenceTests
+namespace Rob.EventSourcing.Tests.PersistenceTests
 {
     public abstract class AggregateRepositoryTestBase : SpecificationBase<IAggregateRepository<AccountAggregateRoot>>
     {
@@ -14,8 +13,14 @@ namespace Rob.ValuationMonitoring.EventSourcing.Tests.PersistenceTests
 
         protected override void SetUp()
         {
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            containerBuilder.RegisterModule<EventSourcingInMemoryInfrastructureModule>();
+            var container = containerBuilder.Build();
+
+            Subject = container.Resolve<IAggregateRepository<AccountAggregateRoot>>();
+
             AggregateId = Guid.NewGuid();
-            Subject = new AggregateRepository<AccountAggregateRoot>(new InMemoryEventStore(new Bus.Bus()));
         }
     }
 }

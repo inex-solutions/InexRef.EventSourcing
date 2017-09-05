@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests
+namespace Rob.EventSourcing.Tests.SpecificationTests
 {
     [TestFixture]
     public abstract class SpecificationBaseAsync

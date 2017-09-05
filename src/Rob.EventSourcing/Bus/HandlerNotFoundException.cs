@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Bus
+namespace Rob.EventSourcing.Bus
 {
     public class HandlerNotFoundException : Exception
     {

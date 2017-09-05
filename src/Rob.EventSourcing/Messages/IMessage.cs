@@ -1,4 +1,4 @@
-﻿namespace Rob.ValuationMonitoring.EventSourcing.Messages
+﻿namespace Rob.EventSourcing.Messages
 {
     public interface IMessage
     {

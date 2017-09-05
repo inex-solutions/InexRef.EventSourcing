@@ -1,10 +1,9 @@
 ﻿using System;
-using Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow;
-using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
-using Rob.ValuationMonitoring.EventSourcing.Persistence;
+using Rob.EventSourcing.Persistence;
+using Rob.EventSourcing.Tests.SpecificationTests;
 using Shouldly;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Tests.PersistenceTests
+namespace Rob.EventSourcing.Tests.PersistenceTests
 {
     public class when_a_saved_account_is_resaved_but_with_the_wrong_version_number : AggregateRepositoryTestBase
     {

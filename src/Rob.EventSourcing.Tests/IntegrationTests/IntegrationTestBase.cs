@@ -1,11 +1,10 @@
 ﻿using System;
-using Rob.ValuationMonitoring.Calculation.NotEventFlow.Persistence;
-using Rob.ValuationMonitoring.Calculations.Tests.Integration.NotEventFlow;
-using Rob.ValuationMonitoring.Calculations.Tests.Integration.SpecificationTests;
-using Rob.ValuationMonitoring.EventSourcing.Bus;
-using Rob.ValuationMonitoring.EventSourcing.Persistence;
+using Autofac;
+using Rob.EventSourcing.Bus;
+using Rob.EventSourcing.Persistence;
+using Rob.EventSourcing.Tests.SpecificationTests;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Tests.IntegrationTests
+namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     public abstract class IntegrationTestBase : SpecificationBase<IBus>
     {
@@ -13,11 +12,23 @@ namespace Rob.ValuationMonitoring.EventSourcing.Tests.IntegrationTests
 
         protected IAggregateRepository<AccountAggregateRoot> Repository { get; private set; }
 
+        protected BalanceReadModel BalanceReadModel { get; private set; }
+
         protected override void SetUp()
         {
-            Subject = new Bus.Bus();
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            containerBuilder.RegisterModule<EventSourcingInMemoryInfrastructureModule>();
+            var container = containerBuilder.Build();
+            Subject = container.Resolve<IBus>();
+            Repository = container.Resolve<IAggregateRepository<AccountAggregateRoot>>();
+
             AggregateId = Guid.NewGuid();
-            Repository = new AggregateRepository<AccountAggregateRoot>(new InMemoryEventStore(Subject));
+
+            BalanceReadModel = new BalanceReadModel();
+            Subject.Subscribe<BalanceUpdatedEvent>(BalanceReadModel.Handle);
+            Subject.Subscribe<BalanceResetEvent>(BalanceReadModel.Handle);
+
             var handlers = new IntegrationTestHandlers(Repository);
             Subject.RegisterHandler<AddAmountCommand>(handlers.Handle);
             Subject.RegisterHandler<ResetBalanceCommand>(handlers.Handle);

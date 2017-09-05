@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Rob.ValuationMonitoring.EventSourcing.Messages;
+using Rob.EventSourcing.Bus;
+using Rob.EventSourcing.Messages;
 
-namespace Rob.ValuationMonitoring.EventSourcing
+namespace Rob.EventSourcing
 {
     public interface IAggregateRootInternal
     {
         void Load(Guid id, IEnumerable<Event> history);
+
+        void SetDependencies(IBus bus);
     }
 }

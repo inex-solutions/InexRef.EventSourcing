@@ -34,6 +34,9 @@
     <Reference Include="Autofac, Version=4.6.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.6.1\lib\net45\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="ReflectionMagic, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c4c75393d7e08e8e, processorArchitecture=MSIL">
       <HintPath>..\packages\ReflectionMagic.3.0.0\lib\net45\ReflectionMagic.dll</HintPath>
     </Reference>
@@ -64,6 +67,8 @@
     <Compile Include="Persistence\AggregateNotFoundException.cs" />
     <Compile Include="Persistence\AggregateRepository.cs" />
     <Compile Include="Persistence\EventStoreConcurrencyException.cs" />
+    <Compile Include="Persistence\FilePersistenceConfiguration.cs" />
+    <Compile Include="Persistence\FileSystemEventStore.cs" />
     <Compile Include="Persistence\IAggregateRepository.cs" />
     <Compile Include="Persistence\IEventStore.cs" />
     <Compile Include="Persistence\InMemoryEventStore.cs" />

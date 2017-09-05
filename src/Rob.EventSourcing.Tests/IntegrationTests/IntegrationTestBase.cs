@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using Autofac;
 using Rob.EventSourcing.Bus;
 using Rob.EventSourcing.Persistence;
@@ -8,6 +9,8 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     public abstract class IntegrationTestBase : SpecificationBase<IBus>
     {
+        protected DisposableDirectory DisposableDirectory;
+
         protected Guid AggregateId { get; private set; }
 
         protected IAggregateRepository<AccountAggregateRoot> Repository { get; private set; }
@@ -16,9 +19,19 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
         protected override void SetUp()
         {
+            DisposableDirectory = new DisposableDirectory();
+
+            var filePersistenceConfiguration = new FilePersistenceConfiguration
+            {
+                EventStoreRootDirectory = DisposableDirectory.FullName
+            };
+
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
             containerBuilder.RegisterModule<EventSourcingInMemoryInfrastructureModule>();
+            containerBuilder.RegisterInstance(filePersistenceConfiguration);
+            containerBuilder.RegisterType<FileSystemEventStore>().As<IEventStore>().SingleInstance(); // experimenting with file system
+
             var container = containerBuilder.Build();
             Subject = container.Resolve<IBus>();
             Repository = container.Resolve<IAggregateRepository<AccountAggregateRoot>>();
@@ -32,6 +45,11 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
             var handlers = new IntegrationTestHandlers(Repository);
             Subject.RegisterHandler<AddAmountCommand>(handlers.Handle);
             Subject.RegisterHandler<ResetBalanceCommand>(handlers.Handle);
+        }
+
+        protected override void Cleanup()
+        {
+            DisposableDirectory.Dispose();
         }
     }
 }

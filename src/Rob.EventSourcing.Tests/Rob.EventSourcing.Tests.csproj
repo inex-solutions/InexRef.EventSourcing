@@ -58,6 +58,8 @@
     <Compile Include="AggregateTests\when_I_reset_an_account_containing_one_pound.cs" />
     <Compile Include="AmountAddedEvent.cs" />
     <Compile Include="BalanceResetEvent.cs" />
+    <Compile Include="DisposableDirectory.cs" />
+    <Compile Include="FileFinder.cs" />
     <Compile Include="IntegrationTests\BalanceEntry.cs" />
     <Compile Include="IntegrationTests\BalanceReadModel.cs" />
     <Compile Include="IntegrationTests\BalanceUpdatedEvent.cs" />
@@ -88,6 +90,10 @@
     <ProjectReference Include="..\Rob.EventSourcing\Rob.EventSourcing.csproj">
       <Project>{83871704-2589-4981-88EB-11613994A5F9}</Project>
       <Name>Rob.ValuationMonitoring.EventSourcing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rob.ValuationMonitoring.Utils\Rob.ValuationMonitoring.Utils.csproj">
+      <Project>{a8b180f2-1162-438e-9bd3-6c8cf0c5ef39}</Project>
+      <Name>Rob.ValuationMonitoring.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,11 +6,11 @@ namespace Rob.EventSourcing.Messages
     {
         public Guid Id { get; }
 
+        public int Version { get; set; }
+
         protected Event(Guid id)
         {
             Id = id;
         }
-
-        public int Version { get; set; }
     }
 }

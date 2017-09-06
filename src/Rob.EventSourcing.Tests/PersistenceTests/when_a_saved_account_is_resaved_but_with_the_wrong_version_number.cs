@@ -9,6 +9,8 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
     {
         private Exception CaughtException;
 
+        public when_a_saved_account_is_resaved_but_with_the_wrong_version_number(string persistenceProvider) : base(persistenceProvider) { }
+
         protected override void Given()
         {
             ReloadedAccountAggregateRoot = new AccountAggregateRoot(AggregateId);

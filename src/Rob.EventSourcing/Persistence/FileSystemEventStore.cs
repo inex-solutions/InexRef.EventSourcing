@@ -43,9 +43,9 @@ namespace Rob.EventSourcing.Persistence
             return TryLoadEvents(aggregateId, out events);
         }
 
-        void IEventStore.SaveEvents(Guid aggregateId, IEnumerable<Event> events, int expectedVersion)
+        void IEventStore.SaveEvents(Guid aggregateId, Type aggregateType, IEnumerable<Event> events, int currentVersion, int expectedVersion)
         {
-            SaveEvents(aggregateId, events, expectedVersion);
+            SaveEvents(aggregateId, aggregateType, events, currentVersion, expectedVersion);
         }
 
         public bool TryLoadEvents(Guid aggregateId, out IEnumerable<Event> events)
@@ -65,27 +65,18 @@ namespace Rob.EventSourcing.Persistence
             }
         }
 
-        public void SaveEvents(Guid id, Type aggregateType, IEnumerable<Event> events, int expectedVersion)
+        public void SaveEvents(Guid id, Type aggregateType, IEnumerable<Event> events, int currentVersion, int expectedVersion)
         {
-            var eventsList = events.ToList();
-
-            int eventVersion = expectedVersion;
-
-            foreach (var @event in eventsList)
-            {
-                @event.Version = ++eventVersion;
-            }
-
             var persistedAggregate = new PersistedAggregate
             {
                 Metadata = new Metadata
                 {
                     Id = id,
                     AggregateType = aggregateType.FullName,
-                    Version = eventVersion
+                    Version = currentVersion
                 },
 
-                Events = eventsList
+                Events = events
             };
 
             using (var fileStream = new FileStream(Path.Combine(_directory.FullName, id + ".json"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))

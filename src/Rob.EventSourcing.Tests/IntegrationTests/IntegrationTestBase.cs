@@ -1,33 +1,45 @@
 ﻿
 using System;
 using Autofac;
+using NUnit.Framework;
 using Rob.EventSourcing.Bus;
 using Rob.EventSourcing.Persistence;
 using Rob.EventSourcing.Tests.SpecificationTests;
 
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {
+    [TestFixture("FileSystem")]
+    [TestFixture("InMemory")]
     public abstract class IntegrationTestBase : SpecificationBase<IBus>
     {
+        private readonly string _persistenceProvider;
         protected Guid AggregateId { get; private set; }
 
         protected IAggregateRepository<AccountAggregateRoot> Repository { get; private set; }
 
         protected BalanceReadModel BalanceReadModel { get; private set; }
 
+        protected IntegrationTestBase(string persistenceProvider)
+        {
+            _persistenceProvider = persistenceProvider;
+        }
+
         protected override void SetUp()
         {
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
-            containerBuilder.RegisterModule<EventSourcingInMemoryInfrastructureModule>();
 
-            // experimenting with file system persistence
-            var filePersistenceConfiguration = new FilePersistenceConfiguration
+            switch (_persistenceProvider)
             {
-                EventStoreRootDirectory = "d:\\temp\\EventStorePersistence"
-            };
-            containerBuilder.RegisterInstance(filePersistenceConfiguration);
-            containerBuilder.RegisterType<FileSystemEventStore>().As<IEventStore>().SingleInstance();
+                case "InMemory":
+                    containerBuilder.RegisterModule<EventSourcingInMemoryInfrastructureModule>();
+                    break;
+                case "FileSystem":
+                    containerBuilder.RegisterModule<EventSourcingFileSystemInfrastructureModule>();
+                    break;
+                default:
+                    throw new TestSetupException($"Test setup failed. Persistence provider '{_persistenceProvider}' not supported.");
+            }
 
             var container = containerBuilder.Build();
             Subject = container.Resolve<IBus>();

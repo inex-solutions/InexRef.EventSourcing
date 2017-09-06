@@ -5,6 +5,8 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     public class when_two_pounds_is_added_to_a_non_existent_account : IntegrationTestBase
     {
+        public when_two_pounds_is_added_to_a_non_existent_account(string persistenceProvider) : base(persistenceProvider) { }
+
         protected override void Given() { }
 
         protected override void When() => Subject.Send(new AddAmountCommand(AggregateId, 2.00M));

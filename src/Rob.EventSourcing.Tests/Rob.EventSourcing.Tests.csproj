@@ -67,6 +67,7 @@
     <Compile Include="IntegrationTests\IntegrationTestHandlers.cs" />
     <Compile Include="IntegrationTests\when_the_balance_is_reset_on_an_account_containing_two_pounds.cs" />
     <Compile Include="IntegrationTests\when_two_pounds_is_added_to_an_existing_but_empty_account.cs" />
+    <Compile Include="IntegrationTests\when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds.cs" />
     <Compile Include="IntegrationTests\when_two_pounds_is_added_to_a_non_existent_account.cs" />
     <Compile Include="PersistenceTests\AggregateRepositoryTestBase.cs" />
     <Compile Include="PersistenceTests\when_an_account_containing_two_pounds_is_saved_and_reloaded.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="SpecificationTests\SpecificationBase.cs" />
     <Compile Include="SpecificationTests\SpecificationBaseAsync.cs" />
     <Compile Include="SpecificationTests\ThenAttribute.cs" />
+    <Compile Include="TestSetupException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

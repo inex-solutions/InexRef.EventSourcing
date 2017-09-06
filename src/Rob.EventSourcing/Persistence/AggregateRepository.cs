@@ -20,7 +20,16 @@ namespace Rob.EventSourcing.Persistence
 
         public void Save(TAggregate aggregate)
         {
-            _eventStore.SaveEvents(aggregate.Id, typeof(TAggregate), aggregate.GetUncommittedEvents(), aggregate.Version);
+            var events = aggregate.GetUncommittedEvents().ToList();
+
+            int version = aggregate.Version;
+
+            foreach (var @event in events)
+            {
+                @event.Version = ++version;
+            }
+
+            _eventStore.SaveEvents(aggregate.Id, typeof(TAggregate), events, version, aggregate.Version);
             aggregate.ClearUncommittedEvents();
         }
 

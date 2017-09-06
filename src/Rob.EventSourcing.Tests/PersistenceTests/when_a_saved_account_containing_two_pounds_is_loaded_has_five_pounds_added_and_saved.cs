@@ -5,6 +5,8 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 {
     public class when_a_saved_account_containing_two_pounds_is_loaded_has_five_pounds_added_and_saved : AggregateRepositoryTestBase
     {
+        public when_a_saved_account_containing_two_pounds_is_loaded_has_five_pounds_added_and_saved(string persistenceProvider) : base(persistenceProvider) { }
+
         protected override void Given()
         {
             var aggregate = new AccountAggregateRoot(AggregateId);

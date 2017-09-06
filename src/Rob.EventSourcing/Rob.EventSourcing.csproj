@@ -58,6 +58,7 @@
     <Compile Include="Bus\IEventBus.cs" />
     <Compile Include="Bus\InMemoryBus.cs" />
     <Compile Include="EventSourcingCoreModule.cs" />
+    <Compile Include="EventSourcingFileSystemInfrastructureModule.cs" />
     <Compile Include="EventSourcingInMemoryInfrastructureModule.cs" />
     <Compile Include="IAggregateRootInternal.cs" />
     <Compile Include="Messages\Command.cs" />

@@ -18,14 +18,9 @@ namespace Rob.EventSourcing.Persistence
             _eventBus = eventBus;
         }
 
-        public void SaveEvents(Guid aggregateId, Type aggregateType, IEnumerable<Event> events, int expectedVersion)
+        public void SaveEvents(Guid aggregateId, Type aggregateType, IEnumerable<Event> events, int currentVersion, int expectedVersion)
         {
-            int eventVersion = expectedVersion;
-            IEnumerable<StoredEvent> eventsToStore = events.Select(@event =>
-            {
-                @event.Version = ++eventVersion;
-                return new StoredEvent(aggregateId, @event.Version, @event);
-            }).ToList();
+            IEnumerable<StoredEvent> eventsToStore = events.Select(@event => new StoredEvent(aggregateId, @event.Version, @event)).ToList();
 
             _storedEvents.AddOrUpdate(
                 key: aggregateId,

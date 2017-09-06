@@ -8,7 +8,5 @@ namespace Rob.EventSourcing
     public interface IAggregateRootInternal
     {
         void Load(Guid id, IEnumerable<Event> history);
-
-        void SetDependencies(IBus bus);
     }
 }

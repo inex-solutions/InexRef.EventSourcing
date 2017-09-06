@@ -29,14 +29,20 @@ namespace Rob.EventSourcing.Persistence
                 @event.Version = ++version;
             }
 
+            foreach (var @event in aggregate.GetUnpublishedEvents())
+            {
+                @event.Version = version;
+                _bus.PublishEvent(@event);
+            }
+
             _eventStore.SaveEvents(aggregate.Id, typeof(TAggregate), events, version, aggregate.Version);
             aggregate.ClearUncommittedEvents();
+            aggregate.ClearUnpublishedEvents();
         }
 
         public TAggregate Get(Guid id)
         {
             IAggregateRootInternal aggregate = new TAggregate();
-            aggregate.SetDependencies(_bus);
             var events = _eventStore.LoadEvents(id).ToList();
             aggregate.Load(id, events);
             return (TAggregate)aggregate;
@@ -45,7 +51,6 @@ namespace Rob.EventSourcing.Persistence
         public TAggregate GetOrCreateNew(Guid id)
         {
             IAggregateRootInternal aggregate = new TAggregate();
-            aggregate.SetDependencies(_bus);
             IEnumerable<Event> events;
             if (!_eventStore.TryLoadEvents(id, out events))
             {

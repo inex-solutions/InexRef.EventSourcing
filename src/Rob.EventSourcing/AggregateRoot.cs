@@ -1,7 +1,7 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using ReflectionMagic;
-using Rob.EventSourcing.Bus;
 using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing
@@ -9,26 +9,35 @@ namespace Rob.EventSourcing
     public abstract class AggregateRoot : IAggregateRootInternal
     {
         private readonly List<Event> _uncommittedEvents = new List<Event>();
+        private readonly List<Event> _eventsToPublish = new List<Event>();
 
         public Guid Id { get; protected set; }
 
         public  int Version { get; protected set; }
-
-        public IBus Bus { get; protected set; }
-
-        public AggregateRoot()
-        {
-            Bus = new NullBus();
-        }
 
         public IEnumerable<Event> GetUncommittedEvents()
         {
             return _uncommittedEvents;
         }
 
+        public IEnumerable<Event> GetUnpublishedEvents()
+        {
+            return _eventsToPublish;
+        }
+
         public void ClearUncommittedEvents()
         {
             _uncommittedEvents.Clear();
+        }
+
+        public void ClearUnpublishedEvents()
+        {
+            _eventsToPublish.Clear();
+        }
+
+        protected void PublishEvent(Event @event)
+        {
+            _eventsToPublish.Add(@event);
         }
 
         protected void Apply(Event @event)
@@ -58,11 +67,6 @@ namespace Rob.EventSourcing
             {
                 Apply(@event, false);
             }
-        }
-
-        void IAggregateRootInternal.SetDependencies(IBus bus)
-        {
-            Bus = bus;
         }
     }
 }

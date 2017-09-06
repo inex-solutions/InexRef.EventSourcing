@@ -6,13 +6,14 @@ using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing.Persistence
 {
-    public class AggregateRepository<TAggregate> : IAggregateRepository<TAggregate>
-        where TAggregate : AggregateRoot, new()
+    public class AggregateRepository<TAggregate, TId> : IAggregateRepository<TAggregate, TId>
+        where TAggregate : AggregateRoot<TId>, new()
+        where TId : IEquatable<TId>, IComparable<TId>
     {
-        private readonly IEventStore _eventStore;
+        private readonly IEventStore<TId> _eventStore;
         private readonly IBus _bus;
 
-        public AggregateRepository(IEventStore eventStore, IBus bus)
+        public AggregateRepository(IEventStore<TId> eventStore, IBus bus)
         {
             _eventStore = eventStore;
             _bus = bus;
@@ -20,21 +21,21 @@ namespace Rob.EventSourcing.Persistence
 
         public void Save(TAggregate aggregate)
         {
-            IAggregateRootInternal internalAggregate = aggregate;
+            IAggregateRootInternal<TId> internalAggregate = aggregate;
 
             var events = internalAggregate.GetUncommittedEvents().ToList();
 
             int version = aggregate.Version;
 
-            foreach (var @event in events)
+            foreach (IEventInternal @event in events)
             {
-                @event.Version = ++version;
+                @event.SetVersion(++version);
             }
 
-            foreach (var @event in internalAggregate.GetUnpublishedEvents())
+            foreach (IEventInternal @event in internalAggregate.GetUnpublishedEvents())
             {
-                @event.Version = version;
-                _bus.PublishEvent(@event);
+                @event.SetVersion(version);
+                _bus.PublishEvent((Event)@event);
             }
 
             _eventStore.SaveEvents(aggregate.Id, typeof(TAggregate), events, version, aggregate.Version);
@@ -43,17 +44,17 @@ namespace Rob.EventSourcing.Persistence
             internalAggregate.Dispose();
         }
 
-        public TAggregate Get(Guid id)
+        public TAggregate Get(TId id)
         {
-            IAggregateRootInternal aggregate = new TAggregate();
+            IAggregateRootInternal<TId> aggregate = new TAggregate();
             var events = _eventStore.LoadEvents(id).ToList();
             aggregate.Load(id, events);
             return (TAggregate)aggregate;
         }
 
-        public TAggregate GetOrCreateNew(Guid id)
+        public TAggregate GetOrCreateNew(TId id)
         {
-            IAggregateRootInternal aggregate = new TAggregate();
+            IAggregateRootInternal<TId> aggregate = new TAggregate();
             IEnumerable<Event> events;
             if (!_eventStore.TryLoadEvents(id, out events))
             {
@@ -63,7 +64,7 @@ namespace Rob.EventSourcing.Persistence
             return (TAggregate)aggregate;
         }
 
-        public void Delete(Guid id)
+        public void Delete(TId id)
         {
             _eventStore.DeleteEvents(id, typeof(TAggregate));
         }

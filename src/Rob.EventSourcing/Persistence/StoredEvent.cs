@@ -3,15 +3,15 @@ using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing.Persistence
 {
-    internal class StoredEvent
+    internal class StoredEvent<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
         public int Version { get; }
 
-        public Guid AggregateId { get; }
+        public TId AggregateId { get; }
 
         public Event EventData { get; }
 
-        public StoredEvent(Guid aggregateId, int version, Event eventData)
+        public StoredEvent(TId aggregateId, int version, Event eventData)
         {
             AggregateId = aggregateId;
             Version = version;

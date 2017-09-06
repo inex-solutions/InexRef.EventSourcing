@@ -63,6 +63,7 @@
     <Compile Include="IAggregateRootInternal.cs" />
     <Compile Include="Messages\Command.cs" />
     <Compile Include="Messages\Event.cs" />
+    <Compile Include="Messages\IEventInternal.cs" />
     <Compile Include="Messages\IMessage.cs" />
     <Compile Include="NullBus.cs" />
     <Compile Include="Persistence\AggregateNotFoundException.cs" />

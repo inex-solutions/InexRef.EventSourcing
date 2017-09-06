@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
-using Rob.EventSourcing.Messages;
+using Rob.ValuationMonitoring.EventSourcing.Messages;
 
-namespace Rob.EventSourcing.Persistence
+namespace Rob.ValuationMonitoring.EventSourcing.Persistence
 {
-    public class FileSystemEventStore : IEventStore
+    public class FileSystemEventStore<TId> : IEventStore<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
         private readonly DirectoryInfo _directory;
         private readonly JsonSerializer _jsonSerializer;
@@ -28,7 +28,7 @@ namespace Rob.EventSourcing.Persistence
             });
         }
 
-        public IEnumerable<Event> LoadEvents(Guid aggregateId)
+        public IEnumerable<Event> LoadEvents(TId aggregateId)
         {
             IEnumerable<Event> events;
             if (!TryLoadEvents(aggregateId, out events))
@@ -38,17 +38,7 @@ namespace Rob.EventSourcing.Persistence
             return events;
         }
 
-        bool IEventStore.TryLoadEvents(Guid aggregateId, out IEnumerable<Event> events)
-        {
-            return TryLoadEvents(aggregateId, out events);
-        }
-
-        void IEventStore.SaveEvents(Guid aggregateId, Type aggregateType, IEnumerable<Event> events, int currentVersion, int expectedVersion)
-        {
-            SaveEvents(aggregateId, aggregateType, events, currentVersion, expectedVersion);
-        }
-
-        public bool TryLoadEvents(Guid aggregateId, out IEnumerable<Event> events)
+        public bool TryLoadEvents(TId aggregateId, out IEnumerable<Event> events)
         {
             var filename = Path.Combine(_directory.FullName, aggregateId + ".json");
             if (!File.Exists(filename))
@@ -59,17 +49,17 @@ namespace Rob.EventSourcing.Persistence
             using (var fileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read))
             using (var reader = new StreamReader(fileStream, Encoding.UTF8))
             {
-                var persisted = (PersistedAggregate)_jsonSerializer.Deserialize(reader, typeof(PersistedAggregate));
+                var persisted = (PersistedAggregate<TId>)_jsonSerializer.Deserialize(reader, typeof(PersistedAggregate<TId>));
                 events = persisted.Events;
                 return true;
             }
         }
 
-        public void SaveEvents(Guid id, Type aggregateType, IEnumerable<Event> events, int currentVersion, int expectedVersion)
+        public void SaveEvents(TId id, Type aggregateType, IEnumerable<Event> events, int currentVersion, int expectedVersion)
         {
-            var persistedAggregate = new PersistedAggregate
+            var persistedAggregate = new PersistedAggregate<TId>
             {
-                Metadata = new Metadata
+                Metadata = new Metadata<TId>
                 {
                     Id = id,
                     AggregateType = aggregateType.FullName,
@@ -84,7 +74,7 @@ namespace Rob.EventSourcing.Persistence
                 if (fileStream.Length > 0)
                 {
                     var reader = new StreamReader(fileStream, Encoding.UTF8);
-                    var persisted = (PersistedAggregate) _jsonSerializer.Deserialize(reader, typeof(PersistedAggregate));
+                    var persisted = (PersistedAggregate<TId>) _jsonSerializer.Deserialize(reader, typeof(PersistedAggregate<TId>));
                     persistedAggregate.Events = persisted.Events.Concat(persistedAggregate.Events);
                     fileStream.Position = 0;
 
@@ -101,30 +91,25 @@ namespace Rob.EventSourcing.Persistence
             }
         }
 
-        public void DeleteEvents(Guid id, Type aggregateType)
+        public void DeleteEvents(TId id, Type aggregateType)
         {
             File.Delete(Path.Combine(_directory.FullName, id + ".json"));
         }
+    }
 
-        public class PersistedAggregate
-        {
-            public Metadata Metadata { get; set; }
+    public class PersistedAggregate<TId> where TId : IEquatable<TId>, IComparable<TId>
+    {
+        public Metadata<TId> Metadata { get; set; }
 
-            public IEnumerable<Event> Events { get; set; }
-        }
+        public IEnumerable<Event> Events { get; set; }
+    }
 
-        public class Metadata
-        {
-            public Guid Id {get; set; }
+    public class Metadata<TId> where TId : IEquatable<TId>, IComparable<TId>
+    {
+        public TId Id { get; set; }
 
-            public string AggregateType { get; set; }
+        public string AggregateType { get; set; }
 
-            public int Version { get; set; }
-        }
-
-        IEnumerable<Event> IEventStore.LoadEvents(Guid aggregateId)
-        {
-            return LoadEvents(aggregateId);
-        }
+        public int Version { get; set; }
     }
 }

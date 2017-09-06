@@ -6,7 +6,6 @@ namespace Rob.EventSourcing.Tests
     {
         public TestSetupException(string message) : base(message)
         {
-            
         }
     }
 }

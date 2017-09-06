@@ -6,13 +6,13 @@ using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing
 {
-    public abstract class AggregateRoot : IAggregateRootInternal, IDisposable
+    public abstract class AggregateRoot<TId> : IAggregateRootInternal<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
         private readonly List<Event> _uncommittedEvents = new List<Event>();
         private readonly List<Event> _eventsToPublish = new List<Event>();
         private bool _isDisposed;
 
-        public Guid Id { get; protected set; }
+        public TId Id { get; protected set; }
 
         public  int Version { get; protected set; }
 
@@ -44,7 +44,7 @@ namespace Rob.EventSourcing
             }
         }
 
-        void IAggregateRootInternal.Load(Guid id, IEnumerable<Event> eventHistory)
+        void IAggregateRootInternal<TId>.Load(TId id, IEnumerable<Event> eventHistory)
         {
             ThrowIfDisposed();
             Id = id;
@@ -54,25 +54,25 @@ namespace Rob.EventSourcing
             }
         }
 
-        IEnumerable<Event> IAggregateRootInternal.GetUncommittedEvents()
+        IEnumerable<Event> IAggregateRootInternal<TId>.GetUncommittedEvents()
         {
             ThrowIfDisposed();
             return _uncommittedEvents;
         }
 
-        IEnumerable<Event> IAggregateRootInternal.GetUnpublishedEvents()
+        IEnumerable<Event> IAggregateRootInternal<TId>.GetUnpublishedEvents()
         {
             ThrowIfDisposed();
             return _eventsToPublish;
         }
 
-        void IAggregateRootInternal.ClearUncommittedEvents()
+        void IAggregateRootInternal<TId>.ClearUncommittedEvents()
         {
             ThrowIfDisposed();
             _uncommittedEvents.Clear();
         }
 
-        void IAggregateRootInternal.ClearUnpublishedEvents()
+        void IAggregateRootInternal<TId>.ClearUnpublishedEvents()
         {
             ThrowIfDisposed();
             _eventsToPublish.Clear();

@@ -3,7 +3,7 @@ using Rob.EventSourcing.Tests.IntegrationTests;
 
 namespace Rob.EventSourcing.Tests
 {
-    public class AccountAggregateRoot : AggregateRoot
+    public class AccountAggregateRoot : AggregateRoot<Guid>
     {
         public AccountAggregateRoot()
         {
@@ -30,7 +30,7 @@ namespace Rob.EventSourcing.Tests
         public void HandleEvent(AmountAddedEvent @event, bool isNew)
         {
             Balance += @event.Amount;
-            PublishEvent(new BalanceUpdatedEvent(Id, Version, Balance));
+            PublishEvent(new BalanceUpdatedEvent(Id, Balance));
         }
 
         public void HandleEvent(BalanceResetEvent @event, bool isNew)

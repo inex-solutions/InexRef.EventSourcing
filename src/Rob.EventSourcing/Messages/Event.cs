@@ -2,7 +2,7 @@
 
 namespace Rob.EventSourcing.Messages
 {
-    public abstract class Event : IMessage
+    public abstract class Event : IMessage, IEventInternal
     {
         public Guid Id { get; }
 
@@ -11,6 +11,11 @@ namespace Rob.EventSourcing.Messages
         protected Event(Guid id)
         {
             Id = id;
+        }
+
+        void IEventInternal.SetVersion(int version)
+        {
+            Version = version;
         }
     }
 }

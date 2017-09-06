@@ -8,19 +8,19 @@ using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing.Persistence
 {
-    public class InMemoryEventStore : IEventStore
+    public class InMemoryEventStore<TId> : IEventStore<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
         private readonly IEventBus _eventBus;
-        private readonly ConcurrentDictionary<Guid, IEnumerable<StoredEvent>> _storedEvents = new ConcurrentDictionary<Guid, IEnumerable<StoredEvent>>();
+        private readonly ConcurrentDictionary<TId, IEnumerable<StoredEvent<TId>>> _storedEvents = new ConcurrentDictionary<TId, IEnumerable<StoredEvent<TId>>>();
 
         public InMemoryEventStore(IEventBus eventBus)
         {
             _eventBus = eventBus;
         }
 
-        public void SaveEvents(Guid aggregateId, Type aggregateType, IEnumerable<Event> events, int currentVersion, int expectedVersion)
+        public void SaveEvents(TId aggregateId, Type aggregateType, IEnumerable<Event> events, int currentVersion, int expectedVersion)
         {
-            IEnumerable<StoredEvent> eventsToStore = events.Select(@event => new StoredEvent(aggregateId, @event.Version, @event)).ToList();
+            IEnumerable<StoredEvent<TId>> eventsToStore = events.Select(@event => new StoredEvent<TId>(aggregateId, @event.Version, @event)).ToList();
 
             _storedEvents.AddOrUpdate(
                 key: aggregateId,
@@ -45,15 +45,15 @@ namespace Rob.EventSourcing.Persistence
                 });
         }
 
-        public void DeleteEvents(Guid id, Type aggregateType)
+        public void DeleteEvents(TId id, Type aggregateType)
         {
-            IEnumerable<StoredEvent> events;
+            IEnumerable<StoredEvent<TId>> events;
             _storedEvents.TryRemove(id, out events);
         }
 
-        public bool TryLoadEvents(Guid aggregateId, out IEnumerable<Event> events)
+        public bool TryLoadEvents(TId aggregateId, out IEnumerable<Event> events)
         {
-            IEnumerable<StoredEvent> storedEvents;
+            IEnumerable<StoredEvent<TId>> storedEvents;
 
             if (!_storedEvents.TryGetValue(aggregateId, out storedEvents))
             {
@@ -65,9 +65,9 @@ namespace Rob.EventSourcing.Persistence
             return true;
         }
 
-        public IEnumerable<Event> LoadEvents(Guid aggregateId)
+        public IEnumerable<Event> LoadEvents(TId aggregateId)
         {
-            IEnumerable<StoredEvent> events;
+            IEnumerable<StoredEvent<TId>> events;
 
             if (!_storedEvents.TryGetValue(aggregateId, out events))
             {

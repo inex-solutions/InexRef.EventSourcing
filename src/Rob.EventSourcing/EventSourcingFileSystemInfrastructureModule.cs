@@ -14,7 +14,8 @@ namespace Rob.EventSourcing
                 EventStoreRootDirectory = "d:\\temp\\EventStorePersistence"
             };
             builder.RegisterInstance(filePersistenceConfiguration);
-            builder.RegisterType<FileSystemEventStore>().As<IEventStore>().SingleInstance();
+            builder.RegisterGeneric(typeof(FileSystemEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
+
         }
     }
 }

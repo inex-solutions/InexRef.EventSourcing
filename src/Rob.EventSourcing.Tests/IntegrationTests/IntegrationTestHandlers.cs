@@ -1,12 +1,17 @@
+<<<<<<< HEAD:src/Rob.EventSourcing.Tests/IntegrationTests/IntegrationTestHandlers.cs
 ﻿using Rob.EventSourcing.Persistence;
+=======
+﻿using System;
+using Rob.ValuationMonitoring.EventSourcing.Persistence;
+>>>>>>> 61efacf... Remove hard dependency on Guid as identifier:src/Rob.ValuationMonitoring.EventSourcing.Tests/IntegrationTests/IntegrationTestHandlers.cs
 
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     public class IntegrationTestHandlers
     {
-        private readonly IAggregateRepository<AccountAggregateRoot> _repository;
+        private readonly IAggregateRepository<AccountAggregateRoot, Guid> _repository;
 
-        public IntegrationTestHandlers(IAggregateRepository<AccountAggregateRoot> repository)
+        public IntegrationTestHandlers(IAggregateRepository<AccountAggregateRoot, Guid> repository)
         {
             _repository = repository;
         }

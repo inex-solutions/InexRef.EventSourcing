@@ -4,11 +4,11 @@ using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing.Persistence
 {
-    public interface IEventStore
+    public interface IEventStore<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
-        IEnumerable<Event> LoadEvents(Guid aggregateId);
-        bool TryLoadEvents(Guid aggregateId, out IEnumerable<Event> events);
-        void SaveEvents(Guid id, Type aggregateType, IEnumerable<Event> events, int currentVersion, int expectedVersion);
-        void DeleteEvents(Guid id, Type aggregateType);
+        IEnumerable<Event> LoadEvents(TId aggregateId);
+        bool TryLoadEvents(TId aggregateId, out IEnumerable<Event> events);
+        void SaveEvents(TId id, Type aggregateType, IEnumerable<Event> events, int currentVersion, int expectedVersion);
+        void DeleteEvents(TId id, Type aggregateType);
     }
 }

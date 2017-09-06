@@ -9,10 +9,9 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
     {
         public decimal Balance { get; }
 
-        public BalanceUpdatedEvent(Guid id, int version, decimal balance) : base(id)
+        public BalanceUpdatedEvent(Guid id, decimal balance) : base(id)
         {
             Balance = balance;
-            Version = version;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
         private readonly string _persistenceProvider;
         protected Guid AggregateId { get; private set; }
 
-        protected IAggregateRepository<AccountAggregateRoot> Repository { get; private set; }
+        protected IAggregateRepository<AccountAggregateRoot, Guid> Repository { get; private set; }
 
         protected BalanceReadModel BalanceReadModel { get; private set; }
 
@@ -43,7 +43,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
             var container = containerBuilder.Build();
             Subject = container.Resolve<IBus>();
-            Repository = container.Resolve<IAggregateRepository<AccountAggregateRoot>>();
+            Repository = container.Resolve<IAggregateRepository<AccountAggregateRoot, Guid>>();
 
             AggregateId = Guid.NewGuid();
 

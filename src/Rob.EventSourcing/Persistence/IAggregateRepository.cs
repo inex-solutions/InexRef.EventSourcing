@@ -2,13 +2,16 @@
 
 namespace Rob.EventSourcing.Persistence
 {
-    public interface IAggregateRepository<TAggregate> where TAggregate : AggregateRoot, new()
+    public interface IAggregateRepository<TAggregate, TId> 
+        where TAggregate : AggregateRoot<TId>, new() 
+        where TId : IEquatable<TId>, IComparable<TId>
     {
         void Save(TAggregate aggregate);
 
-        TAggregate Get(Guid id);
+        TAggregate Get(TId id);
 
-        TAggregate GetOrCreateNew(Guid id);
-        void Delete(Guid id);
+        TAggregate GetOrCreateNew(TId id);
+
+        void Delete(TId id);
     }
 }

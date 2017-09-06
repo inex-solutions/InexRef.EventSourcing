@@ -1,15 +1,15 @@
 ﻿using Autofac;
-using Rob.EventSourcing.Bus;
-using Rob.EventSourcing.Persistence;
+using Rob.ValuationMonitoring.EventSourcing.Bus;
+using Rob.ValuationMonitoring.EventSourcing.Persistence;
 
-namespace Rob.EventSourcing
+namespace Rob.ValuationMonitoring.EventSourcing
 {
     public class EventSourcingInMemoryInfrastructureModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<InMemoryBus>().As<IBus>().As<IEventBus>().As<ICommandBus>().SingleInstance();
-            builder.RegisterType(typeof(InMemoryEventStore)).As(typeof(IEventStore)).SingleInstance();
+            builder.RegisterGeneric(typeof(InMemoryEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
         }
     }
 }

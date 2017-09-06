@@ -12,7 +12,7 @@ namespace Rob.EventSourcing
 
         public Guid Id { get; protected set; }
 
-        public int Version { get; protected set; }
+        public  int Version { get; protected set; }
 
         public IBus Bus { get; protected set; }
 
@@ -24,6 +24,11 @@ namespace Rob.EventSourcing
         public IEnumerable<Event> GetUncommittedEvents()
         {
             return _uncommittedEvents;
+        }
+
+        public void ClearUncommittedEvents()
+        {
+            _uncommittedEvents.Clear();
         }
 
         protected void Apply(Event @event)

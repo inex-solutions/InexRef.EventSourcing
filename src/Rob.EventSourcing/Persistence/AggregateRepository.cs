@@ -18,9 +18,10 @@ namespace Rob.EventSourcing.Persistence
             _bus = bus;
         }
 
-        public void Save(TAggregate aggregate, int expectedVersion)
+        public void Save(TAggregate aggregate)
         {
-            _eventStore.SaveEvents(aggregate.Id, aggregate.GetUncommittedEvents(), expectedVersion);
+            _eventStore.SaveEvents(aggregate.Id, typeof(TAggregate), aggregate.GetUncommittedEvents(), aggregate.Version);
+            aggregate.ClearUncommittedEvents();
         }
 
         public TAggregate Get(Guid id)
@@ -43,6 +44,11 @@ namespace Rob.EventSourcing.Persistence
             }
             aggregate.Load(id, events.ToList());
             return (TAggregate)aggregate;
+        }
+
+        public void Delete(Guid id)
+        {
+            _eventStore.DeleteEvents(id, typeof(TAggregate));
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Rob.EventSourcing.Messages;
@@ -49,7 +50,7 @@ namespace Rob.EventSourcing.Persistence
 
         public bool TryLoadEvents(Guid aggregateId, out IEnumerable<Event> events)
         {
-            var filename = Path.Combine(_directory.FullName, aggregateId.ToString() + ".json");
+            var filename = Path.Combine(_directory.FullName, aggregateId + ".json");
             if (!File.Exists(filename))
             {
                 events = null;
@@ -64,25 +65,54 @@ namespace Rob.EventSourcing.Persistence
             }
         }
 
-        public void SaveEvents(Guid aggregateId, IEnumerable<Event> events, int expectedVersion)
+        public void SaveEvents(Guid id, Type aggregateType, IEnumerable<Event> events, int expectedVersion)
         {
+            var eventsList = events.ToList();
+
+            int eventVersion = expectedVersion;
+
+            foreach (var @event in eventsList)
+            {
+                @event.Version = ++eventVersion;
+            }
+
             var persistedAggregate = new PersistedAggregate
             {
                 Metadata = new Metadata
                 {
-                    Id = aggregateId,
-                    AggregateType = "Unknown",
-                    Version = -1
+                    Id = id,
+                    AggregateType = aggregateType.FullName,
+                    Version = eventVersion
                 },
 
-                Events = events
+                Events = eventsList
             };
 
-            using (var fileStream = new FileStream(Path.Combine(_directory.FullName, aggregateId.ToString()+".json"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
-            using (var writer = new StreamWriter(fileStream, Encoding.UTF8))
+            using (var fileStream = new FileStream(Path.Combine(_directory.FullName, id + ".json"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
             {
-                _jsonSerializer.Serialize(writer, persistedAggregate);
+                if (fileStream.Length > 0)
+                {
+                    var reader = new StreamReader(fileStream, Encoding.UTF8);
+                    var persisted = (PersistedAggregate) _jsonSerializer.Deserialize(reader, typeof(PersistedAggregate));
+                    persistedAggregate.Events = persisted.Events.Concat(persistedAggregate.Events);
+                    fileStream.Position = 0;
+
+                    if (persisted.Metadata.Version != expectedVersion)
+                    {
+                        throw new EventStoreConcurrencyException($"Concurrency error saving aggregate {id} (expected version {expectedVersion}, actual {persisted.Metadata.Version})");
+                    }
+                }
+
+                using (var writer = new StreamWriter(fileStream, Encoding.UTF8))
+                {
+                    _jsonSerializer.Serialize(writer, persistedAggregate);
+                }
             }
+        }
+
+        public void DeleteEvents(Guid id, Type aggregateType)
+        {
+            File.Delete(Path.Combine(_directory.FullName, id + ".json"));
         }
 
         public class PersistedAggregate

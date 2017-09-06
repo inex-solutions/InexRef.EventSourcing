@@ -8,6 +8,7 @@ namespace Rob.EventSourcing.Persistence
     {
         IEnumerable<Event> LoadEvents(Guid aggregateId);
         bool TryLoadEvents(Guid aggregateId, out IEnumerable<Event> events);
-        void SaveEvents(Guid aggregateId, IEnumerable<Event> events, int expectedVersion);
+        void SaveEvents(Guid id, Type aggregateType, IEnumerable<Event> events, int expectedVersion);
+        void DeleteEvents(Guid id, Type aggregateType);
     }
 }

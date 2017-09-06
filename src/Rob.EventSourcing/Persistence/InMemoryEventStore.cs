@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Rob.EventSourcing.Persistence
             _eventBus = eventBus;
         }
 
-        public void SaveEvents(Guid aggregateId, IEnumerable<Event> events, int expectedVersion)
+        public void SaveEvents(Guid aggregateId, Type aggregateType, IEnumerable<Event> events, int expectedVersion)
         {
             int eventVersion = expectedVersion;
             IEnumerable<StoredEvent> eventsToStore = events.Select(@event =>
@@ -47,6 +48,12 @@ namespace Rob.EventSourcing.Persistence
 
                     return enumerable.Concat(eventsToStoreList);
                 });
+        }
+
+        public void DeleteEvents(Guid id, Type aggregateType)
+        {
+            IEnumerable<StoredEvent> events;
+            _storedEvents.TryRemove(id, out events);
         }
 
         public bool TryLoadEvents(Guid aggregateId, out IEnumerable<Event> events)

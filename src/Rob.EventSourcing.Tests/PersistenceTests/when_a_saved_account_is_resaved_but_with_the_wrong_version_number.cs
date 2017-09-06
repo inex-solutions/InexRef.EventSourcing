@@ -11,15 +11,16 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 
         protected override void Given()
         {
-            var aggregate = new AccountAggregateRoot(AggregateId);
-            aggregate.AddAmount(2.00M);
-            Subject.Save(aggregate, aggregate.Version);
+            ReloadedAccountAggregateRoot = new AccountAggregateRoot(AggregateId);
+            ReloadedAccountAggregateRoot.AddAmount(2.00M);
 
-            ReloadedAccountAggregateRoot = Subject.Get(AggregateId);
+            // intermediate save should cause a concurrency error when we save below
+            Subject.Save(ReloadedAccountAggregateRoot);
+
             ReloadedAccountAggregateRoot.AddAmount(5.00M);
         }
 
-        protected override void When() => CaughtException = Catch.Exception (() => Subject.Save(ReloadedAccountAggregateRoot, ReloadedAccountAggregateRoot.Version - 1));
+        protected override void When() => CaughtException = Catch.Exception (() => Subject.Save(ReloadedAccountAggregateRoot));
 
         [Then]
         public void a_EventStoreConcurrencyException_should_be_thrown() => CaughtException.ShouldBeOfType<EventStoreConcurrencyException>();

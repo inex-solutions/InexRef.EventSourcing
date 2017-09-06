@@ -9,7 +9,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
         {
             var account = new AccountAggregateRoot(AggregateId);
             account.AddAmount(2.00M);
-            Repository.Save(account, account.Version);
+            Repository.Save(account);
         }
 
         protected override void When() => Subject.Send(new ResetBalanceCommand(AggregateId));

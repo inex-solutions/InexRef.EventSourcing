@@ -15,14 +15,14 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
         {
             var item = _repository.GetOrCreateNew(command.Id);
             item.AddAmount(command.Amount);
-            _repository.Save(item, item.Version);
+            _repository.Save(item);
         }
 
         public void Handle(ResetBalanceCommand command)
         {
             var item = _repository.GetOrCreateNew(command.Id);
             item.ResetBalance();
-            _repository.Save(item, item.Version);
+            _repository.Save(item);
         }
     }
 }

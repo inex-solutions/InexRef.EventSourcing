@@ -8,7 +8,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
         protected override void Given()
         {
             var account = new AccountAggregateRoot(AggregateId);
-            Repository.Save(account, account.Version);
+            Repository.Save(account);
         }
 
         protected override void When() => Subject.Send(new AddAmountCommand(AggregateId, 2.00M));

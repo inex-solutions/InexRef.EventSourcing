@@ -9,7 +9,7 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
         {
             var aggregate = new AccountAggregateRoot(AggregateId);
             aggregate.AddAmount(2.00M);
-            Subject.Save(aggregate, aggregate.Version);
+            Subject.Save(aggregate);
         }
 
         protected override void When() => ReloadedAccountAggregateRoot = Subject.Get(AggregateId);

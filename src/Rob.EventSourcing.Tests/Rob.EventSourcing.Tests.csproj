@@ -70,6 +70,7 @@
     <Compile Include="IntegrationTests\when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds.cs" />
     <Compile Include="IntegrationTests\when_two_pounds_is_added_to_a_non_existent_account.cs" />
     <Compile Include="PersistenceTests\AggregateRepositoryTestBase.cs" />
+    <Compile Include="PersistenceTests\NonDisposingAccountAggregateRoot.cs" />
     <Compile Include="PersistenceTests\when_an_account_containing_two_pounds_is_saved_and_reloaded.cs" />
     <Compile Include="PersistenceTests\when_a_saved_account_containing_two_pounds_is_loaded_has_five_pounds_added_and_saved.cs" />
     <Compile Include="PersistenceTests\when_a_saved_account_is_resaved_but_with_the_wrong_version_number.cs" />

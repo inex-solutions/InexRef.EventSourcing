@@ -20,7 +20,9 @@ namespace Rob.EventSourcing.Persistence
 
         public void Save(TAggregate aggregate)
         {
-            var events = aggregate.GetUncommittedEvents().ToList();
+            IAggregateRootInternal internalAggregate = aggregate;
+
+            var events = internalAggregate.GetUncommittedEvents().ToList();
 
             int version = aggregate.Version;
 
@@ -29,15 +31,16 @@ namespace Rob.EventSourcing.Persistence
                 @event.Version = ++version;
             }
 
-            foreach (var @event in aggregate.GetUnpublishedEvents())
+            foreach (var @event in internalAggregate.GetUnpublishedEvents())
             {
                 @event.Version = version;
                 _bus.PublishEvent(@event);
             }
 
             _eventStore.SaveEvents(aggregate.Id, typeof(TAggregate), events, version, aggregate.Version);
-            aggregate.ClearUncommittedEvents();
-            aggregate.ClearUnpublishedEvents();
+            internalAggregate.ClearUncommittedEvents();
+            internalAggregate.ClearUnpublishedEvents();
+            internalAggregate.Dispose();
         }
 
         public TAggregate Get(Guid id)

@@ -19,5 +19,11 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
         [Then]
         public void the_account_balance_on_the_read_model_is_zero() => BalanceReadModel[AggregateId].ShouldBe(0.00M);
+
+        [Then]
+        public void the_aggregate_is_version_two() => Repository.Get(AggregateId).Version.ShouldBe(2);
+
+        [Then]
+        public void the_version_on_the_read_model_is_two() => BalanceReadModel.GetVersion(AggregateId).ShouldBe(2);
     }
 }

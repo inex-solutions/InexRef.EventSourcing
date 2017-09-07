@@ -42,6 +42,8 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
         protected ReceivedEventsHistoryReadModel ReceivedEventsHistoryReadModel { get; private set; }
 
+        protected IdGenerator IdGenerator { get; private set; }
+
         protected IntegrationTestBase(string persistenceProvider)
         {
             _persistenceProvider = persistenceProvider;
@@ -49,6 +51,8 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
         protected override void SetUp()
         {
+            IdGenerator = new IdGenerator("my-root");
+
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
 
@@ -68,7 +72,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
             Subject = container.Resolve<IBus>();
             Repository = container.Resolve<IAggregateRepository<AccountAggregateRoot, string>>();
 
-            AggregateId = Guid.NewGuid().ToString();
+            AggregateId = IdGenerator.CreateAggregateId();
 
             BalanceReadModel = new BalanceReadModel();
             Subject.Subscribe<BalanceUpdatedEvent>(BalanceReadModel.Handle);

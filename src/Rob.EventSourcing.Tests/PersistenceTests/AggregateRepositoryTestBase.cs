@@ -37,6 +37,8 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 
         protected AccountAggregateRoot ReloadedAccountAggregateRoot { get; set; }
 
+        protected IdGenerator IdGenerator { get; private set; }
+
         protected AggregateRepositoryTestBase(string persistenceProvider)
         {
             _persistenceProvider = persistenceProvider;
@@ -44,6 +46,8 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 
         protected override void SetUp()
         {
+            IdGenerator = new IdGenerator("my-root");
+
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
 
@@ -62,8 +66,7 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 
             Subject = container.Resolve<IAggregateRepository<AccountAggregateRoot, string>>();
 
-            AggregateId = Guid.NewGuid().ToString();
-
+            AggregateId = IdGenerator.CreateAggregateId();
         }
 
         protected override void Cleanup()

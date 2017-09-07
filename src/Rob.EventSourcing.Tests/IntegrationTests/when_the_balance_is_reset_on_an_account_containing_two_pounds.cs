@@ -47,6 +47,9 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
         public void the_aggregate_is_version_two() => Repository.Get(AggregateId).Version.ShouldBe(2);
 
         [Then]
-        public void the_version_on_the_read_model_is_two() => BalanceReadModel.GetVersion(AggregateId).ShouldBe(2);
+        public void the_version_on_the_read_model_subscribed_to_external_events_is_two() => BalanceReadModel.GetVersion(AggregateId).ShouldBe(2);
+
+        [Then]
+        public void the_number_of_events_received_by_the_read_model_subscribed_to_internal_events_is_two() => ReceivedInternalEventsHistoryReadModel[AggregateId].Count.ShouldBe(2);
     }
 }

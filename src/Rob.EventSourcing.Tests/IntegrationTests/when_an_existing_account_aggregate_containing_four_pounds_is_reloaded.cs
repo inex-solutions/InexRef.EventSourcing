@@ -35,6 +35,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
             Subject.Send(new AddAmountCommand(AggregateId, 2.00M));
             Subject.Send(new AddAmountCommand(AggregateId, 2.00M));
             ReceivedEventsHistoryReadModel.Clear();
+            ReceivedInternalEventsHistoryReadModel.Clear();
         }
 
         protected override void When() => Aggregate = Repository.Get(AggregateId);
@@ -46,6 +47,9 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
         public void the_reloaded_aggregate_has_is_version_2() => Aggregate.Version.ShouldBe(2);
 
         [Then]
-        public void no_updates_were_received_by_the_read_model() => ReceivedEventsHistoryReadModel[AggregateId].ShouldBeNull();
+        public void no_updates_were_received_by_the_read_model_subscribed_to_external_events() => ReceivedEventsHistoryReadModel[AggregateId].ShouldBeNull();
+
+        [Then]
+        public void no_updates_were_received_by_the_read_model_subscribed_to_internal_events() => ReceivedInternalEventsHistoryReadModel[AggregateId].ShouldBeNull();
     }
 }

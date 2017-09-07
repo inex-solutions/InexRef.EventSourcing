@@ -62,6 +62,5 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
                 return events;
             }
         }
-
     }
 }

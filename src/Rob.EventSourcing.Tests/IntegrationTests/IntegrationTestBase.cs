@@ -42,6 +42,8 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
         protected ReceivedEventsHistoryReadModel ReceivedEventsHistoryReadModel { get; private set; }
 
+        protected ReceivedInternalEventsHistoryReadModel ReceivedInternalEventsHistoryReadModel { get; private set; }
+
         protected IdGenerator IdGenerator { get; private set; }
 
         protected IntegrationTestBase(string persistenceProvider)
@@ -81,6 +83,10 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
             ReceivedEventsHistoryReadModel = new ReceivedEventsHistoryReadModel();
             Subject.Subscribe<BalanceUpdatedEvent>(ReceivedEventsHistoryReadModel.Handle);
             Subject.Subscribe<BalanceResetEvent>(ReceivedEventsHistoryReadModel.Handle);
+
+            ReceivedInternalEventsHistoryReadModel = new ReceivedInternalEventsHistoryReadModel();
+            Subject.Subscribe<AmountAddedEvent>(ReceivedInternalEventsHistoryReadModel.Handle);
+            Subject.Subscribe<BalanceResetEvent>(ReceivedInternalEventsHistoryReadModel.Handle);
 
             var handlers = new IntegrationTestHandlers(Repository);
             Subject.RegisterHandler<AddAmountCommand>(handlers.Handle);

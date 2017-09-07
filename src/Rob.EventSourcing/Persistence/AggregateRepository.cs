@@ -56,6 +56,11 @@ namespace Rob.EventSourcing.Persistence
                 @event.SetVersion(++version);
             }
 
+            foreach (var eventToStore in events)
+            {
+                _bus.PublishEvent(eventToStore);
+            }
+
             foreach (IEventInternal @event in internalAggregate.GetUnpublishedEvents())
             {
                 @event.SetVersion(version);

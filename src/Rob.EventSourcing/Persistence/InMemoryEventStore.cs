@@ -56,12 +56,6 @@ namespace Rob.EventSourcing.Persistence
 
                     var eventsToStoreList = eventsToStore.ToList();
 
-                    //HACK: what if we fail to send? We've already saved. Here's the tricky bit :)
-                    foreach (var eventToStore in eventsToStoreList)
-                    {
-                        _eventBus.PublishEvent(eventToStore.EventData);
-                    }
-
                     return enumerable.Concat(eventsToStoreList);
                 });
         }

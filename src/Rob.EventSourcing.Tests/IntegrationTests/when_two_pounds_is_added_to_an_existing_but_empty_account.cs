@@ -41,5 +41,8 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
         [Then]
         public void the_account_balance_on_the_read_model_is_two_pounds() => BalanceReadModel[AggregateId].ShouldBe(2.00M);
+
+        [Then]
+        public void the_number_of_events_received_by_the_read_model_subscribed_to_internal_events_is_one() => ReceivedInternalEventsHistoryReadModel[AggregateId].Count.ShouldBe(1);
     }
 }

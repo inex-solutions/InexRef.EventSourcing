@@ -65,6 +65,7 @@
     <Compile Include="IntegrationTests\IntegrationTestBase.cs" />
     <Compile Include="IntegrationTests\IntegrationTestHandlers.cs" />
     <Compile Include="IntegrationTests\ReceivedEventsHistoryReadModel.cs" />
+    <Compile Include="IntegrationTests\ReceivedInternalEventsHistoryReadModel.cs" />
     <Compile Include="IntegrationTests\when_an_existing_account_aggregate_containing_four_pounds_is_reloaded.cs" />
     <Compile Include="IntegrationTests\when_the_balance_is_reset_on_an_account_containing_two_pounds.cs" />
     <Compile Include="IntegrationTests\when_two_pounds_is_added_to_an_existing_but_empty_account.cs" />

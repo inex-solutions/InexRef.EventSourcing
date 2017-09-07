@@ -49,5 +49,8 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
         [Then]
         public void the_total_number_of_updates_received_by_a_subscribed_read_model_is_two() => ReceivedEventsHistoryReadModel[AggregateId].Count.ShouldBe(2);
+
+        [Then]
+        public void the_number_of_events_received_by_the_read_model_subscribed_to_internal_events_is_one() => ReceivedInternalEventsHistoryReadModel[AggregateId].Count.ShouldBe(2);
     }
 }

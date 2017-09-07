@@ -58,8 +58,6 @@
     <Compile Include="AggregateTests\when_I_reset_an_account_containing_one_pound.cs" />
     <Compile Include="AmountAddedEvent.cs" />
     <Compile Include="BalanceResetEvent.cs" />
-    <Compile Include="DisposableDirectory.cs" />
-    <Compile Include="FileFinder.cs" />
     <Compile Include="IntegrationTests\BalanceEntry.cs" />
     <Compile Include="IntegrationTests\BalanceReadModel.cs" />
     <Compile Include="IntegrationTests\BalanceUpdatedEvent.cs" />

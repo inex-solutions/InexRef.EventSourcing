@@ -18,7 +18,7 @@
 #endregion
 
 using System;
-using Rob.EventSourcing.Messages;
+using Rob.EventSourcing.Contracts.Messages;
 
 namespace Rob.EventSourcing.Persistence
 {

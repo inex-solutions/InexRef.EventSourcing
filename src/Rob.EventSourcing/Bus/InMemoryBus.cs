@@ -21,7 +21,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Rob.EventSourcing.Messages;
+using Rob.EventSourcing.Contracts.Bus;
+using Rob.EventSourcing.Contracts.Messages;
 
 namespace Rob.EventSourcing.Bus
 {

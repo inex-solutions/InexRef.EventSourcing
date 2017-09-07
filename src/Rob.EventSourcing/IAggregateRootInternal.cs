@@ -19,7 +19,7 @@
 
 using System;
 using System.Collections.Generic;
-using Rob.EventSourcing.Messages;
+using Rob.EventSourcing.Contracts.Messages;
 
 namespace Rob.EventSourcing
 {

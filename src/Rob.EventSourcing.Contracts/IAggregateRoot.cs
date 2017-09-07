@@ -18,14 +18,13 @@
 #endregion
 
 using System;
-using Rob.EventSourcing.Messages;
 
-namespace Rob.EventSourcing.Bus
+namespace Rob.EventSourcing.Contracts
 {
-    public interface IEventBus
+    public interface IAggregateRoot<out TId> where TId : IEquatable<TId>, IComparable<TId>
     {
-        void Subscribe<T>(Action<T> handler) where T : IEvent;
+        TId Id { get; }
 
-        void PublishEvent(IEvent @event);
+        int Version { get; }
     }
 }

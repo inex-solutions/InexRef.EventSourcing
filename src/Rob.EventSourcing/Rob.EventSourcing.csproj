@@ -53,9 +53,6 @@
     <Compile Include="AggregateRoot.cs" />
     <Compile Include="Bus\HandlerNotFoundException.cs" />
     <Compile Include="Bus\HandlerRegistrationException.cs" />
-    <Compile Include="Bus\IBus.cs" />
-    <Compile Include="Bus\ICommandBus.cs" />
-    <Compile Include="Bus\IEventBus.cs" />
     <Compile Include="Bus\InMemoryBus.cs" />
     <Compile Include="EventSourcingCoreModule.cs" />
     <Compile Include="EventSourcingFileSystemInfrastructureModule.cs" />
@@ -63,17 +60,12 @@
     <Compile Include="IAggregateRootInternal.cs" />
     <Compile Include="Messages\Command.cs" />
     <Compile Include="Messages\Event.cs" />
-    <Compile Include="Messages\ICommand.cs" />
-    <Compile Include="Messages\IEvent.cs" />
     <Compile Include="Messages\IEventInternal.cs" />
-    <Compile Include="Messages\IMessage.cs" />
     <Compile Include="Persistence\AggregateNotFoundException.cs" />
     <Compile Include="Persistence\AggregateRepository.cs" />
     <Compile Include="Persistence\EventStoreConcurrencyException.cs" />
     <Compile Include="Persistence\FilePersistenceConfiguration.cs" />
     <Compile Include="Persistence\FileSystemEventStore.cs" />
-    <Compile Include="Persistence\IAggregateRepository.cs" />
-    <Compile Include="Persistence\IEventStore.cs" />
     <Compile Include="Persistence\InMemoryEventStore.cs" />
     <Compile Include="Persistence\Metadata.cs" />
     <Compile Include="Persistence\PersistedAggregate.cs" />
@@ -82,6 +74,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rob.EventSourcing.Contracts\Rob.EventSourcing.Contracts.csproj">
+      <Project>{55071AF7-67F7-4C14-8A11-D759C99F67D0}</Project>
+      <Name>Rob.EventSourcing.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

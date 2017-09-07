@@ -20,7 +20,7 @@
 using System;
 using Autofac;
 using NUnit.Framework;
-using Rob.EventSourcing.Persistence;
+using Rob.EventSourcing.Contracts.Persistence;
 using Rob.EventSourcing.Tests.SpecificationTests;
 
 namespace Rob.EventSourcing.Tests.PersistenceTests

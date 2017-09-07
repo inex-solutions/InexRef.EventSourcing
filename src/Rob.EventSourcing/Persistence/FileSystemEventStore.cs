@@ -23,7 +23,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
-using Rob.EventSourcing.Messages;
+using Rob.EventSourcing.Contracts.Messages;
+using Rob.EventSourcing.Contracts.Persistence;
 
 namespace Rob.EventSourcing.Persistence
 {

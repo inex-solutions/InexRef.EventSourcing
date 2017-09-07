@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // Copyright 2017 INEX Solutions Ltd
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -19,15 +19,15 @@
 
 using System;
 
-namespace Rob.EventSourcing.Messages
+namespace Rob.EventSourcing.Contracts.Messages
 {
-    public interface ICommand<TId> : ICommand where TId : IEquatable<TId>, IComparable<TId>
+    public interface IEvent : IMessage
     {
-        
+        int Version { get; }
     }
 
-    public interface ICommand : IMessage
+    public interface IEvent<TId> : IEvent where TId : IEquatable<TId>, IComparable<TId>
     {
-
+        TId Id { get; }
     }
 }

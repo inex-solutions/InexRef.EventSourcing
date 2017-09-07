@@ -88,6 +88,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Rob.EventSourcing.Contracts\Rob.EventSourcing.Contracts.csproj">
+      <Project>{55071AF7-67F7-4C14-8A11-D759C99F67D0}</Project>
+      <Name>Rob.EventSourcing.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rob.EventSourcing\Rob.EventSourcing.csproj">
       <Project>{83871704-2589-4981-88EB-11613994A5F9}</Project>
       <Name>Rob.EventSourcing</Name>

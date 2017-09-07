@@ -18,6 +18,7 @@
 #endregion
 
 using Autofac;
+using Rob.EventSourcing.Contracts.Persistence;
 using Rob.EventSourcing.Persistence;
 
 namespace Rob.EventSourcing

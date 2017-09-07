@@ -18,15 +18,16 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using Rob.EventSourcing.Contracts.Messages;
 
-namespace Rob.EventSourcing.Persistence
+namespace Rob.EventSourcing.Contracts.Messages
 {
-    public class PersistedAggregate<TId> where TId : IEquatable<TId>, IComparable<TId>
+    public interface ICommand<TId> : ICommand where TId : IEquatable<TId>, IComparable<TId>
     {
-        public Metadata<TId> Metadata { get; set; }
+        
+    }
 
-        public IEnumerable<IEvent<TId>> Events { get; set; }
+    public interface ICommand : IMessage
+    {
+
     }
 }

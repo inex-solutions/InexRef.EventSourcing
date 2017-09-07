@@ -19,6 +19,8 @@
 
 using Autofac;
 using Rob.EventSourcing.Bus;
+using Rob.EventSourcing.Contracts.Bus;
+using Rob.EventSourcing.Contracts.Persistence;
 using Rob.EventSourcing.Persistence;
 
 namespace Rob.EventSourcing

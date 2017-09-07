@@ -23,11 +23,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Rob.EventSourcing.Tests")]
+[assembly: AssemblyTitle("Rob.EventSourcing.Contracts")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Rob.EventSourcing.Tests")]
+[assembly: AssemblyProduct("Rob.EventSourcing.Contracts")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -38,7 +38,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("285e7479-1f0e-4d0b-992b-2a41ca207250")]
+[assembly: Guid("55071af7-67f7-4c14-8a11-d759c99f67d0")]
 
 // Version information for an assembly consists of the following four values:
 //

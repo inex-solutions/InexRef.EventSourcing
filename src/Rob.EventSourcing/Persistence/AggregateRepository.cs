@@ -20,13 +20,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Rob.EventSourcing.Bus;
+using Rob.EventSourcing.Contracts;
+using Rob.EventSourcing.Contracts.Bus;
+using Rob.EventSourcing.Contracts.Messages;
+using Rob.EventSourcing.Contracts.Persistence;
 using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing.Persistence
 {
     public class AggregateRepository<TAggregate, TId> : IAggregateRepository<TAggregate, TId>
-        where TAggregate : AggregateRoot<TId>, new()
+        where TAggregate : IAggregateRoot<TId>, IAggregateRootInternal<TId>, new()
         where TId : IEquatable<TId>, IComparable<TId>
     {
         private readonly IEventStore<TId> _eventStore;

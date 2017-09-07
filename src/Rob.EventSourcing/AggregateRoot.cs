@@ -20,11 +20,13 @@
 using System;
 using System.Collections.Generic;
 using ReflectionMagic;
+using Rob.EventSourcing.Contracts;
+using Rob.EventSourcing.Contracts.Messages;
 using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing
 {
-    public abstract class AggregateRoot<TId> : IAggregateRootInternal<TId> where TId : IEquatable<TId>, IComparable<TId>
+    public abstract class AggregateRoot<TId> : IAggregateRoot<TId>, IAggregateRootInternal<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
         private readonly List<IEvent<TId>> _uncommittedEvents = new List<IEvent<TId>>();
         private readonly List<IEvent<TId>> _eventsToPublish = new List<IEvent<TId>>();
@@ -32,7 +34,7 @@ namespace Rob.EventSourcing
 
         public TId Id { get; protected set; }
 
-        public  int Version { get; protected set; }
+        public int Version { get; protected set; }
 
         protected void PublishEvent(Event<TId> @event, bool isNew)
         {

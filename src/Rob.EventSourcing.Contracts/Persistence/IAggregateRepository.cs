@@ -19,15 +19,18 @@
 
 using System;
 
-namespace Rob.EventSourcing.Messages
+namespace Rob.EventSourcing.Contracts.Persistence
 {
-    public interface IEvent : IMessage
+    public interface IAggregateRepository<TAggregate, in TId> 
+        where TAggregate : IAggregateRoot<TId>, new() 
+        where TId : IEquatable<TId>, IComparable<TId>
     {
-        int Version { get; }
-    }
+        void Save(TAggregate aggregate);
 
-    public interface IEvent<TId> : IEvent where TId : IEquatable<TId>, IComparable<TId>
-    {
-        TId Id { get; }
+        TAggregate Get(TId id);
+
+        TAggregate GetOrCreateNew(TId id);
+
+        void Delete(TId id);
     }
 }

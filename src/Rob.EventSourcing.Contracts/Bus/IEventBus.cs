@@ -18,19 +18,14 @@
 #endregion
 
 using System;
+using Rob.EventSourcing.Contracts.Messages;
 
-namespace Rob.EventSourcing.Persistence
+namespace Rob.EventSourcing.Contracts.Bus
 {
-    public interface IAggregateRepository<TAggregate, TId> 
-        where TAggregate : AggregateRoot<TId>, new() 
-        where TId : IEquatable<TId>, IComparable<TId>
+    public interface IEventBus
     {
-        void Save(TAggregate aggregate);
+        void Subscribe<T>(Action<T> handler) where T : IEvent;
 
-        TAggregate Get(TId id);
-
-        TAggregate GetOrCreateNew(TId id);
-
-        void Delete(TId id);
+        void PublishEvent(IEvent @event);
     }
 }

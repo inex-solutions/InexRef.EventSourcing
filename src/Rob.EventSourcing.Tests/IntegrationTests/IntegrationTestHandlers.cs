@@ -17,7 +17,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Rob.EventSourcing.Persistence;
+using Rob.EventSourcing.Contracts.Persistence;
 
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {

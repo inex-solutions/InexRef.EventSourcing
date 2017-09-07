@@ -35,7 +35,7 @@ namespace Rob.EventSourcing.Persistence
             foreach (IEventInternal @event in internalAggregate.GetUnpublishedEvents())
             {
                 @event.SetVersion(version);
-                _bus.PublishEvent((Event)@event);
+                _bus.PublishEvent((IEvent<TId>)@event);
             }
 
             _eventStore.SaveEvents(aggregate.Id, typeof(TAggregate), events, version, aggregate.Version);
@@ -53,10 +53,10 @@ namespace Rob.EventSourcing.Persistence
         public TAggregate GetOrCreateNew(TId id)
         {
             IAggregateRootInternal<TId> aggregate = new TAggregate();
-            IEnumerable<Event> events;
+            IEnumerable<IEvent<TId>> events;
             if (!_eventStore.TryLoadEvents(id, out events))
             {
-                events = new List<Event>();
+                events = new List<IEvent<TId>>();
             }
             aggregate.Load(id, events.ToList());
             return (TAggregate)aggregate;

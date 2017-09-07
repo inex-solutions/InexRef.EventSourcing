@@ -9,9 +9,9 @@ namespace Rob.EventSourcing.Persistence
 
         public TId AggregateId { get; }
 
-        public Event EventData { get; }
+        public IEvent<TId> EventData { get; }
 
-        public StoredEvent(TId aggregateId, int version, Event eventData)
+        public StoredEvent(TId aggregateId, int version, IEvent<TId> eventData)
         {
             AggregateId = aggregateId;
             Version = version;

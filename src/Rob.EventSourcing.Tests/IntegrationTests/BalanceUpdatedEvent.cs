@@ -5,7 +5,7 @@ using Rob.EventSourcing.Messages;
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     [DebuggerDisplay("BalanceUpdatedEvent: Id={Id}, Balance={Balance}, Version={Version}")]
-    public class BalanceUpdatedEvent : Event
+    public class BalanceUpdatedEvent : Event<Guid>
     {
         public decimal Balance { get; }
 

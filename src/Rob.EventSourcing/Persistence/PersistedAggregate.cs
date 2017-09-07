@@ -8,6 +8,6 @@ namespace Rob.EventSourcing.Persistence
     {
         public Metadata<TId> Metadata { get; set; }
 
-        public IEnumerable<Event> Events { get; set; }
+        public IEnumerable<IEvent<TId>> Events { get; set; }
     }
 }

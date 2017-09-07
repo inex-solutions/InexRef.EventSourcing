@@ -8,7 +8,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     public class ReceivedEventsHistoryReadModel
     {
-        private readonly ConcurrentDictionary<Guid, List<Event>> _receivedEvents = new ConcurrentDictionary<Guid, List<Event>>();
+        private readonly ConcurrentDictionary<Guid, List<IEvent<Guid>>> _receivedEvents = new ConcurrentDictionary<Guid, List<IEvent<Guid>>>();
 
         public void Handle(BalanceUpdatedEvent @event)
         {
@@ -20,11 +20,11 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
             ReceiveEvent(@event);
         }
 
-        private void ReceiveEvent(Event @event)
+        private void ReceiveEvent(IEvent<Guid> @event)
         {
             _receivedEvents.AddOrUpdate(
                 key: @event.Id,
-                addValue: new List<Event>(new [] {@event}), 
+                addValue: new List<IEvent<Guid>>(new [] {@event}), 
                 updateValueFactory: (id, entry) => entry.Concat(new [] {@event}).ToList());
         }
 
@@ -33,11 +33,11 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
             _receivedEvents.Clear();
         }
 
-        public IList<Event> this[Guid id]
+        public IList<IEvent<Guid>> this[Guid id]
         {
             get
             {
-                List<Event> events = null;
+                List<IEvent<Guid>> events = null;
                 _receivedEvents.TryGetValue(id, out events);
                 return events;
             }

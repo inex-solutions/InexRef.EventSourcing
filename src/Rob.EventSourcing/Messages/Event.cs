@@ -2,13 +2,13 @@
 
 namespace Rob.EventSourcing.Messages
 {
-    public abstract class Event : IMessage, IEventInternal
+    public abstract class Event<TId> : IEvent<TId>, IEventInternal where TId : IEquatable<TId>, IComparable<TId>
     {
-        public Guid Id { get; }
+        public TId Id { get; }
 
         public int Version { get; set; }
 
-        protected Event(Guid id)
+        protected Event(TId id)
         {
             Id = id;
         }

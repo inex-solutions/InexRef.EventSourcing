@@ -5,8 +5,8 @@ namespace Rob.EventSourcing.Bus
 {
     public interface IEventBus
     {
-        void Subscribe<T>(Action<T> handler) where T : Event;
+        void Subscribe<T>(Action<T> handler) where T : IEvent;
 
-        void PublishEvent(Event @event);
+        void PublishEvent(IEvent @event);
     }
 }

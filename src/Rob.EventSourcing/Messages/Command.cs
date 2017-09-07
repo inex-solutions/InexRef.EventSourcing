@@ -2,7 +2,7 @@ using System;
 
 namespace Rob.EventSourcing.Messages
 {
-    public abstract class Command : IMessage
+    public abstract class Command : ICommand
     {
         protected Command(Guid id)
         {

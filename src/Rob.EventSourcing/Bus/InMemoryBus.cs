@@ -8,16 +8,15 @@ namespace Rob.EventSourcing.Bus
 {
     public class InMemoryBus : IBus
     {
-        public readonly ConcurrentDictionary<Type, List<Action<Event>>> _eventHandlers = new ConcurrentDictionary<Type, List<Action<Event>>>();
-        public readonly ConcurrentDictionary<Type, Action<Command>> _commandHandlers = new ConcurrentDictionary<Type, Action<Command>>();
+        public readonly ConcurrentDictionary<Type, List<Action<IEvent>>> _eventHandlers = new ConcurrentDictionary<Type, List<Action<IEvent>>>();
+        public readonly ConcurrentDictionary<Type, Action<ICommand>> _commandHandlers = new ConcurrentDictionary<Type, Action<ICommand>>();
 
-        public void Subscribe<T>(Action<T> handler) where T : Event
+        public void Subscribe<T>(Action<T> handler) where T : IEvent
         {
-            // WARNING - this inner list isn't thread safe
-            Action<Event> eventHandler = @event => handler((T) @event);
+            Action<IEvent> eventHandler = @event => handler((T)@event);
             _eventHandlers.AddOrUpdate(
                 key: typeof(T),
-                addValue: new List<Action<Event>>(new[] { eventHandler }), 
+                addValue: new List<Action<IEvent>>(new[] { eventHandler }), 
                 updateValueFactory: (id, list) =>
                 {
                     var newList = list.Concat(new [] { eventHandler }).ToList();
@@ -25,9 +24,9 @@ namespace Rob.EventSourcing.Bus
                 });
         }
 
-        public void PublishEvent(Event @event)
+        public void PublishEvent(IEvent @event)
         {
-            List<Action<Event>> handlers;
+            List<Action<IEvent>> handlers;
 
             if (_eventHandlers.TryGetValue(@event.GetType(), out handlers))
             {
@@ -38,21 +37,22 @@ namespace Rob.EventSourcing.Bus
             }
         }
 
-        public void RegisterHandler<T>(Action<T> handler) where T : Command
+        public void RegisterHandler<T>(Action<T> handler) where T : ICommand
         {
-            if (!_commandHandlers.TryAdd(typeof(T), t => handler((T)t)))
+            Action<ICommand> commandHandler = command => handler((T)command);
+            if (!_commandHandlers.TryAdd(typeof(T), commandHandler))
             {
                 throw new HandlerRegistrationException($"Couldn't register handler for type '{typeof(T).Name}', as a registration already exists");
             }
         }
 
-        public void Send<T>(T command) where T : Command
+        public void Send(ICommand command)
         {
-            Action<Command> handler;
+            Action<ICommand> handler;
 
-            if (!_commandHandlers.TryGetValue(typeof(T), out handler))
+            if (!_commandHandlers.TryGetValue(command.GetType(), out handler))
             {
-                throw new HandlerNotFoundException($"No handler found for command of type '{typeof(T).Name}'");
+                throw new HandlerNotFoundException($"No handler found for command of type '{command.GetType().Name}'");
             }
 
             handler(command);

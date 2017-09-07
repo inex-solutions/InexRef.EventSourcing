@@ -18,7 +18,7 @@ namespace Rob.EventSourcing.Persistence
             _eventBus = eventBus;
         }
 
-        public void SaveEvents(TId aggregateId, Type aggregateType, IEnumerable<Event> events, int currentVersion, int expectedVersion)
+        public void SaveEvents(TId aggregateId, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion, int expectedVersion)
         {
             IEnumerable<StoredEvent<TId>> eventsToStore = events.Select(@event => new StoredEvent<TId>(aggregateId, @event.Version, @event)).ToList();
 
@@ -51,7 +51,7 @@ namespace Rob.EventSourcing.Persistence
             _storedEvents.TryRemove(id, out events);
         }
 
-        public bool TryLoadEvents(TId aggregateId, out IEnumerable<Event> events)
+        public bool TryLoadEvents(TId aggregateId, out IEnumerable<IEvent<TId>> events)
         {
             IEnumerable<StoredEvent<TId>> storedEvents;
 
@@ -65,7 +65,7 @@ namespace Rob.EventSourcing.Persistence
             return true;
         }
 
-        public IEnumerable<Event> LoadEvents(TId aggregateId)
+        public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId)
         {
             IEnumerable<StoredEvent<TId>> events;
 

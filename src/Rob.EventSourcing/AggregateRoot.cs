@@ -8,15 +8,15 @@ namespace Rob.EventSourcing
 {
     public abstract class AggregateRoot<TId> : IAggregateRootInternal<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
-        private readonly List<Event> _uncommittedEvents = new List<Event>();
-        private readonly List<Event> _eventsToPublish = new List<Event>();
+        private readonly List<IEvent<TId>> _uncommittedEvents = new List<IEvent<TId>>();
+        private readonly List<IEvent<TId>> _eventsToPublish = new List<IEvent<TId>>();
         private bool _isDisposed;
 
         public TId Id { get; protected set; }
 
         public  int Version { get; protected set; }
 
-        protected void PublishEvent(Event @event, bool isNew)
+        protected void PublishEvent(Event<TId> @event, bool isNew)
         {
             ThrowIfDisposed();
 
@@ -26,13 +26,13 @@ namespace Rob.EventSourcing
             }
         }
 
-        protected void Apply(Event @event)
+        protected void Apply(IEvent<TId> @event)
         {
             ThrowIfDisposed();
             Apply(@event, true);
         }
 
-        private void Apply(Event @event, bool isNew)
+        private void Apply(IEvent<TId> @event, bool isNew)
         {
             ThrowIfDisposed();
             this.AsDynamic().HandleEvent(@event, isNew);
@@ -48,7 +48,7 @@ namespace Rob.EventSourcing
             }
         }
 
-        void IAggregateRootInternal<TId>.Load(TId id, IEnumerable<Event> eventHistory)
+        void IAggregateRootInternal<TId>.Load(TId id, IEnumerable<IEvent<TId>> eventHistory)
         {
             ThrowIfDisposed();
             Id = id;
@@ -58,13 +58,13 @@ namespace Rob.EventSourcing
             }
         }
 
-        IEnumerable<Event> IAggregateRootInternal<TId>.GetUncommittedEvents()
+        IEnumerable<IEvent<TId>> IAggregateRootInternal<TId>.GetUncommittedEvents()
         {
             ThrowIfDisposed();
             return _uncommittedEvents;
         }
 
-        IEnumerable<Event> IAggregateRootInternal<TId>.GetUnpublishedEvents()
+        IEnumerable<IEvent<TId>> IAggregateRootInternal<TId>.GetUnpublishedEvents()
         {
             ThrowIfDisposed();
             return _eventsToPublish;

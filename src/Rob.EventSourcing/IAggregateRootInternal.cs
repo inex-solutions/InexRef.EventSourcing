@@ -7,9 +7,10 @@ namespace Rob.EventSourcing
 {
     public interface IAggregateRootInternal<TId> : IDisposable where TId : IEquatable<TId>, IComparable<TId>
     {
-        void Load(TId id, IEnumerable<Event> history);
+        void Load(TId id, IEnumerable<IEvent<TId>> history);
 
-        IEnumerable<Event> GetUncommittedEvents();
-        IEnumerable<Event> GetUnpublishedEvents();
+        IEnumerable<IEvent<TId>> GetUncommittedEvents();
+
+        IEnumerable<IEvent<TId>> GetUnpublishedEvents();
     }
 }

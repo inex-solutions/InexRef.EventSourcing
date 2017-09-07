@@ -65,6 +65,8 @@
     <Compile Include="IntegrationTests\BalanceUpdatedEvent.cs" />
     <Compile Include="IntegrationTests\IntegrationTestBase.cs" />
     <Compile Include="IntegrationTests\IntegrationTestHandlers.cs" />
+    <Compile Include="IntegrationTests\ReceivedEventsHistoryReadModel.cs" />
+    <Compile Include="IntegrationTests\when_an_existing_account_aggregate_containing_four_pounds_is_reloaded.cs" />
     <Compile Include="IntegrationTests\when_the_balance_is_reset_on_an_account_containing_two_pounds.cs" />
     <Compile Include="IntegrationTests\when_two_pounds_is_added_to_an_existing_but_empty_account.cs" />
     <Compile Include="IntegrationTests\when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds.cs" />
@@ -89,14 +91,6 @@
     <ProjectReference Include="..\Rob.EventSourcing\Rob.EventSourcing.csproj">
       <Project>{83871704-2589-4981-88EB-11613994A5F9}</Project>
       <Name>Rob.EventSourcing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rob.EventSourcing\Rob.EventSourcing.csproj">
-      <Project>{83871704-2589-4981-88EB-11613994A5F9}</Project>
-      <Name>Rob.ValuationMonitoring.EventSourcing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rob.ValuationMonitoring.Utils\Rob.ValuationMonitoring.Utils.csproj">
-      <Project>{a8b180f2-1162-438e-9bd3-6c8cf0c5ef39}</Project>
-      <Name>Rob.ValuationMonitoring.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

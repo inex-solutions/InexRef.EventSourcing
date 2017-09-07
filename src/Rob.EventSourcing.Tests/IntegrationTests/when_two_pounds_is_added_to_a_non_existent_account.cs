@@ -22,5 +22,8 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
         [Then]
         public void the_version_on_the_read_model_is_one() => BalanceReadModel.GetVersion(AggregateId).ShouldBe(1);
+
+        [Then]
+        public void the_total_number_of_updates_received_by_a_subscribed_read_model_is_one() => ReceivedEventsHistoryReadModel[AggregateId].Count.ShouldBe(1);
     }
 }

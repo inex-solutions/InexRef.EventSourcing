@@ -1,8 +1,8 @@
 ﻿using Autofac;
-using Rob.ValuationMonitoring.EventSourcing.Bus;
-using Rob.ValuationMonitoring.EventSourcing.Persistence;
+using Rob.EventSourcing.Bus;
+using Rob.EventSourcing.Persistence;
 
-namespace Rob.ValuationMonitoring.EventSourcing
+namespace Rob.EventSourcing
 {
     public class EventSourcingInMemoryInfrastructureModule : Module
     {

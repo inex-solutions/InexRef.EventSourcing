@@ -13,11 +13,14 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
     public abstract class IntegrationTestBase : SpecificationBase<IBus>
     {
         private readonly string _persistenceProvider;
+
         protected Guid AggregateId { get; private set; }
 
         protected IAggregateRepository<AccountAggregateRoot, Guid> Repository { get; private set; }
 
         protected BalanceReadModel BalanceReadModel { get; private set; }
+
+        protected ReceivedEventsHistoryReadModel ReceivedEventsHistoryReadModel { get; private set; }
 
         protected IntegrationTestBase(string persistenceProvider)
         {
@@ -50,6 +53,10 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
             BalanceReadModel = new BalanceReadModel();
             Subject.Subscribe<BalanceUpdatedEvent>(BalanceReadModel.Handle);
             Subject.Subscribe<BalanceResetEvent>(BalanceReadModel.Handle);
+
+            ReceivedEventsHistoryReadModel = new ReceivedEventsHistoryReadModel();
+            Subject.Subscribe<BalanceUpdatedEvent>(ReceivedEventsHistoryReadModel.Handle);
+            Subject.Subscribe<BalanceResetEvent>(ReceivedEventsHistoryReadModel.Handle);
 
             var handlers = new IntegrationTestHandlers(Repository);
             Subject.RegisterHandler<AddAmountCommand>(handlers.Handle);

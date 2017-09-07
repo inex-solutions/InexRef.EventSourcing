@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
-using Rob.ValuationMonitoring.EventSourcing.Messages;
+using Rob.EventSourcing.Messages;
 
-namespace Rob.ValuationMonitoring.EventSourcing.Persistence
+namespace Rob.EventSourcing.Persistence
 {
     public class FileSystemEventStore<TId> : IEventStore<TId> where TId : IEquatable<TId>, IComparable<TId>
     {

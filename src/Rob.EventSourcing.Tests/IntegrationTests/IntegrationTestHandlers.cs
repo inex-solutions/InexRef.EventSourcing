@@ -1,9 +1,7 @@
-<<<<<<< HEAD:src/Rob.EventSourcing.Tests/IntegrationTests/IntegrationTestHandlers.cs
-﻿using Rob.EventSourcing.Persistence;
-=======
-﻿using System;
-using Rob.ValuationMonitoring.EventSourcing.Persistence;
->>>>>>> 61efacf... Remove hard dependency on Guid as identifier:src/Rob.ValuationMonitoring.EventSourcing.Tests/IntegrationTests/IntegrationTestHandlers.cs
+
+
+using System;
+using Rob.EventSourcing.Persistence;
 
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {

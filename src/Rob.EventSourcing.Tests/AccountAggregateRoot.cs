@@ -30,13 +30,13 @@ namespace Rob.EventSourcing.Tests
         public void HandleEvent(AmountAddedEvent @event, bool isNew)
         {
             Balance += @event.Amount;
-            PublishEvent(new BalanceUpdatedEvent(Id, Balance));
+            PublishEvent(new BalanceUpdatedEvent(Id, Balance), isNew);
         }
 
         public void HandleEvent(BalanceResetEvent @event, bool isNew)
         {
             Balance = 0;
-            PublishEvent(new BalanceResetEvent(Id));
+            PublishEvent(new BalanceResetEvent(Id), isNew);
         }
     }
 }

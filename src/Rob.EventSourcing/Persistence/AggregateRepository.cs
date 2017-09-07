@@ -39,8 +39,6 @@ namespace Rob.EventSourcing.Persistence
             }
 
             _eventStore.SaveEvents(aggregate.Id, typeof(TAggregate), events, version, aggregate.Version);
-            internalAggregate.ClearUncommittedEvents();
-            internalAggregate.ClearUnpublishedEvents();
             internalAggregate.Dispose();
         }
 

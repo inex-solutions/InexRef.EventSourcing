@@ -16,10 +16,14 @@ namespace Rob.EventSourcing
 
         public  int Version { get; protected set; }
 
-        protected void PublishEvent(Event @event)
+        protected void PublishEvent(Event @event, bool isNew)
         {
             ThrowIfDisposed();
-            _eventsToPublish.Add(@event);
+
+            if (isNew)
+            {
+                _eventsToPublish.Add(@event);
+            }
         }
 
         protected void Apply(Event @event)
@@ -66,23 +70,13 @@ namespace Rob.EventSourcing
             return _eventsToPublish;
         }
 
-        void IAggregateRootInternal<TId>.ClearUncommittedEvents()
-        {
-            ThrowIfDisposed();
-            _uncommittedEvents.Clear();
-        }
-
-        void IAggregateRootInternal<TId>.ClearUnpublishedEvents()
-        {
-            ThrowIfDisposed();
-            _eventsToPublish.Clear();
-        }
-
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
                 _isDisposed = true;
+                _uncommittedEvents.Clear();
+                _eventsToPublish.Clear();
             }
         }
 

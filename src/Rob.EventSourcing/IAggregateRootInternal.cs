@@ -11,8 +11,5 @@ namespace Rob.EventSourcing
 
         IEnumerable<Event> GetUncommittedEvents();
         IEnumerable<Event> GetUnpublishedEvents();
-
-        void ClearUncommittedEvents();
-        void ClearUnpublishedEvents();
     }
 }

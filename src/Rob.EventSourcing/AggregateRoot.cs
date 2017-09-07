@@ -21,10 +21,10 @@
 
 using System;
 using System.Collections.Generic;
-using ReflectionMagic;
 using Rob.EventSourcing.Contracts;
 using Rob.EventSourcing.Contracts.Messages;
 using Rob.EventSourcing.Messages;
+using Rob.EventSourcing.Utils;
 
 namespace Rob.EventSourcing
 {

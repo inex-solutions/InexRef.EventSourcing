@@ -7,9 +7,9 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     public class IntegrationTestHandlers
     {
-        private readonly IAggregateRepository<AccountAggregateRoot, Guid> _repository;
+        private readonly IAggregateRepository<AccountAggregateRoot, string> _repository;
 
-        public IntegrationTestHandlers(IAggregateRepository<AccountAggregateRoot, Guid> repository)
+        public IntegrationTestHandlers(IAggregateRepository<AccountAggregateRoot, string> repository)
         {
             _repository = repository;
         }

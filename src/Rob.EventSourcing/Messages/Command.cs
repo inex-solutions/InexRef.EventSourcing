@@ -2,13 +2,13 @@ using System;
 
 namespace Rob.EventSourcing.Messages
 {
-    public abstract class Command : ICommand
+    public abstract class Command<TId> : ICommand<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
-        protected Command(Guid id)
+        protected Command(TId id)
         {
             Id = id;
         }
 
-        public Guid Id { get; }
+        public TId Id { get; }
     }
 }

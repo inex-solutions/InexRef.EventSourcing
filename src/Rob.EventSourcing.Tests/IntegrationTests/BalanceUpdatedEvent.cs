@@ -5,11 +5,11 @@ using Rob.EventSourcing.Messages;
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     [DebuggerDisplay("BalanceUpdatedEvent: Id={Id}, Balance={Balance}, Version={Version}")]
-    public class BalanceUpdatedEvent : Event<Guid>
+    public class BalanceUpdatedEvent : Event<string>
     {
         public decimal Balance { get; }
 
-        public BalanceUpdatedEvent(Guid id, decimal balance) : base(id)
+        public BalanceUpdatedEvent(string id, decimal balance) : base(id)
         {
             Balance = balance;
         }

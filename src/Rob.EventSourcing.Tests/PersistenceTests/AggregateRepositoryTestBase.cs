@@ -9,11 +9,11 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 {
     [TestFixture("FileSystem")]
     [TestFixture("InMemory")]
-    public abstract class AggregateRepositoryTestBase : SpecificationBase<IAggregateRepository<AccountAggregateRoot, Guid>>
+    public abstract class AggregateRepositoryTestBase : SpecificationBase<IAggregateRepository<AccountAggregateRoot, string>>
     {
         private readonly string _persistenceProvider;
 
-        protected Guid AggregateId { get; private set; }
+        protected string AggregateId { get; private set; }
 
         protected AccountAggregateRoot ReloadedAccountAggregateRoot { get; set; }
 
@@ -40,9 +40,9 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
             }
             var container = containerBuilder.Build();
 
-            Subject = container.Resolve<IAggregateRepository<AccountAggregateRoot, Guid>>();
+            Subject = container.Resolve<IAggregateRepository<AccountAggregateRoot, string>>();
 
-            AggregateId = Guid.NewGuid();
+            AggregateId = Guid.NewGuid().ToString();
 
         }
 

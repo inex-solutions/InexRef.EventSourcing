@@ -3,9 +3,9 @@ using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing.Tests
 {
-    public class ResetBalanceCommand : Command
+    public class ResetBalanceCommand : Command<string>
     {
-        public ResetBalanceCommand(Guid id) : base(id)
+        public ResetBalanceCommand(string id) : base(id)
         {
         }
     }

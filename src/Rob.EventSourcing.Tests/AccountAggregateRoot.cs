@@ -3,14 +3,14 @@ using Rob.EventSourcing.Tests.IntegrationTests;
 
 namespace Rob.EventSourcing.Tests
 {
-    public class AccountAggregateRoot : AggregateRoot<Guid>
+    public class AccountAggregateRoot : AggregateRoot<string>
     {
         public AccountAggregateRoot()
         {
             
         }
 
-        public AccountAggregateRoot(Guid id)
+        public AccountAggregateRoot(string id)
         {
             Id = id;
         }

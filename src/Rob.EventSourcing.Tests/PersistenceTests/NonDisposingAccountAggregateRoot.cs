@@ -4,7 +4,7 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 {
     public class NonDisposingAccountAggregateRoot : AccountAggregateRoot
     {
-        public NonDisposingAccountAggregateRoot(Guid id) : base(id)
+        public NonDisposingAccountAggregateRoot(string id) : base(id)
         {
 
         }

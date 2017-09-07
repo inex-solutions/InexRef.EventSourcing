@@ -5,7 +5,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     public class BalanceReadModel
     {
-        private readonly ConcurrentDictionary<Guid, BalanceEntry> _balances = new ConcurrentDictionary<Guid, BalanceEntry>();
+        private readonly ConcurrentDictionary<string, BalanceEntry> _balances = new ConcurrentDictionary<string, BalanceEntry>();
 
         public void Handle(BalanceUpdatedEvent @event)
         {
@@ -27,8 +27,8 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
                     : new BalanceEntry { Version = @event.Version, Balance = 0 });
         }
 
-        public decimal this[Guid id] => _balances[id].Balance;
+        public decimal this[string id] => _balances[id].Balance;
 
-        public int GetVersion(Guid id) => _balances[id].Version;
+        public int GetVersion(string id) => _balances[id].Version;
     }
 }

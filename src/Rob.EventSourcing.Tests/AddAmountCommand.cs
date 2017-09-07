@@ -3,11 +3,11 @@ using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing.Tests
 {
-    public class AddAmountCommand : Command
+    public class AddAmountCommand : Command<string>
     {
         public decimal Amount { get; }
 
-        public AddAmountCommand(Guid id, decimal amount) : base(id)
+        public AddAmountCommand(string id, decimal amount) : base(id)
         {
             Amount = amount;
         }

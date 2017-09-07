@@ -25,6 +25,6 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
         public void the_reloaded_aggregate_has_is_version_2() => Aggregate.Version.ShouldBe(2);
 
         [Then]
-        public void no_updates_were_received_by_the_read_model() => ReceivedEventsHistoryReadModel[AggregateId].Count.ShouldBe(0);
+        public void no_updates_were_received_by_the_read_model() => ReceivedEventsHistoryReadModel[AggregateId].ShouldBeNull();
     }
 }

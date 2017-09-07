@@ -33,6 +33,15 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
             _receivedEvents.Clear();
         }
 
-        public IList<Event> this[Guid id] => _receivedEvents[id];
+        public IList<Event> this[Guid id]
+        {
+            get
+            {
+                List<Event> events = null;
+                _receivedEvents.TryGetValue(id, out events);
+                return events;
+            }
+        }
+
     }
 }

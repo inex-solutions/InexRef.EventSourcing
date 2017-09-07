@@ -74,6 +74,8 @@
     <Compile Include="Persistence\IAggregateRepository.cs" />
     <Compile Include="Persistence\IEventStore.cs" />
     <Compile Include="Persistence\InMemoryEventStore.cs" />
+    <Compile Include="Persistence\Metadata.cs" />
+    <Compile Include="Persistence\PersistedAggregate.cs" />
     <Compile Include="Persistence\StoredEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

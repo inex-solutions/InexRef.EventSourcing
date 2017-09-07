@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -95,21 +96,5 @@ namespace Rob.EventSourcing.Persistence
         {
             File.Delete(Path.Combine(_directory.FullName, id + ".json"));
         }
-    }
-
-    public class PersistedAggregate<TId> where TId : IEquatable<TId>, IComparable<TId>
-    {
-        public Metadata<TId> Metadata { get; set; }
-
-        public IEnumerable<Event> Events { get; set; }
-    }
-
-    public class Metadata<TId> where TId : IEquatable<TId>, IComparable<TId>
-    {
-        public TId Id { get; set; }
-
-        public string AggregateType { get; set; }
-
-        public int Version { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Autofac;
 using NUnit.Framework;
 using Rob.EventSourcing.Bus;

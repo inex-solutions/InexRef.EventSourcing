@@ -35,7 +35,7 @@
       <HintPath>..\packages\Autofac.4.6.1\lib\net45\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="ReflectionMagic, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c4c75393d7e08e8e, processorArchitecture=MSIL">
       <HintPath>..\packages\ReflectionMagic.3.0.0\lib\net45\ReflectionMagic.dll</HintPath>

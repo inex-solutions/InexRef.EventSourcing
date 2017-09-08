@@ -28,7 +28,7 @@ namespace Rob.EventSourcing.Contracts.Messages
         int Version { get; }
     }
 
-    public interface IEvent<TId> : IEvent where TId : IEquatable<TId>, IComparable<TId>
+    public interface IEvent<out TId> : IEvent where TId : IEquatable<TId>, IComparable<TId>
     {
         TId Id { get; }
     }

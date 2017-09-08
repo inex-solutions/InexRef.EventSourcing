@@ -30,6 +30,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     [TestFixture("FileSystem")]
     [TestFixture("InMemory")]
+    [TestFixture("SqlServer")]
     public abstract class IntegrationTestBase : SpecificationBase<IBus>
     {
         private readonly string _persistenceProvider;
@@ -66,7 +67,10 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
                 case "FileSystem":
                     containerBuilder.RegisterModule<EventSourcingFileSystemInfrastructureModule>();
                     break;
-                default:
+                case "SqlServer":
+                    containerBuilder.RegisterModule<EventSourcingSqlServerInfrastructureModule>();
+                    break;
+            default:
                     throw new TestSetupException($"Test setup failed. Persistence provider '{_persistenceProvider}' not supported.");
             }
 

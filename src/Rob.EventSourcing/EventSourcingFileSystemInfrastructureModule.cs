@@ -38,7 +38,8 @@ namespace Rob.EventSourcing
             };
             builder.RegisterInstance(filePersistenceConfiguration);
             builder.RegisterGeneric(typeof(FileSystemEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
-
         }
+
+        
     }
 }

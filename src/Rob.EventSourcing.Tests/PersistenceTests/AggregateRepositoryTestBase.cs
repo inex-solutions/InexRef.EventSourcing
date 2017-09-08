@@ -29,6 +29,7 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 {
     [TestFixture("FileSystem")]
     [TestFixture("InMemory")]
+    [TestFixture("SqlServer")]
     public abstract class AggregateRepositoryTestBase : SpecificationBase<IAggregateRepository<AccountAggregateRoot, string>>
     {
         private readonly string _persistenceProvider;
@@ -58,6 +59,9 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
                     break;
                 case "FileSystem":
                     containerBuilder.RegisterModule<EventSourcingFileSystemInfrastructureModule>();
+                    break;
+                case "SqlServer":
+                    containerBuilder.RegisterModule<EventSourcingSqlServerInfrastructureModule>();
                     break;
                 default:
                     throw new TestSetupException($"Test setup failed. Persistence provider '{_persistenceProvider}' not supported.");

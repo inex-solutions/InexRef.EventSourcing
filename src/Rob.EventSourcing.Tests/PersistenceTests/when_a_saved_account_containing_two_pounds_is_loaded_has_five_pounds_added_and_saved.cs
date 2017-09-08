@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using Rob.EventSourcing.Persistence;
 using Rob.EventSourcing.Tests.SpecificationTests;
 using Shouldly;
 
@@ -43,5 +44,34 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 
         [Then]
         public void then_when_reloaded_the_account_contains_seven_pounds() => ReloadedAccountAggregateRoot.Balance.ShouldBe(7.00M);
+    }
+
+    public class when_get_is_called_for_a_non_existent_aggregate : AggregateRepositoryTestBase
+    {
+        public when_get_is_called_for_a_non_existent_aggregate(string persistenceProvider) : base(persistenceProvider) { }
+
+        protected override void Given()
+        {
+        }
+
+        protected override void When() => CaughtException = Catch.Exception(() => Subject.Get(AggregateId));
+
+        [Then]
+        public void an_aggregate_not_found_exception_is_thrown() => CaughtException.ShouldBeOfType<AggregateNotFoundException>();
+    }
+
+    public class when_GetOrCreateNew_is_called_for_a_non_existent_aggregate : AggregateRepositoryTestBase
+    {
+        public when_GetOrCreateNew_is_called_for_a_non_existent_aggregate(string persistenceProvider) : base(persistenceProvider) { }
+
+        protected override void Given()
+        {
+        }
+
+        protected override void When() => ReloadedAccountAggregateRoot = Subject.GetOrCreateNew(AggregateId);
+
+        [Then]
+        public void no_exception_is_thrown_and_a_new_aggregate_is_returned() => ReloadedAccountAggregateRoot
+            .ShouldNotBeNull();
     }
 }

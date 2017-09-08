@@ -1,7 +1,29 @@
+#region Copyright & License
+// The MIT License (MIT)
+// 
+// Copyright 2017 INEX Solutions Ltd
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+// and associated documentation files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all copies or
+// substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+// BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#endregion
+
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Rob.EventSourcing.Contracts.Messages;
@@ -11,90 +33,143 @@ namespace Rob.EventSourcing.Persistence
 {
     public class SqlEventStore<TId> : IEventStore<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
-        private readonly DirectoryInfo _directory;
+        private readonly SqlServerPersistenceConfiguration _sqlServerPersistenceConfiguration;
         private readonly JsonSerializer _jsonSerializer;
 
-        public SqlEventStore(FilePersistenceConfiguration filePersistenceConfiguration)
+        public SqlEventStore(SqlServerPersistenceConfiguration sqlServerPersistenceConfiguration)
         {
-            _directory = new DirectoryInfo(filePersistenceConfiguration.EventStoreRootDirectory);
-            if (!_directory.Exists)
-            {
-                _directory.Create();
-                _directory.Refresh();
-            }
-
+            _sqlServerPersistenceConfiguration = sqlServerPersistenceConfiguration;
             _jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects
             });
         }
 
-        public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId)
+        public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, bool throwIfNotFound)
         {
-            IEnumerable<IEvent<TId>> events;
-            if (!TryLoadEvents(aggregateId, out events))
+            using (var connection = new SqlConnection(_sqlServerPersistenceConfiguration.ConnectionString))
             {
-                throw new AggregateNotFoundException($"Aggregate '{aggregateId}' not found");
-            }
-            return events;
-        }
+                connection.Open();
 
-        public bool TryLoadEvents(TId aggregateId, out IEnumerable<IEvent<TId>> events)
-        {
-            var filename = Path.Combine(_directory.FullName, aggregateId + ".json");
-            if (!File.Exists(filename))
-            {
-                events = null;
-                return false;
-            }
-            using (var fileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read))
-            using (var reader = new StreamReader(fileStream, Encoding.UTF8))
-            {
-                var persisted = (PersistedAggregate<TId>)_jsonSerializer.Deserialize(reader, typeof(PersistedAggregate<TId>));
-                events = persisted.Events;
-                return true;
+                using (var transaction = connection.BeginTransaction())
+                {
+                    var sql = @"
+SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggregateId ORDER BY [Version] ASC".Replace("{aggName}", "Account");
+
+                    using (var command = new SqlCommand(sql, connection, transaction))
+                    {
+                        command.Parameters.Add("@aggregateId", SqlDbType.NVarChar).Value = aggregateId;
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (!reader.HasRows)
+                            {
+                                if (throwIfNotFound)
+                                {
+                                    throw new AggregateNotFoundException($"Aggregate '{aggregateId}' not found");
+                                }
+
+                                yield break;
+                            }
+
+                            while (reader.Read())
+                            {
+                                yield return (IEvent<TId>)Deserialize((string)reader[0]);
+                            }
+                        }
+                    }
+                } 
             }
         }
 
         public void SaveEvents(TId id, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion, int expectedVersion)
         {
-            var persistedAggregate = new PersistedAggregate<TId>
+            using (var connection = new SqlConnection(_sqlServerPersistenceConfiguration.ConnectionString))
             {
-                Metadata = new Metadata<TId>
+                connection.Open();
+                using (var transaction = connection.BeginTransaction(IsolationLevel.RepeatableRead))
                 {
-                    Id = id,
-                    AggregateType = aggregateType.FullName,
-                    Version = currentVersion
-                },
+                    var getLatestVersionSql = @"SELECT ISNULL(MAX([Version]),0) FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggregateId".Replace("{aggName}", "Account");
 
-                Events = events
-            };
-
-            using (var fileStream = new FileStream(Path.Combine(_directory.FullName, id + ".json"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
-            {
-                if (fileStream.Length > 0)
-                {
-                    var reader = new StreamReader(fileStream, Encoding.UTF8);
-                    var persisted = (PersistedAggregate<TId>)_jsonSerializer.Deserialize(reader, typeof(PersistedAggregate<TId>));
-                    persistedAggregate.Events = persisted.Events.Concat(persistedAggregate.Events);
-                    fileStream.Position = 0;
-
-                    if (persisted.Metadata.Version != expectedVersion)
+                    using (var command = new SqlCommand(getLatestVersionSql, connection, transaction))
                     {
-                        throw new EventStoreConcurrencyException($"Concurrency error saving aggregate {id} (expected version {expectedVersion}, actual {persisted.Metadata.Version})");
-                    }
-                }
+                        command.Parameters.Add("@aggregateId", SqlDbType.NVarChar).Value = id;
 
-                using (var writer = new StreamWriter(fileStream, Encoding.UTF8))
-                {
-                    _jsonSerializer.Serialize(writer, persistedAggregate);
+                        var latestVersion = (long)command.ExecuteScalar();
+                        if (latestVersion != expectedVersion)
+                        {
+                            throw new EventStoreConcurrencyException($"Concurrency error saving aggregate {id} (expected version {expectedVersion}, actual {latestVersion})");
+                        }
+                    }
+
+                    foreach (var @event in events)
+                    {
+                        var insertEventsSql = @"
+INSERT INTO [dbo].[EventStore-{aggName}] (AggregateId, Version, EventDateTime, Payload)
+VALUES (@aggregateId, @version, @eventDateTime, @payload)".Replace("{aggName}", "Account");
+
+                        using (var command = new SqlCommand(insertEventsSql, connection, transaction))
+                        {
+                            command.Parameters.Add("@aggregateId", SqlDbType.NVarChar).Value = @event.Id;
+                            command.Parameters.Add("@version", SqlDbType.BigInt).Value = @event.Version;
+                            command.Parameters.Add("@eventDateTime", SqlDbType.DateTime2).Value = DateTime.Now; //TODO: remove this hack
+                            command.Parameters.Add("@payload", SqlDbType.NVarChar).Value = Serialize(@event);
+
+                            command.ExecuteNonQuery();
+                        }
+                    }
+
+                    transaction.Commit();
                 }
             }
         }
 
         public void DeleteEvents(TId id, Type aggregateType)
         {
-            File.Delete(Path.Combine(_directory.FullName, id + ".json"));
+            using (var connection = new SqlConnection(_sqlServerPersistenceConfiguration.ConnectionString))
+            {
+                connection.Open();
+
+                var getLatestVersionSql = @"DELETE FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggregateId".Replace("{aggName}", "Account");
+
+                using (var command = new SqlCommand(getLatestVersionSql, connection))
+                {
+                    command.Parameters.Add("@aggregateId", SqlDbType.NVarChar).Value = id;
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private string Serialize(IEvent @event)
+        {
+            using (var ms = new MemoryStream())
+            using (var writer = new StreamWriter(ms, Encoding.UTF8))
+            {
+                _jsonSerializer.Serialize(writer, @event);
+                writer.Flush();
+                ms.Position = 0;
+
+                using (var reader = new StreamReader(ms, Encoding.UTF8))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+        }
+
+        private IEvent Deserialize(string eventPayload)
+        {
+            using (var ms = new MemoryStream())
+            using (var writer = new StreamWriter(ms, Encoding.UTF8))
+            {
+                writer.Write(eventPayload);
+                writer.Flush();
+                ms.Position = 0;
+
+                using (var reader = new StreamReader(ms, Encoding.UTF8))
+                {
+                    return (IEvent)_jsonSerializer.Deserialize(reader, typeof(IEvent));
+                }
+            }
         }
     }
 }

@@ -40,6 +40,8 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 
         protected IdGenerator IdGenerator { get; private set; }
 
+        protected Exception CaughtException { get; set; }
+
         protected AggregateRepositoryTestBase(string persistenceProvider)
         {
             _persistenceProvider = persistenceProvider;

@@ -34,6 +34,8 @@ namespace Rob.EventSourcing.Tests
             Id = id;
         }
 
+        public override string Name => "Account";
+
         public decimal Balance { get; set; }
 
         public void AddAmount(decimal amount)

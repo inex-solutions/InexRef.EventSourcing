@@ -75,7 +75,7 @@ namespace Rob.EventSourcing.Persistence
         public TAggregate Get(TId id)
         {
             IAggregateRootInternal<TId> aggregate = new TAggregate();
-            var events = _eventStore.LoadEvents(id).ToList();
+            var events = _eventStore.LoadEvents(id, throwIfNotFound: true).ToList();
             aggregate.Load(id, events);
             return (TAggregate)aggregate;
         }
@@ -83,12 +83,8 @@ namespace Rob.EventSourcing.Persistence
         public TAggregate GetOrCreateNew(TId id)
         {
             IAggregateRootInternal<TId> aggregate = new TAggregate();
-            IEnumerable<IEvent<TId>> events;
-            if (!_eventStore.TryLoadEvents(id, out events))
-            {
-                events = new List<IEvent<TId>>();
-            }
-            aggregate.Load(id, events.ToList());
+            IEnumerable<IEvent<TId>> events = _eventStore.LoadEvents(id, throwIfNotFound: false);
+            aggregate.Load(id, events);
             return (TAggregate)aggregate;
         }
 

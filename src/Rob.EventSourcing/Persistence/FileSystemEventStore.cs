@@ -50,30 +50,23 @@ namespace Rob.EventSourcing.Persistence
             });
         }
 
-        public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId)
-        {
-            IEnumerable<IEvent<TId>> events;
-            if (!TryLoadEvents(aggregateId, out events))
-            {
-                throw new AggregateNotFoundException($"Aggregate '{aggregateId}' not found");
-            }
-            return events;
-        }
-
-        public bool TryLoadEvents(TId aggregateId, out IEnumerable<IEvent<TId>> events)
+        public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, bool throwIfNotFound)
         {
             var filename = Path.Combine(_directory.FullName, aggregateId + ".json");
             if (!File.Exists(filename))
             {
-                events = null;
-                return false;
+                if (throwIfNotFound)
+                {
+                    throw new AggregateNotFoundException($"Aggregate '{aggregateId}' not found");
+                }
+
+                return Enumerable.Empty<IEvent<TId>>();
             }
             using (var fileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read))
             using (var reader = new StreamReader(fileStream, Encoding.UTF8))
             {
                 var persisted = (PersistedAggregate<TId>)_jsonSerializer.Deserialize(reader, typeof(PersistedAggregate<TId>));
-                events = persisted.Events;
-                return true;
+                return persisted.Events;
             }
         }
 

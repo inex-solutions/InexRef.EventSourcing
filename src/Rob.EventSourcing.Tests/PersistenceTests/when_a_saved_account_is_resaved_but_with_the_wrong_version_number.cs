@@ -19,7 +19,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using Rob.EventSourcing.Persistence;
 using Rob.EventSourcing.Tests.SpecificationTests;
 using Shouldly;
@@ -28,8 +27,6 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 {
     public class when_a_saved_account_is_resaved_but_with_the_wrong_version_number : AggregateRepositoryTestBase
     {
-        private Exception CaughtException;
-
         public when_a_saved_account_is_resaved_but_with_the_wrong_version_number(string persistenceProvider) : base(persistenceProvider) { }
 
         protected override void Given()

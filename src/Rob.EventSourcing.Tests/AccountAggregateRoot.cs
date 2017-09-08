@@ -27,7 +27,6 @@ namespace Rob.EventSourcing.Tests
     {
         public AccountAggregateRoot()
         {
-            
         }
 
         public AccountAggregateRoot(string id)
@@ -56,7 +55,7 @@ namespace Rob.EventSourcing.Tests
         public void HandleEvent(BalanceResetEvent @event, bool isNew)
         {
             Balance = 0;
-            PublishEvent(new BalanceResetEvent(Id), isNew);
+            PublishEvent(new BalanceUpdatedEvent(Id, Balance), isNew);
         }
     }
 }

@@ -78,11 +78,9 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
             BalanceReadModel = new BalanceReadModel();
             Subject.Subscribe<BalanceUpdatedEvent>(BalanceReadModel.Handle);
-            Subject.Subscribe<BalanceResetEvent>(BalanceReadModel.Handle);
 
             ReceivedEventsHistoryReadModel = new ReceivedEventsHistoryReadModel();
             Subject.Subscribe<BalanceUpdatedEvent>(ReceivedEventsHistoryReadModel.Handle);
-            Subject.Subscribe<BalanceResetEvent>(ReceivedEventsHistoryReadModel.Handle);
 
             ReceivedInternalEventsHistoryReadModel = new ReceivedInternalEventsHistoryReadModel();
             Subject.Subscribe<AmountAddedEvent>(ReceivedInternalEventsHistoryReadModel.Handle);

@@ -31,5 +31,10 @@ namespace Rob.EventSourcing.Tests
         {
             Amount = amount;
         }
+
+        public override string ToString()
+        {
+            return $"AmountAddedEvent: Id={Id}, Amount={Amount}, Version={Version}";
+        }
     }
 }

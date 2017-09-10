@@ -62,6 +62,7 @@
     <Compile Include="IntegrationTests\BalanceEntry.cs" />
     <Compile Include="IntegrationTests\BalanceReadModel.cs" />
     <Compile Include="IntegrationTests\BalanceUpdatedEvent.cs" />
+    <Compile Include="EventStorePersistenceModuleExtensions.cs" />
     <Compile Include="IntegrationTests\IntegrationTestBase.cs" />
     <Compile Include="IntegrationTests\IntegrationTestHandlers.cs" />
     <Compile Include="IntegrationTests\ReceivedEventsHistoryReadModel.cs" />

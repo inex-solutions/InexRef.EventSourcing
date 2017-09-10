@@ -23,7 +23,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Rob.EventSourcing.Contracts.Bus;
 using Rob.EventSourcing.Contracts.Messages;
 using Rob.EventSourcing.Contracts.Persistence;
 
@@ -31,13 +30,7 @@ namespace Rob.EventSourcing.Persistence
 {
     public class InMemoryEventStore<TId> : IEventStore<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
-        private readonly IEventBus _eventBus;
         private readonly ConcurrentDictionary<TId, IEnumerable<StoredEvent<TId>>> _storedEvents = new ConcurrentDictionary<TId, IEnumerable<StoredEvent<TId>>>();
-
-        public InMemoryEventStore(IEventBus eventBus)
-        {
-            _eventBus = eventBus;
-        }
 
         public void SaveEvents(TId aggregateId, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion, int expectedVersion)
         {
@@ -66,27 +59,18 @@ namespace Rob.EventSourcing.Persistence
             _storedEvents.TryRemove(id, out events);
         }
 
-        public bool TryLoadEvents(TId aggregateId, out IEnumerable<IEvent<TId>> events)
-        {
-            IEnumerable<StoredEvent<TId>> storedEvents;
-
-            if (!_storedEvents.TryGetValue(aggregateId, out storedEvents))
-            {
-                events = null;
-                return false;
-            }
-
-            events = storedEvents.Select(@event => @event.EventData);
-            return true;
-        }
-
-        public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId)
+        public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, bool throwIfNotFound)
         {
             IEnumerable<StoredEvent<TId>> events;
 
             if (!_storedEvents.TryGetValue(aggregateId, out events))
             {
-                throw new AggregateNotFoundException($"Aggregate '{aggregateId}' not found");
+                if (throwIfNotFound)
+                {
+                    throw new AggregateNotFoundException($"Aggregate '{aggregateId}' not found");
+                }
+
+                return Enumerable.Empty<IEvent<TId>>();
             }
 
             return events.Select(@event => @event.EventData);

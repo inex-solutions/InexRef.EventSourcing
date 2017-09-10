@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017 INEX Solutions Ltd
@@ -18,46 +18,10 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
-
-using Rob.EventSourcing.Tests.IntegrationTests;
-
-namespace Rob.EventSourcing.Tests
+namespace Rob.EventSourcing.Persistence
 {
-    public class AccountAggregateRoot : AggregateRoot<string>
+    public class SqlServerPersistenceConfiguration
     {
-        public AccountAggregateRoot()
-        {
-        }
-
-        public AccountAggregateRoot(string id)
-        {
-            Id = id;
-        }
-
-        public override string Name => "Account";
-
-        public decimal Balance { get; set; }
-
-        public void AddAmount(decimal amount)
-        {
-            Apply(new AmountAddedEvent(Id, amount));
-        }
-
-        public void ResetBalance()
-        {
-            Apply(new BalanceResetEvent(Id));
-        }
-
-        public void HandleEvent(AmountAddedEvent @event, bool isNew)
-        {
-            Balance += @event.Amount;
-            PublishEvent(new BalanceUpdatedEvent(Id, Balance), isNew);
-        }
-
-        public void HandleEvent(BalanceResetEvent @event, bool isNew)
-        {
-            Balance = 0;
-            PublishEvent(new BalanceUpdatedEvent(Id, Balance), isNew);
-        }
+        public string ConnectionString { get; set; }
     }
 }

@@ -38,6 +38,8 @@ namespace Rob.EventSourcing
 
         public int Version { get; protected set; }
 
+        public abstract string Name { get; }
+
         protected void PublishEvent(Event<TId> @event, bool isNew)
         {
             ThrowIfDisposed();

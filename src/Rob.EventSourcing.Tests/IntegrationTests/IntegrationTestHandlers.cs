@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using Rob.EventSourcing.Contracts.Persistence;
 
 namespace Rob.EventSourcing.Tests.IntegrationTests
@@ -34,16 +35,34 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
         public void Handle(AddAmountCommand command)
         {
-            var item = _repository.GetOrCreateNew(command.Id);
-            item.AddAmount(command.Amount);
-            _repository.Save(item);
+            try
+            {
+                //Console.WriteLine($"{DateTime.Now:yyyyMMdd-hh:mm:ss:fff}:Handling {command}");
+                var item = _repository.GetOrCreateNew(command.Id);
+                item.AddAmount(command.Amount);
+                _repository.Save(item);
+            }
+            catch
+            {
+                Console.WriteLine($"Exception while handling {command}");
+                throw;
+            }
         }
 
         public void Handle(ResetBalanceCommand command)
         {
-            var item = _repository.GetOrCreateNew(command.Id);
-            item.ResetBalance();
-            _repository.Save(item);
+            try
+            {
+                //Console.WriteLine($"{DateTime.Now:yyyyMMdd-hh:mm:ss:fff}:Handling {command}");
+                var item = _repository.GetOrCreateNew(command.Id);
+                item.ResetBalance();
+                _repository.Save(item);
+            }
+            catch
+            {
+                Console.WriteLine($"Exception while handling {command}");
+                throw;
+            }
         }
     }
 }

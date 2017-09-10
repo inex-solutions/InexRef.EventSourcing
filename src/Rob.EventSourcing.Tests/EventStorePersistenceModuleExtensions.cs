@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017 INEX Solutions Ltd
@@ -19,45 +19,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Rob.EventSourcing.Tests.IntegrationTests;
+using Autofac;
 
 namespace Rob.EventSourcing.Tests
 {
-    public class AccountAggregateRoot : AggregateRoot<string>
+    public static class EventStorePersistenceModuleExtensions
     {
-        public AccountAggregateRoot()
+        public static void RegisterEventStorePersistenceModule(this ContainerBuilder containerBuilder, string persistenceProvider)
         {
-        }
-
-        public AccountAggregateRoot(string id)
-        {
-            Id = id;
-        }
-
-        public override string Name => "Account";
-
-        public decimal Balance { get; set; }
-
-        public void AddAmount(decimal amount)
-        {
-            Apply(new AmountAddedEvent(Id, amount));
-        }
-
-        public void ResetBalance()
-        {
-            Apply(new BalanceResetEvent(Id));
-        }
-
-        public void HandleEvent(AmountAddedEvent @event, bool isNew)
-        {
-            Balance += @event.Amount;
-            PublishEvent(new BalanceUpdatedEvent(Id, Balance), isNew);
-        }
-
-        public void HandleEvent(BalanceResetEvent @event, bool isNew)
-        {
-            Balance = 0;
-            PublishEvent(new BalanceUpdatedEvent(Id, Balance), isNew);
+            switch (persistenceProvider)
+            {
+                case "InMemory":
+                    containerBuilder.RegisterModule<EventSourcingInMemoryInfrastructureModule>();
+                    break;
+                case "FileSystem":
+                    containerBuilder.RegisterModule<EventSourcingFileSystemInfrastructureModule>();
+                    break;
+                case "SqlServer":
+                    containerBuilder.RegisterModule<EventSourcingSqlServerInfrastructureModule>();
+                    break;
+                default:
+                    throw new TestSetupException($"Test setup failed. Persistence provider '{persistenceProvider}' not supported.");
+            }
         }
     }
 }

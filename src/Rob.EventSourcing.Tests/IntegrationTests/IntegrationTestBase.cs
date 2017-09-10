@@ -19,7 +19,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using Rob.EventSourcing.Contracts.Bus;
@@ -28,11 +29,12 @@ using Rob.EventSourcing.Tests.SpecificationTests;
 
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {
-    [TestFixture("FileSystem")]
-    [TestFixture("InMemory")]
+    [TestFixture("EventStorePersistence=FileSystem")]
+    [TestFixture("EventStorePersistence=InMemory")]
+    [TestFixture("EventStorePersistence=SqlServer")]
     public abstract class IntegrationTestBase : SpecificationBase<IBus>
     {
-        private readonly string _persistenceProvider;
+        private readonly IDictionary<string, string> _testFixtureOptions;
 
         protected string AggregateId { get; private set; }
 
@@ -46,9 +48,11 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
         protected IdGenerator IdGenerator { get; private set; }
 
-        protected IntegrationTestBase(string persistenceProvider)
+        protected IntegrationTestBase(string testFixtureOptions)
         {
-            _persistenceProvider = persistenceProvider;
+            _testFixtureOptions = testFixtureOptions
+                .Split(',')
+                .ToDictionary(item => item.Split('=')[0].Trim(), item => item.Split('=')[1].Trim());
         }
 
         protected override void SetUp()
@@ -57,18 +61,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
-
-            switch (_persistenceProvider)
-            {
-                case "InMemory":
-                    containerBuilder.RegisterModule<EventSourcingInMemoryInfrastructureModule>();
-                    break;
-                case "FileSystem":
-                    containerBuilder.RegisterModule<EventSourcingFileSystemInfrastructureModule>();
-                    break;
-                default:
-                    throw new TestSetupException($"Test setup failed. Persistence provider '{_persistenceProvider}' not supported.");
-            }
+            containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
 
             var container = containerBuilder.Build();
             Subject = container.Resolve<IBus>();

@@ -26,7 +26,7 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 {
     public class when_an_account_containing_two_pounds_is_saved_and_reloaded : AggregateRepositoryTestBase
     {
-        public when_an_account_containing_two_pounds_is_saved_and_reloaded(string persistenceProvider) : base(persistenceProvider) { }
+        public when_an_account_containing_two_pounds_is_saved_and_reloaded(string testFixtureOptions) : base(testFixtureOptions) { }
 
         protected override void Given()
         {

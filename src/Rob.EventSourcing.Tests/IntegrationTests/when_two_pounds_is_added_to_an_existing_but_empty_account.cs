@@ -26,7 +26,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     public class when_two_pounds_is_added_to_an_existing_but_empty_account : IntegrationTestBase
     {
-        public when_two_pounds_is_added_to_an_existing_but_empty_account(string persistenceProvider) : base(persistenceProvider) { }
+        public when_two_pounds_is_added_to_an_existing_but_empty_account(string testFixtureOptions) : base(testFixtureOptions) { }
 
         protected override void Given()
         {

@@ -28,5 +28,7 @@ namespace Rob.EventSourcing.Contracts
         TId Id { get; }
 
         int Version { get; }
+
+        string Name { get; }
     }
 }

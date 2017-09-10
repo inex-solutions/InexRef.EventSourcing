@@ -26,7 +26,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     public class when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds : IntegrationTestBase
     {
-        public when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds(string persistenceProvider) : base(persistenceProvider) { }
+        public when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds(string testFixtureOptions) : base(testFixtureOptions) { }
 
         protected override void Given()
         {

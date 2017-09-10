@@ -19,45 +19,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Rob.EventSourcing.Tests.IntegrationTests;
+using Autofac;
+using Rob.EventSourcing.Bus;
+using Rob.EventSourcing.Contracts.Bus;
+using Rob.EventSourcing.Contracts.Persistence;
+using Rob.EventSourcing.Persistence;
 
-namespace Rob.EventSourcing.Tests
+namespace Rob.EventSourcing
 {
-    public class AccountAggregateRoot : AggregateRoot<string>
+    public class EventSourcingSqlServerInfrastructureModule : Module
     {
-        public AccountAggregateRoot()
+        protected override void Load(ContainerBuilder builder)
         {
-        }
-
-        public AccountAggregateRoot(string id)
-        {
-            Id = id;
-        }
-
-        public override string Name => "Account";
-
-        public decimal Balance { get; set; }
-
-        public void AddAmount(decimal amount)
-        {
-            Apply(new AmountAddedEvent(Id, amount));
-        }
-
-        public void ResetBalance()
-        {
-            Apply(new BalanceResetEvent(Id));
-        }
-
-        public void HandleEvent(AmountAddedEvent @event, bool isNew)
-        {
-            Balance += @event.Amount;
-            PublishEvent(new BalanceUpdatedEvent(Id, Balance), isNew);
-        }
-
-        public void HandleEvent(BalanceResetEvent @event, bool isNew)
-        {
-            Balance = 0;
-            PublishEvent(new BalanceUpdatedEvent(Id, Balance), isNew);
+            builder.RegisterType<InMemoryBus>().As<IBus>().As<IEventBus>().As<ICommandBus>().SingleInstance();
+            var sqlServerPersistenceConfiguration = new SqlServerPersistenceConfiguration
+            {
+                ConnectionString = "Server=localhost;Database=Rob.EventStore;Trusted_Connection=True"
+            };
+            builder.RegisterInstance(sqlServerPersistenceConfiguration);
+            builder.RegisterGeneric(typeof(SqlEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
         }
     }
 }

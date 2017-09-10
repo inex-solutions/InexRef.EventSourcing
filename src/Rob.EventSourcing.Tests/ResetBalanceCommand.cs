@@ -28,5 +28,10 @@ namespace Rob.EventSourcing.Tests
         public ResetBalanceCommand(string id) : base(id)
         {
         }
+
+        public override string ToString()
+        {
+            return $"ResetBalanceCommand: id={Id}";
+        }
     }
 }

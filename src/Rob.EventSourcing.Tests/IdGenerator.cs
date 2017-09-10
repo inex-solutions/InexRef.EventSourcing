@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 
 namespace Rob.EventSourcing.Tests
@@ -39,7 +40,7 @@ namespace Rob.EventSourcing.Tests
         public string CreateAggregateId()
         {
             var count = Interlocked.Increment(ref _count);
-            var id = $"{_prefix}-{DateTime.Now:yyyyMMddHHmmss}-{count:D2}";
+            var id = $"{_prefix}-{DateTime.Now:yyyyMMddHHmmss}-{count:D2}-{Process.GetCurrentProcess().Id}-{Thread.CurrentThread.ManagedThreadId}";
             _generatedIds.Add(id);
             return id;
         }

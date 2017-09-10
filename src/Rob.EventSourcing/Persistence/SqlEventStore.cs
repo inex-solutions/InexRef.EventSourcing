@@ -51,34 +51,32 @@ namespace Rob.EventSourcing.Persistence
             {
                 connection.Open();
 
-                using (var transaction = connection.BeginTransaction())
+                var sql = @"  
+SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggregateId ORDER BY [Version] ASC"
+                    .Replace("{aggName}", "Account");
+
+                using (var command = new SqlCommand(sql, connection))
                 {
-                    var sql = @"
-SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggregateId ORDER BY [Version] ASC".Replace("{aggName}", "Account");
+                    command.Parameters.Add("@aggregateId", SqlDbType.NVarChar).Value = aggregateId;
 
-                    using (var command = new SqlCommand(sql, connection, transaction))
+                    using (var reader = command.ExecuteReader())
                     {
-                        command.Parameters.Add("@aggregateId", SqlDbType.NVarChar).Value = aggregateId;
-
-                        using (var reader = command.ExecuteReader())
+                        if (!reader.HasRows)
                         {
-                            if (!reader.HasRows)
+                            if (throwIfNotFound)
                             {
-                                if (throwIfNotFound)
-                                {
-                                    throw new AggregateNotFoundException($"Aggregate '{aggregateId}' not found");
-                                }
-
-                                yield break;
+                                throw new AggregateNotFoundException($"Aggregate '{aggregateId}' not found");
                             }
 
-                            while (reader.Read())
-                            {
-                                yield return (IEvent<TId>)Deserialize((string)reader[0]);
-                            }
+                            yield break;
+                        }
+
+                        while (reader.Read())
+                        {
+                            yield return (IEvent<TId>) Deserialize((string) reader[0]);
                         }
                     }
-                } 
+                }
             }
         }
 
@@ -87,26 +85,36 @@ SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggreg
             using (var connection = new SqlConnection(_sqlServerPersistenceConfiguration.ConnectionString))
             {
                 connection.Open();
-                using (var transaction = connection.BeginTransaction(IsolationLevel.RepeatableRead))
+                using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
                 {
-                    var getLatestVersionSql = @"SELECT ISNULL(MAX([Version]),0) FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggregateId".Replace("{aggName}", "Account");
+                    const string insertSql = @"
+WITH cte AS
+(
+SELECT @aggregateId AS [AggregateId], @version AS [Version], @eventDateTime AS [EventDateTime], @payload AS [Payload]
+)
 
-                    using (var command = new SqlCommand(getLatestVersionSql, connection, transaction))
-                    {
-                        command.Parameters.Add("@aggregateId", SqlDbType.NVarChar).Value = id;
-
-                        var latestVersion = (long)command.ExecuteScalar();
-                        if (latestVersion != expectedVersion)
-                        {
-                            throw new EventStoreConcurrencyException($"Concurrency error saving aggregate {id} (expected version {expectedVersion}, actual {latestVersion})");
-                        }
-                    }
+INSERT INTO [dbo].[EventStore-{aggName}] (AggregateId, Version, EventDateTime, Payload)  
+SELECT 
+	cte.AggregateId,
+	cte.[Version],
+	cte.[EventDateTime],
+	cte.[Payload]
+FROM cte
+	LEFT JOIN [Rob.EventStore].[dbo].[EventStore-{aggName}] store ON cte.AggregateId = store.AggregateId 
+WHERE 
+	cte.AggregateId = @aggregateId
+GROUP BY
+	cte.AggregateId,
+	cte.[Version],
+	cte.[EventDateTime],
+	cte.[Payload]
+HAVING 
+	MAX(store.[Version]) = @expectedVersion OR COUNT(store.[Version]) = 0
+";
 
                     foreach (var @event in events)
                     {
-                        var insertEventsSql = @"
-INSERT INTO [dbo].[EventStore-{aggName}] (AggregateId, Version, EventDateTime, Payload)
-VALUES (@aggregateId, @version, @eventDateTime, @payload)".Replace("{aggName}", "Account");
+                        var insertEventsSql = insertSql.Replace("{aggName}", "Account");
 
                         using (var command = new SqlCommand(insertEventsSql, connection, transaction))
                         {
@@ -114,8 +122,14 @@ VALUES (@aggregateId, @version, @eventDateTime, @payload)".Replace("{aggName}", 
                             command.Parameters.Add("@version", SqlDbType.BigInt).Value = @event.Version;
                             command.Parameters.Add("@eventDateTime", SqlDbType.DateTime2).Value = DateTime.Now; //TODO: remove this hack
                             command.Parameters.Add("@payload", SqlDbType.NVarChar).Value = Serialize(@event);
+                            command.Parameters.Add("@expectedVersion", SqlDbType.BigInt).Value = expectedVersion;
+                            var numRecordsUpdated = command.ExecuteNonQuery();
 
-                            command.ExecuteNonQuery();
+                            if (numRecordsUpdated == 0)
+                            {
+                                throw new EventStoreConcurrencyException($"Concurrency error saving aggregate {id} (expected version {expectedVersion})");
+                            }
+
                         }
                     }
 

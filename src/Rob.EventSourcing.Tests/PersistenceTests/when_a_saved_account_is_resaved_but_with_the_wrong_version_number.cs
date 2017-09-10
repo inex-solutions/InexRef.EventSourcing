@@ -27,7 +27,7 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 {
     public class when_a_saved_account_is_resaved_but_with_the_wrong_version_number : AggregateRepositoryTestBase
     {
-        public when_a_saved_account_is_resaved_but_with_the_wrong_version_number(string persistenceProvider) : base(persistenceProvider) { }
+        public when_a_saved_account_is_resaved_but_with_the_wrong_version_number(string testFixtureOptions) : base(testFixtureOptions) { }
 
         protected override void Given()
         {

@@ -20,6 +20,8 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using Rob.EventSourcing.Contracts.Persistence;
@@ -32,7 +34,7 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
     [TestFixture("SqlServer")]
     public abstract class AggregateRepositoryTestBase : SpecificationBase<IAggregateRepository<AccountAggregateRoot, string>>
     {
-        private readonly string _persistenceProvider;
+        private readonly IDictionary<string, string> _testFixtureOptions;
 
         protected string AggregateId { get; private set; }
 
@@ -42,9 +44,11 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 
         protected Exception CaughtException { get; set; }
 
-        protected AggregateRepositoryTestBase(string persistenceProvider)
+        protected AggregateRepositoryTestBase(string testFixtureOptions)
         {
-            _persistenceProvider = persistenceProvider;
+            _testFixtureOptions = testFixtureOptions
+                .Split(',')
+                .ToDictionary(item => item.Split('=')[0].Trim(), item => item.Split('=')[1].Trim());
         }
 
         protected override void SetUp()
@@ -53,21 +57,8 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
 
-            switch (_persistenceProvider)
-            {
-                case "InMemory":
-                    containerBuilder.RegisterModule<EventSourcingInMemoryInfrastructureModule>();
-                    break;
-                case "FileSystem":
-                    containerBuilder.RegisterModule<EventSourcingFileSystemInfrastructureModule>();
-                    break;
-                case "SqlServer":
-                    containerBuilder.RegisterModule<EventSourcingSqlServerInfrastructureModule>();
-                    break;
-                default:
-                    throw new TestSetupException($"Test setup failed. Persistence provider '{_persistenceProvider}' not supported.");
-            }
             var container = containerBuilder.Build();
 
             Subject = container.Resolve<IAggregateRepository<AccountAggregateRoot, string>>();

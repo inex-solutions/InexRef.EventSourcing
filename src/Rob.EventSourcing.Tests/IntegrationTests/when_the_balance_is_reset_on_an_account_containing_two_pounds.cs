@@ -26,7 +26,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 {
     public class when_the_balance_is_reset_on_an_account_containing_two_pounds : IntegrationTestBase
     {
-        public when_the_balance_is_reset_on_an_account_containing_two_pounds(string persistenceProvider) : base(persistenceProvider) { }
+        public when_the_balance_is_reset_on_an_account_containing_two_pounds(string testFixtureOptions) : base(testFixtureOptions) { }
 
         protected override void Given()
         {

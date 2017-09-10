@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017 INEX Solutions Ltd
@@ -19,25 +19,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Rob.EventSourcing.Tests.SpecificationTests;
-using Shouldly;
+using Autofac;
 
-namespace Rob.EventSourcing.Tests.PersistenceTests
+namespace Rob.EventSourcing.Tests
 {
-    public class when_an_account_containing_two_pounds_is_saved_and_reloaded : AggregateRepositoryTestBase
+    public static class EventStorePersistenceModuleExtensions
     {
-        public when_an_account_containing_two_pounds_is_saved_and_reloaded(string testFixtureOptions) : base(testFixtureOptions) { }
-
-        protected override void Given()
+        public static void RegisterEventStorePersistenceModule(this ContainerBuilder containerBuilder, string persistenceProvider)
         {
-            var aggregate = new AccountAggregateRoot(AggregateId);
-            aggregate.AddAmount(2.00M);
-            Subject.Save(aggregate);
+            switch (persistenceProvider)
+            {
+                case "InMemory":
+                    containerBuilder.RegisterModule<EventSourcingInMemoryInfrastructureModule>();
+                    break;
+                case "FileSystem":
+                    containerBuilder.RegisterModule<EventSourcingFileSystemInfrastructureModule>();
+                    break;
+                case "SqlServer":
+                    containerBuilder.RegisterModule<EventSourcingSqlServerInfrastructureModule>();
+                    break;
+                default:
+                    throw new TestSetupException($"Test setup failed. Persistence provider '{persistenceProvider}' not supported.");
+            }
         }
-
-        protected override void When() => ReloadedAccountAggregateRoot = Subject.Get(AggregateId);
-
-        [Then]
-        public void the_reloaded_account_contains_two_pounds() => ReloadedAccountAggregateRoot.Balance.ShouldBe(2.00M);
     }
 }

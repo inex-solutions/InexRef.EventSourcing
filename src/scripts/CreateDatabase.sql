@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [Rob.EventStore]    Script Date: 08/09/2017 23:08:27 ******/
+/****** Object:  Database [Rob.EventStore]    Script Date: 10/09/2017 21:27:21 ******/
 CREATE DATABASE [Rob.EventStore]
 GO
 ALTER DATABASE [Rob.EventStore] SET COMPATIBILITY_LEVEL = 110
@@ -66,18 +66,22 @@ ALTER DATABASE [Rob.EventStore] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF )
 GO
 ALTER DATABASE [Rob.EventStore] SET TARGET_RECOVERY_TIME = 60 SECONDS 
 GO
-ALTER DATABASE [Rob.EventStore] SET DELAYED_DURABILITY = DISABLED 
-GO
 EXEC sys.sp_db_vardecimal_storage_format N'Rob.EventStore', N'ON'
 GO
 USE [Rob.EventStore]
 GO
-/****** Object:  Table [dbo].[EventStore-Account]    Script Date: 08/09/2017 23:08:28 ******/
+/****** Object:  UserDefinedTableType [dbo].[EventStoreType]    Script Date: 10/09/2017 21:27:21 ******/
+CREATE TYPE [dbo].[EventStoreType] AS TABLE(
+	[AggregateId] [nvarchar](64) NOT NULL,
+	[Version] [bigint] NOT NULL,
+	[EventDateTime] [datetime2](7) NOT NULL,
+	[Payload] [nvarchar](max) NOT NULL
+)
+GO
+/****** Object:  Table [dbo].[EventStore-Account]    Script Date: 10/09/2017 21:27:21 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
-GO
-SET ANSI_PADDING ON
 GO
 CREATE TABLE [dbo].[EventStore-Account](
 	[AggregateId] [nvarchar](64) NOT NULL,
@@ -87,7 +91,38 @@ CREATE TABLE [dbo].[EventStore-Account](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-SET ANSI_PADDING OFF
+/****** Object:  StoredProcedure [dbo].[usp_InsertAccountEvents]    Script Date: 10/09/2017 21:27:21 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[usp_InsertAccountEvents]
+	@aggregateId [nvarchar](64),
+    @eventsToInsert EventStoreType READONLY,
+	@expectedVersion BIGINT
+
+AS   
+
+BEGIN TRAN
+
+DECLARE @currentLatestVersion BIGINT
+
+SELECT @currentLatestVersion = ISNULL(MAX([Version]),0) FROM [dbo].[EventStore-Account] WHERE [AggregateId] = @aggregateId 
+
+IF (@expectedVersion = @currentLatestVersion)
+BEGIN
+	INSERT INTO [dbo].[EventStore-Account] ([AggregateId], [Version], [EventDateTime], [Payload])  
+	SELECT * FROM @eventsToInsert
+END
+ELSE
+BEGIN
+	DECLARE @errorMessage NVARCHAR(255)
+	SELECT @errorMessage = FORMATMESSAGE('Concurrency error saving aggregate %s (expected version %I64d, actual %I64d)', @aggregateId,  @expectedVersion, @currentLatestVersion);
+	THROW 51000, @errorMessage, 1
+	ROLLBACK TRAN
+END
+
+COMMIT TRAN
 GO
 USE [master]
 GO

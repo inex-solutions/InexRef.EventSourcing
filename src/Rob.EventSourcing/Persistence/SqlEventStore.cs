@@ -82,58 +82,44 @@ SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggreg
 
         public void SaveEvents(TId id, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion, int expectedVersion)
         {
+            var dataTable = new DataTable();
+            dataTable.Columns.Add("AggregateId", typeof(string));
+            dataTable.Columns.Add("Version", typeof(long));
+            dataTable.Columns.Add("EventDateTime", typeof(DateTime));
+            dataTable.Columns.Add("Payload", typeof(string));
+
+            foreach (var @event in events)
+            {
+                dataTable.Rows.Add(@event.Id, @event.Version, DateTime.Now, Serialize(@event));
+            }
+
             using (var connection = new SqlConnection(_sqlServerPersistenceConfiguration.ConnectionString))
             {
                 connection.Open();
-                using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
+
+                using (var command = new SqlCommand())
                 {
-                    const string insertSql = @"
-WITH cte AS
-(
-SELECT @aggregateId AS [AggregateId], @version AS [Version], @eventDateTime AS [EventDateTime], @payload AS [Payload]
-)
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = "dbo.usp_InsertAccountEvents";
+                    command.Parameters.Add("@aggregateId", SqlDbType.NVarChar).Value = id;
+                    command.Parameters.Add("@expectedVersion", SqlDbType.BigInt).Value = expectedVersion;
 
-INSERT INTO [dbo].[EventStore-{aggName}] (AggregateId, Version, EventDateTime, Payload)  
-SELECT 
-	cte.AggregateId,
-	cte.[Version],
-	cte.[EventDateTime],
-	cte.[Payload]
-FROM cte
-	LEFT JOIN [Rob.EventStore].[dbo].[EventStore-{aggName}] store ON cte.AggregateId = store.AggregateId 
-WHERE 
-	cte.AggregateId = @aggregateId
-GROUP BY
-	cte.AggregateId,
-	cte.[Version],
-	cte.[EventDateTime],
-	cte.[Payload]
-HAVING 
-	MAX(store.[Version]) = @expectedVersion OR COUNT(store.[Version]) = 0
-";
+                    var tableParameter = new SqlParameter();
+                    tableParameter.ParameterName = "@eventsToInsert";
+                    tableParameter.TypeName = "EventStoreType";
+                    tableParameter.SqlDbType = SqlDbType.Structured;
+                    tableParameter.Value = dataTable;
+                    command.Parameters.Add(tableParameter);
 
-                    foreach (var @event in events)
+                    try
                     {
-                        var insertEventsSql = insertSql.Replace("{aggName}", "Account");
-
-                        using (var command = new SqlCommand(insertEventsSql, connection, transaction))
-                        {
-                            command.Parameters.Add("@aggregateId", SqlDbType.NVarChar).Value = @event.Id;
-                            command.Parameters.Add("@version", SqlDbType.BigInt).Value = @event.Version;
-                            command.Parameters.Add("@eventDateTime", SqlDbType.DateTime2).Value = DateTime.Now; //TODO: remove this hack
-                            command.Parameters.Add("@payload", SqlDbType.NVarChar).Value = Serialize(@event);
-                            command.Parameters.Add("@expectedVersion", SqlDbType.BigInt).Value = expectedVersion;
-                            var numRecordsUpdated = command.ExecuteNonQuery();
-
-                            if (numRecordsUpdated == 0)
-                            {
-                                throw new EventStoreConcurrencyException($"Concurrency error saving aggregate {id} (expected version {expectedVersion})");
-                            }
-
-                        }
+                        command.ExecuteNonQuery();
                     }
-
-                    transaction.Commit();
+                    catch (SqlException ex) when (ex.Number == 51000)
+                    {
+                        throw new EventStoreConcurrencyException(ex.Message);
+                    }
                 }
             }
         }

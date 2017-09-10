@@ -29,9 +29,9 @@ using Rob.EventSourcing.Tests.SpecificationTests;
 
 namespace Rob.EventSourcing.Tests.PersistenceTests
 {
-    [TestFixture("FileSystem")]
-    [TestFixture("InMemory")]
-    [TestFixture("SqlServer")]
+    [TestFixture("EventStorePersistence=FileSystem")]
+    [TestFixture("EventStorePersistence=InMemory")]
+    [TestFixture("EventStorePersistence=SqlServer")]
     public abstract class AggregateRepositoryTestBase : SpecificationBase<IAggregateRepository<AccountAggregateRoot, string>>
     {
         private readonly IDictionary<string, string> _testFixtureOptions;

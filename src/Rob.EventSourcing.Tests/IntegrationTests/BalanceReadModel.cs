@@ -20,10 +20,11 @@
 #endregion
 
 using System.Collections.Concurrent;
+using Rob.EventSourcing.Contracts.Bus;
 
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {
-    public class BalanceReadModel
+    public class BalanceReadModel : IHandle<BalanceUpdatedEvent>
     {
         private readonly ConcurrentDictionary<string, BalanceEntry> _balances = new ConcurrentDictionary<string, BalanceEntry>();
 

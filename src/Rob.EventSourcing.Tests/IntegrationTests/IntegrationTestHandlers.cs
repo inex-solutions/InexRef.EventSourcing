@@ -20,11 +20,12 @@
 #endregion
 
 using System;
+using Rob.EventSourcing.Contracts.Bus;
 using Rob.EventSourcing.Contracts.Persistence;
 
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {
-    public class IntegrationTestHandlers
+    public class IntegrationTestHandlers: IHandle<AddAmountCommand>, IHandle<ResetBalanceCommand>
     {
         private readonly IAggregateRepository<AccountAggregateRoot, string> _repository;
 

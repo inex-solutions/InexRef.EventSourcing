@@ -61,6 +61,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            containerBuilder.RegisterModule<HandlerModule>();
             containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
 
             var container = containerBuilder.Build();
@@ -69,19 +70,9 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
             AggregateId = IdGenerator.CreateAggregateId();
 
-            BalanceReadModel = new BalanceReadModel();
-            Subject.Subscribe<BalanceUpdatedEvent>(BalanceReadModel.Handle);
-
-            ReceivedEventsHistoryReadModel = new ReceivedEventsHistoryReadModel();
-            Subject.Subscribe<BalanceUpdatedEvent>(ReceivedEventsHistoryReadModel.Handle);
-
-            ReceivedInternalEventsHistoryReadModel = new ReceivedInternalEventsHistoryReadModel();
-            Subject.Subscribe<AmountAddedEvent>(ReceivedInternalEventsHistoryReadModel.Handle);
-            Subject.Subscribe<BalanceResetEvent>(ReceivedInternalEventsHistoryReadModel.Handle);
-
-            var handlers = new IntegrationTestHandlers(Repository);
-            Subject.RegisterHandler<AddAmountCommand>(handlers.Handle);
-            Subject.RegisterHandler<ResetBalanceCommand>(handlers.Handle);
+            BalanceReadModel = container.Resolve<BalanceReadModel>();
+            ReceivedEventsHistoryReadModel = container.Resolve<ReceivedEventsHistoryReadModel>();
+            ReceivedInternalEventsHistoryReadModel = container.Resolve<ReceivedInternalEventsHistoryReadModel>();
         }
 
         protected override void Cleanup()

@@ -19,43 +19,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using Autofac;
+using Rob.EventSourcing.Bus;
 using Rob.EventSourcing.Contracts.Bus;
-using Rob.EventSourcing.Contracts.Messages;
-using Rob.EventSourcing.Utils;
+using Rob.EventSourcing.Tests.IntegrationTests;
 
-namespace Rob.EventSourcing.Bus
+namespace Rob.EventSourcing.Tests
 {
-    public class InMemoryBus : IBus
+    public class HandlerModule : Module
     {
-        private readonly IComponentContext _componentContext;
-
-        public InMemoryBus(IComponentContext componentContext)
+        protected override void Load(ContainerBuilder containerBuilder)
         {
-            _componentContext = componentContext;
-        }
+            containerBuilder
+                .RegisterType<BalanceReadModel>()
+                .As<BalanceReadModel>()
+                .As<IHandle<BalanceUpdatedEvent>>()
+                .SingleInstance();
 
-        public void PublishEvent(IEvent @event)
-        {
-            var eventHandlerType = typeof(IHandle<>).MakeGenericType(@event.GetType());
-            var listOfEventHandlerTypes = typeof(IEnumerable<>).MakeGenericType(eventHandlerType);
-            var handlers = (IEnumerable)_componentContext.Resolve(listOfEventHandlerTypes);
-            foreach (var handler in handlers)
-            {
-                handler.AsDynamic().Handle(@event);
-            }
-        }
+            containerBuilder
+                .RegisterType<ReceivedEventsHistoryReadModel>()
+                .As<ReceivedEventsHistoryReadModel>()
+                .As<IHandle<BalanceUpdatedEvent>>()
+                .SingleInstance();
 
-        public void Send(ICommand command)
-        {
-            var commandHandlerType = typeof(IHandle<>).MakeGenericType(command.GetType());
-            var handler = _componentContext.Resolve(commandHandlerType);
-            handler.AsDynamic().Handle(command);
+            containerBuilder
+                .RegisterType<ReceivedInternalEventsHistoryReadModel>()
+                .As<ReceivedInternalEventsHistoryReadModel>()
+                .As<IHandle<AmountAddedEvent>>()
+                .As<IHandle<BalanceResetEvent>>()
+                .SingleInstance();
+
+            containerBuilder
+                .RegisterType<IntegrationTestHandlers>()
+                .As<IHandle<AddAmountCommand>>()
+                .As<IHandle<ResetBalanceCommand>>();
         }
     }
 }

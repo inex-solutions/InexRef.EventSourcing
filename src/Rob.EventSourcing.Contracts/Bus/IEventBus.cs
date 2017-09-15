@@ -26,8 +26,6 @@ namespace Rob.EventSourcing.Contracts.Bus
 {
     public interface IEventBus
     {
-        void Subscribe<T>(Action<T> handler) where T : IEvent;
-
         void PublishEvent(IEvent @event);
     }
 }

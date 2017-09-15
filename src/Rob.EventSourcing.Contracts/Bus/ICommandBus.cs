@@ -26,8 +26,6 @@ namespace Rob.EventSourcing.Contracts.Bus
 {
     public interface ICommandBus
     {
-        void RegisterHandler<T>(Action<T> handler) where T : ICommand;
-
         void Send(ICommand command);
     }
 }

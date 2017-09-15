@@ -43,6 +43,7 @@
     <Compile Include="Bus\IBus.cs" />
     <Compile Include="Bus\ICommandBus.cs" />
     <Compile Include="Bus\IEventBus.cs" />
+    <Compile Include="Bus\IHandle.cs" />
     <Compile Include="IAggregateRoot.cs" />
     <Compile Include="Messages\ICommand.cs" />
     <Compile Include="Messages\IEvent.cs" />

@@ -22,11 +22,12 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Rob.EventSourcing.Contracts.Bus;
 using Rob.EventSourcing.Contracts.Messages;
 
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {
-    public class ReceivedInternalEventsHistoryReadModel
+    public class ReceivedInternalEventsHistoryReadModel : IHandle<AmountAddedEvent>, IHandle<BalanceResetEvent>
     {
         private readonly ConcurrentDictionary<string, List<IEvent<string>>> _receivedEvents = new ConcurrentDictionary<string, List<IEvent<string>>>();
 

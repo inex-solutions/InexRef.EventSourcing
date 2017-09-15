@@ -55,7 +55,7 @@ namespace Rob.EventSourcing.Utils
                         args);
                     return true;
                 }
-                catch
+                catch (MissingMethodException)
                 {
                     result = null;
                     return false;

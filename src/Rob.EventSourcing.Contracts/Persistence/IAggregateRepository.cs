@@ -31,7 +31,7 @@ namespace Rob.EventSourcing.Contracts.Persistence
 
         TAggregate Get(TId id);
 
-        TAggregate GetOrCreateNew(TId id);
+        TAggregate GetOrCreateNew(TId id, Action<TAggregate> onCreateNew);
 
         void Delete(TId id);
     }

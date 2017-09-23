@@ -19,8 +19,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using Autofac;
 using Rob.EventSourcing.Contracts.Persistence;
+using Rob.EventSourcing.NaturalKey;
 using Rob.EventSourcing.Persistence;
 
 namespace Rob.EventSourcing
@@ -29,7 +31,9 @@ namespace Rob.EventSourcing
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<GuidAggregateIdCreator>().As<IAggregateIdCreator<Guid>>();
             builder.RegisterGeneric(typeof(AggregateRepository<,>)).As(typeof(IAggregateRepository<,>));
+            builder.RegisterGeneric(typeof(NaturalKeyDrivenAggregateRepository<,,>)).As(typeof(INaturalKeyDrivenAggregateRepository<,,>));
         }
     }
 }

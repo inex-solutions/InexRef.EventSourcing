@@ -22,26 +22,28 @@
 using System;
 using Rob.EventSourcing.Contracts.Bus;
 using Rob.EventSourcing.Contracts.Persistence;
+using Rob.EventSourcing.NaturalKey;
 
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {
-    public class IntegrationTestHandlers: IHandle<AddAmountCommand>, IHandle<ResetBalanceCommand>
+    public class IntegrationTestHandlers : IHandle<AddAmountCommand>, IHandle<ResetBalanceCommand>
     {
-        private readonly IAggregateRepository<AccountAggregateRoot, string> _repository;
+        private readonly INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string> _naturalKeyDrivenRepository;
 
-        public IntegrationTestHandlers(IAggregateRepository<AccountAggregateRoot, string> repository)
+        public IntegrationTestHandlers(INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string> naturalKeyDrivenRepository)
         {
-            _repository = repository;
+            _naturalKeyDrivenRepository = naturalKeyDrivenRepository;
         }
 
         public void Handle(AddAmountCommand command)
         {
             try
             {
-                //Console.WriteLine($"{DateTime.Now:yyyyMMdd-hh:mm:ss:fff}:Handling {command}");
-                var item = _repository.GetOrCreateNew(command.Id);
+                var item = _naturalKeyDrivenRepository.GetOrCreateNewByNaturalKey(
+                    naturalKey: command.Id,
+                    onCreateNew: newItem => newItem.SetAccountNumber(command.Id));
                 item.AddAmount(command.Amount);
-                _repository.Save(item);
+                _naturalKeyDrivenRepository.Save(item);
             }
             catch
             {
@@ -54,10 +56,11 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
         {
             try
             {
-                //Console.WriteLine($"{DateTime.Now:yyyyMMdd-hh:mm:ss:fff}:Handling {command}");
-                var item = _repository.GetOrCreateNew(command.Id);
+                var item = _naturalKeyDrivenRepository.GetOrCreateNewByNaturalKey(
+                    naturalKey: command.Id,
+                    onCreateNew: newItem => newItem.SetAccountNumber(command.Id));
                 item.ResetBalance();
-                _repository.Save(item);
+                _naturalKeyDrivenRepository.Save(item);
             }
             catch
             {

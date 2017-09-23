@@ -19,22 +19,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {
-    public class BalanceUpdatedEvent : Event<string>
+    public class BalanceUpdatedEvent : Event<Guid>
     {
         public decimal Balance { get; }
 
-        public BalanceUpdatedEvent(string id, decimal balance) : base(id)
+        public string AccountId { get; }
+
+        public BalanceUpdatedEvent(Guid aggregateId, string accountId, decimal balance) : base(aggregateId)
         {
             Balance = balance;
+            AccountId = accountId;
         }
 
         public override string ToString()
         {
-            return $"BalanceUpdatedEvent: Id={Id}, Balance={Balance}, Version={Version}";
+            return $"BalanceUpdatedEvent: AccountId={AccountId} Balance={Balance}, Version={Version} (AggregateId={Id})";
 
         }
     }

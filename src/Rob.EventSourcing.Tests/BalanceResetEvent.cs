@@ -19,13 +19,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing.Tests
 {
-    public class BalanceResetEvent : Event<string>
+    public class BalanceResetEvent : Event<Guid>
     {
-        public BalanceResetEvent(string id) : base(id)
+        public BalanceResetEvent(Guid id) : base(id)
         {
         }
 

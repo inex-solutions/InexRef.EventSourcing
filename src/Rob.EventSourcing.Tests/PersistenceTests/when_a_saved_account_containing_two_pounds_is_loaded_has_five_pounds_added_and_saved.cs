@@ -68,7 +68,7 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
         {
         }
 
-        protected override void When() => ReloadedAccountAggregateRoot = Subject.GetOrCreateNew(AggregateId);
+        protected override void When() => ReloadedAccountAggregateRoot = Subject.GetOrCreateNew(AggregateId, null);
 
         [Then]
         public void no_exception_is_thrown_and_a_new_aggregate_is_returned() => ReloadedAccountAggregateRoot

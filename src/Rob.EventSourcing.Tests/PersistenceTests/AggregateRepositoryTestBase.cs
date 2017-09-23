@@ -29,18 +29,18 @@ using Rob.EventSourcing.Tests.SpecificationTests;
 
 namespace Rob.EventSourcing.Tests.PersistenceTests
 {
- //   [TestFixture("EventStorePersistence=FileSystem")]
+    [TestFixture("EventStorePersistence=FileSystem")]
     [TestFixture("EventStorePersistence=InMemory")]
- //   [TestFixture("EventStorePersistence=SqlServer")]
-    public abstract class AggregateRepositoryTestBase : SpecificationBase<IAggregateRepository<AccountAggregateRoot, string>>
+    [TestFixture("EventStorePersistence=SqlServer")]
+    public abstract class AggregateRepositoryTestBase : SpecificationBase<IAggregateRepository<AccountAggregateRoot, Guid>>
     {
         private readonly IDictionary<string, string> _testFixtureOptions;
 
-        protected string AggregateId { get; private set; }
+        protected Guid AggregateId { get; private set; }
 
         protected AccountAggregateRoot ReloadedAccountAggregateRoot { get; set; }
 
-        protected IdGenerator IdGenerator { get; private set; }
+        protected List<Guid> CreatedGuids = new List<Guid>();
 
         protected Exception CaughtException { get; set; }
 
@@ -53,17 +53,22 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 
         protected override void SetUp()
         {
-            IdGenerator = new IdGenerator("my-root");
-
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
             containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
 
             var container = containerBuilder.Build();
 
-            Subject = container.Resolve<IAggregateRepository<AccountAggregateRoot, string>>();
+            Subject = container.Resolve<IAggregateRepository<AccountAggregateRoot, Guid>>();
 
-            AggregateId = IdGenerator.CreateAggregateId();
+            AggregateId = CreateAggregateId();
+        }
+
+        protected Guid CreateAggregateId()
+        {
+            var guid = Guid.NewGuid();
+            CreatedGuids.Add(guid);
+            return guid;
         }
 
         protected override void Cleanup()

@@ -19,10 +19,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using Autofac;
 using Rob.EventSourcing.Bus;
 using Rob.EventSourcing.Contracts.Bus;
 using Rob.EventSourcing.Contracts.Persistence;
+using Rob.EventSourcing.NaturalKey;
 using Rob.EventSourcing.Persistence;
 
 namespace Rob.EventSourcing
@@ -33,6 +35,7 @@ namespace Rob.EventSourcing
         {
             builder.RegisterType<InMemoryBus>().As<IBus>().As<IEventBus>().As<ICommandBus>().SingleInstance();
             builder.RegisterGeneric(typeof(InMemoryEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
+            builder.RegisterType<InMemoryNaturalKeyToAggregateIdMap<string, Guid>>().As<INaturalKeyToAggregateIdMap<string, Guid>>().SingleInstance();
         }
     }
 }

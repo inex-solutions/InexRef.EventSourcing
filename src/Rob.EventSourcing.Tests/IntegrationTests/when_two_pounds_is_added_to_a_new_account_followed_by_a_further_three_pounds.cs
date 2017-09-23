@@ -30,28 +30,21 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
         protected override void Given()
         {
-            Subject.Send(new AddAmountCommand(AggregateId, 2.00M));
+            Subject.Send(new AddAmountCommand(AccountId, 2.00M));
         }
 
-        protected override void When() => Subject.Send(new AddAmountCommand(AggregateId, 3.00M));
+        protected override void When() => Subject.Send(new AddAmountCommand(AccountId, 3.00M));
 
         [Then]
-        public void the_account_balance_is_five_pounds() => Repository.Get(AggregateId).Balance.ShouldBe(5.00M);
+        public void the_account_balance_is_five_pounds() => Repository.GetByNaturalKey(AccountId).Balance.ShouldBe(5.00M);
 
         [Then]
-        public void the_aggregate_is_version_two() => Repository.Get(AggregateId).Version.ShouldBe(2);
+        public void the_aggregate_is_version_three() => Repository.GetByNaturalKey(AccountId).Version.ShouldBe(3);
 
         [Then]
-        public void the_account_balance_on_the_read_model_is_five_pounds() => BalanceReadModel[AggregateId].ShouldBe(5.00M);
+        public void the_account_balance_on_the_read_model_is_five_pounds() => BalanceReadModel[AccountId].ShouldBe(5.00M);
 
         [Then]
-        public void the_version_on_the_read_model_is_two() => BalanceReadModel.GetVersion(AggregateId).ShouldBe(2);
-
-        [Then]
-        public void the_total_number_of_updates_received_by_a_subscribed_read_model_is_two() => ReceivedEventsHistoryReadModel[AggregateId].ShouldHaveACountOf(2);
-
-        [Then]
-        public void the_number_of_events_received_by_the_read_model_subscribed_to_internal_events_is_one() 
-            => ReceivedInternalEventsHistoryReadModel[AggregateId].ShouldHaveACountOf(2);
+        public void the_version_on_the_read_model_is_three() => BalanceReadModel.GetVersion(AccountId).ShouldBe(3);
     }
 }

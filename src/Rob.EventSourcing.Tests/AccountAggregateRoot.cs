@@ -19,24 +19,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using Rob.EventSourcing.Tests.IntegrationTests;
 
 namespace Rob.EventSourcing.Tests
 {
-    public class AccountAggregateRoot : AggregateRoot<string>
+    public class AccountAggregateRoot : AggregateRoot<Guid>
     {
         public AccountAggregateRoot()
         {
         }
 
-        public AccountAggregateRoot(string id)
+        public AccountAggregateRoot(Guid id)
         {
             Id = id;
         }
 
+        public string AccountId { get; private set; }
+
         public override string Name => "Account";
 
-        public decimal Balance { get; set; }
+        public decimal Balance { get; private set; }
+
+        public void SetAccountNumber(string accountId)
+        {
+            Apply(new AccountIdSetEvent(Id, accountId));
+        }
 
         public void AddAmount(decimal amount)
         {
@@ -48,16 +56,21 @@ namespace Rob.EventSourcing.Tests
             Apply(new BalanceResetEvent(Id));
         }
 
+        public void HandleEvent(AccountIdSetEvent @event, bool isNew)
+        {
+            AccountId = @event.AccountId;
+        }
+
         public void HandleEvent(AmountAddedEvent @event, bool isNew)
         {
             Balance += @event.Amount;
-            PublishEvent(new BalanceUpdatedEvent(Id, Balance), isNew);
+            PublishEvent(new BalanceUpdatedEvent(Id, AccountId, Balance), isNew);
         }
 
         public void HandleEvent(BalanceResetEvent @event, bool isNew)
         {
             Balance = 0;
-            PublishEvent(new BalanceUpdatedEvent(Id, Balance), isNew);
+            PublishEvent(new BalanceUpdatedEvent(Id, AccountId, Balance), isNew);
         }
     }
 }

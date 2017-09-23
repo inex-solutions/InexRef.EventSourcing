@@ -57,7 +57,7 @@ SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggreg
 
                 using (var command = new SqlCommand(sql, connection))
                 {
-                    command.Parameters.Add("@aggregateId", SqlDbType.NVarChar).Value = aggregateId;
+                    command.Parameters.Add("@aggregateId", SqlDbType.UniqueIdentifier).Value = aggregateId;
 
                     using (var reader = command.ExecuteReader())
                     {
@@ -83,7 +83,7 @@ SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggreg
         public void SaveEvents(TId id, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion, int expectedVersion)
         {
             var dataTable = new DataTable();
-            dataTable.Columns.Add("AggregateId", typeof(string));
+            dataTable.Columns.Add("AggregateId", typeof(Guid));
             dataTable.Columns.Add("Version", typeof(long));
             dataTable.Columns.Add("EventDateTime", typeof(DateTime));
             dataTable.Columns.Add("Payload", typeof(string));
@@ -102,7 +102,7 @@ SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggreg
                     command.Connection = connection;
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandText = "dbo.usp_InsertAccountEvents";
-                    command.Parameters.Add("@aggregateId", SqlDbType.NVarChar).Value = id;
+                    command.Parameters.Add("@aggregateId", SqlDbType.UniqueIdentifier).Value = id;
                     command.Parameters.Add("@expectedVersion", SqlDbType.BigInt).Value = expectedVersion;
 
                     var tableParameter = new SqlParameter();
@@ -134,7 +134,7 @@ SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggreg
 
                 using (var command = new SqlCommand(getLatestVersionSql, connection))
                 {
-                    command.Parameters.Add("@aggregateId", SqlDbType.NVarChar).Value = id;
+                    command.Parameters.Add("@aggregateId", SqlDbType.UniqueIdentifier).Value = id;
                     command.ExecuteNonQuery();
                 }
             }

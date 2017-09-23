@@ -19,15 +19,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing.Tests
 {
-    public class AmountAddedEvent : Event<string>
+    public class AmountAddedEvent : Event<Guid>
     {
         public decimal Amount { get; }
 
-        public AmountAddedEvent(string id, decimal amount) : base(id)
+        public AmountAddedEvent(Guid id, decimal amount) : base(id)
         {
             Amount = amount;
         }

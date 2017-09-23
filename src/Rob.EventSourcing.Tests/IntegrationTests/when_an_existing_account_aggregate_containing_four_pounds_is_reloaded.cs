@@ -32,24 +32,16 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
         protected override void Given()
         {
-            Subject.Send(new AddAmountCommand(AggregateId, 2.00M));
-            Subject.Send(new AddAmountCommand(AggregateId, 2.00M));
-            ReceivedEventsHistoryReadModel.Clear();
-            ReceivedInternalEventsHistoryReadModel.Clear();
+            Subject.Send(new AddAmountCommand(AccountId, 2.00M));
+            Subject.Send(new AddAmountCommand(AccountId, 2.00M));
         }
 
-        protected override void When() => Aggregate = Repository.Get(AggregateId);
+        protected override void When() => Aggregate = Repository.GetByNaturalKey(AccountId);
 
         [Then]
         public void the_reloaded_aggregate_has_a_balance_of_four_pounds() => Aggregate.Balance.ShouldBe(4.0m);
 
         [Then]
-        public void the_reloaded_aggregate_has_is_version_2() => Aggregate.Version.ShouldBe(2);
-
-        [Then]
-        public void no_updates_were_received_by_the_read_model_subscribed_to_external_events() => ReceivedEventsHistoryReadModel[AggregateId].ShouldBeNull();
-
-        [Then]
-        public void no_updates_were_received_by_the_read_model_subscribed_to_internal_events() => ReceivedInternalEventsHistoryReadModel[AggregateId].ShouldBeNull();
+        public void the_reloaded_aggregate_has_is_version_3() => Aggregate.Version.ShouldBe(3);
     }
 }

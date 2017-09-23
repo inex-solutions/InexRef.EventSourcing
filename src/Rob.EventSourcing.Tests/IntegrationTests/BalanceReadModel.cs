@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using System.Collections.Concurrent;
 using Rob.EventSourcing.Contracts.Bus;
 
@@ -31,21 +32,11 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
         public void Handle(BalanceUpdatedEvent @event)
         {
             _balances.AddOrUpdate(
-                key: @event.Id,
-                addValue: new BalanceEntry {Version = @event.Version, Balance = @event.Balance},
+                key: @event.AccountId,
+                addValue: new BalanceEntry { Version = @event.Version, Balance = @event.Balance },
                 updateValueFactory: (id, entry) => @event.Version < entry.Version
                     ? entry
-                    : new BalanceEntry {Version = @event.Version, Balance = @event.Balance});
-        }
-
-        public void Handle(BalanceResetEvent @event)
-        {
-            _balances.AddOrUpdate(
-                key: @event.Id,
-                addValue: new BalanceEntry { Version = @event.Version, Balance = 0 },
-                updateValueFactory: (id, entry) => @event.Version < entry.Version
-                    ? entry
-                    : new BalanceEntry { Version = @event.Version, Balance = 0 });
+                    : new BalanceEntry { Version = @event.Version, Balance = @event.Balance });
         }
 
         public decimal this[string id] => _balances[id].Balance;

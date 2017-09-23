@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountAggregateRoot.cs" />
+    <Compile Include="AccountIdSetEvent.cs" />
     <Compile Include="AddAmountCommand.cs" />
     <Compile Include="AggregateTests\AggregateRootTestBase.cs" />
     <Compile Include="AggregateTests\when_I_add_an_one_pound_to_an_empty_account.cs" />
@@ -59,15 +60,13 @@
     <Compile Include="AggregateTests\when_I_reset_an_account_containing_one_pound.cs" />
     <Compile Include="AmountAddedEvent.cs" />
     <Compile Include="BalanceResetEvent.cs" />
-    <Compile Include="HandlerModule.cs" />
+    <Compile Include="IntegrationTests\HandlerModule.cs" />
     <Compile Include="IntegrationTests\BalanceEntry.cs" />
     <Compile Include="IntegrationTests\BalanceReadModel.cs" />
     <Compile Include="IntegrationTests\BalanceUpdatedEvent.cs" />
     <Compile Include="EventStorePersistenceModuleExtensions.cs" />
     <Compile Include="IntegrationTests\IntegrationTestBase.cs" />
     <Compile Include="IntegrationTests\IntegrationTestHandlers.cs" />
-    <Compile Include="IntegrationTests\ReceivedEventsHistoryReadModel.cs" />
-    <Compile Include="IntegrationTests\ReceivedInternalEventsHistoryReadModel.cs" />
     <Compile Include="IntegrationTests\when_an_existing_account_aggregate_containing_four_pounds_is_reloaded.cs" />
     <Compile Include="IntegrationTests\when_the_balance_is_reset_on_an_account_containing_two_pounds.cs" />
     <Compile Include="IntegrationTests\when_two_pounds_is_added_to_an_existing_but_empty_account.cs" />

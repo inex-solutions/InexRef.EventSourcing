@@ -80,12 +80,19 @@ namespace Rob.EventSourcing.Persistence
             return (TAggregate)aggregate;
         }
 
-        public TAggregate GetOrCreateNew(TId id)
+        public TAggregate GetOrCreateNew(TId id, Action<TAggregate> onCreateNew)
         {
-            IAggregateRootInternal<TId> aggregate = new TAggregate();
-            IEnumerable<IEvent<TId>> events = _eventStore.LoadEvents(id, throwIfNotFound: false);
+            var aggregate = new TAggregate();
+            IList<IEvent<TId>> events = _eventStore.LoadEvents(id, throwIfNotFound: false).ToList();
+
             aggregate.Load(id, events);
-            return (TAggregate)aggregate;
+
+            if (!events.Any())
+            {
+                onCreateNew?.Invoke(aggregate);
+            }
+
+            return aggregate;
         }
 
         public void Delete(TId id)

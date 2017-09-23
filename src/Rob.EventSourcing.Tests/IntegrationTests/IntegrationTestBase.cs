@@ -19,32 +19,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using Rob.EventSourcing.Contracts.Bus;
-using Rob.EventSourcing.Contracts.Persistence;
+using Rob.EventSourcing.NaturalKey;
 using Rob.EventSourcing.Tests.SpecificationTests;
 
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {
-    [TestFixture("EventStorePersistence=FileSystem")]
+    //[TestFixture("EventStorePersistence=FileSystem")]
     [TestFixture("EventStorePersistence=InMemory")]
-    [TestFixture("EventStorePersistence=SqlServer")]
+    //[TestFixture("EventStorePersistence=SqlServer")]
     public abstract class IntegrationTestBase : SpecificationBase<IBus>
     {
         private readonly IDictionary<string, string> _testFixtureOptions;
 
-        protected string AggregateId { get; private set; }
+        protected string AccountId { get; private set; }
 
-        protected IAggregateRepository<AccountAggregateRoot, string> Repository { get; private set; }
+        protected INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string> Repository { get; private set; }
 
         protected BalanceReadModel BalanceReadModel { get; private set; }
-
-        protected ReceivedEventsHistoryReadModel ReceivedEventsHistoryReadModel { get; private set; }
-
-        protected ReceivedInternalEventsHistoryReadModel ReceivedInternalEventsHistoryReadModel { get; private set; }
 
         protected IdGenerator IdGenerator { get; private set; }
 
@@ -66,18 +63,16 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
 
             var container = containerBuilder.Build();
             Subject = container.Resolve<IBus>();
-            Repository = container.Resolve<IAggregateRepository<AccountAggregateRoot, string>>();
+            Repository = container.Resolve<INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string>>();
 
-            AggregateId = IdGenerator.CreateAggregateId();
+            AccountId = IdGenerator.CreateAggregateId();
 
             BalanceReadModel = container.Resolve<BalanceReadModel>();
-            ReceivedEventsHistoryReadModel = container.Resolve<ReceivedEventsHistoryReadModel>();
-            ReceivedInternalEventsHistoryReadModel = container.Resolve<ReceivedInternalEventsHistoryReadModel>();
         }
 
         protected override void Cleanup()
         {
-            Repository.Delete(AggregateId);
+            Repository.DeleteByNaturalKey(AccountId);
         }
     }
 }

@@ -21,7 +21,6 @@
 
 using System;
 using Rob.EventSourcing.Contracts.Bus;
-using Rob.EventSourcing.Contracts.Persistence;
 using Rob.EventSourcing.NaturalKey;
 
 namespace Rob.EventSourcing.Tests.IntegrationTests

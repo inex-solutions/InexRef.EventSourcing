@@ -19,7 +19,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using Rob.EventSourcing.Contracts.Messages;
 
 namespace Rob.EventSourcing.Contracts.Bus

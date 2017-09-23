@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 
 namespace Rob.EventSourcing.NaturalKey
 {
-    public class InMemoryNaturalKeyToAggregateIdMap<TNaturalKey, TInternalId> : INaturalKeyToAggregateIdMap<TNaturalKey, TInternalId>
+    public class InMemoryNaturalKeyToAggregateIdMap<TNaturalKey, TInternalId, TAggregate> : INaturalKeyToAggregateIdMap<TNaturalKey, TInternalId, TAggregate>
 
     {
         private readonly IAggregateIdCreator<TInternalId> _aggregateIdCreator;
@@ -18,6 +18,12 @@ namespace Rob.EventSourcing.NaturalKey
         public TInternalId GetOrCreateNew(TNaturalKey naturalKey)
         {
             return _keyMap.GetOrAdd(key: naturalKey, valueFactory: key => _aggregateIdCreator.Create());
+        }
+
+        public void Delete(TNaturalKey naturalKey)
+        {
+            TInternalId removedItem;
+            _keyMap.TryRemove(naturalKey, out removedItem);
         }
     }
 }

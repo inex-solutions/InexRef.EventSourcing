@@ -27,7 +27,7 @@ namespace Rob.EventSourcing.Contracts.Persistence
 {
     public interface IEventStore<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
-        IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, bool throwIfNotFound);
+        IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, Type aggregateType, bool throwIfNotFound);
         void SaveEvents(TId id, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion, int expectedVersion);
         void DeleteEvents(TId id, Type aggregateType);
     }

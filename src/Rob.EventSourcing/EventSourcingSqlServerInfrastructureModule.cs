@@ -40,8 +40,7 @@ namespace Rob.EventSourcing
             };
             builder.RegisterInstance(sqlServerPersistenceConfiguration);
             builder.RegisterGeneric(typeof(SqlEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
-            builder.RegisterType<SqlServerNaturalKeyToAggregateIdMap<string, Guid>>().As<INaturalKeyToAggregateIdMap<string, Guid>>().SingleInstance();
-
+            builder.RegisterGeneric(typeof(SqlServerNaturalKeyToAggregateIdMap<,,>)).As(typeof(INaturalKeyToAggregateIdMap<,,>)).SingleInstance();
         }
     }
 }

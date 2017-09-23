@@ -59,7 +59,7 @@ namespace Rob.EventSourcing.Persistence
             _storedEvents.TryRemove(id, out events);
         }
 
-        public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, bool throwIfNotFound)
+        public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, Type aggregateType, bool throwIfNotFound)
         {
             IEnumerable<StoredEvent<TId>> events;
 

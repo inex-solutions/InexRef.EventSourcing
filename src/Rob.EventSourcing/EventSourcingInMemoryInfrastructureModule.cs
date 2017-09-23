@@ -35,7 +35,7 @@ namespace Rob.EventSourcing
         {
             builder.RegisterType<InMemoryBus>().As<IBus>().As<IEventBus>().As<ICommandBus>().SingleInstance();
             builder.RegisterGeneric(typeof(InMemoryEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
-            builder.RegisterType<InMemoryNaturalKeyToAggregateIdMap<string, Guid>>().As<INaturalKeyToAggregateIdMap<string, Guid>>().SingleInstance();
+            builder.RegisterGeneric(typeof(InMemoryNaturalKeyToAggregateIdMap<,,>)).As(typeof(INaturalKeyToAggregateIdMap<,,>)).SingleInstance();
         }
     }
 }

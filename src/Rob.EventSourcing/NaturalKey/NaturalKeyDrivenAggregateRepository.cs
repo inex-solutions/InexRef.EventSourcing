@@ -10,11 +10,11 @@ namespace Rob.EventSourcing.NaturalKey
         where TNaturalKey : IEquatable<TNaturalKey>, IComparable<TNaturalKey>
     {
         private readonly IAggregateRepository<TAggregate, TInternalId> _internalRepository;
-        private readonly INaturalKeyToAggregateIdMap<TNaturalKey, TInternalId> _naturalKeyToAggregateIdMap;
+        private readonly INaturalKeyToAggregateIdMap<TNaturalKey, TInternalId, TAggregate> _naturalKeyToAggregateIdMap;
 
         public NaturalKeyDrivenAggregateRepository(
             IAggregateRepository<TAggregate, TInternalId> internalRepository,
-            INaturalKeyToAggregateIdMap<TNaturalKey, TInternalId> naturalKeyToAggregateIdMap)
+            INaturalKeyToAggregateIdMap<TNaturalKey, TInternalId, TAggregate> naturalKeyToAggregateIdMap)
         {
             _internalRepository = internalRepository;
             _naturalKeyToAggregateIdMap = naturalKeyToAggregateIdMap;
@@ -39,6 +39,7 @@ namespace Rob.EventSourcing.NaturalKey
         public void DeleteByNaturalKey(TNaturalKey key)
         {
             _internalRepository.Delete(_naturalKeyToAggregateIdMap[key]);
+            _naturalKeyToAggregateIdMap.Delete(key);
         }
     }
 }

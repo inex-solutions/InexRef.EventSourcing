@@ -28,6 +28,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Rob.EventSourcing.Contracts.Messages;
 using Rob.EventSourcing.Contracts.Persistence;
+using Rob.EventSourcing.Utils;
 
 namespace Rob.EventSourcing.Persistence
 {
@@ -45,7 +46,7 @@ namespace Rob.EventSourcing.Persistence
             });
         }
 
-        public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, bool throwIfNotFound)
+        public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, Type aggregateType, bool throwIfNotFound)
         {
             using (var connection = new SqlConnection(_sqlServerPersistenceConfiguration.ConnectionString))
             {
@@ -53,11 +54,11 @@ namespace Rob.EventSourcing.Persistence
 
                 var sql = @"  
 SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggregateId ORDER BY [Version] ASC"
-                    .Replace("{aggName}", "Account");
+                    .Replace("{aggName}", AggregateRootUtils.GetAggregateRootName(aggregateType));
 
                 using (var command = new SqlCommand(sql, connection))
                 {
-                    command.Parameters.Add("@aggregateId", SqlDbType.UniqueIdentifier).Value = aggregateId;
+                    command.Parameters.Add("@aggregateId", SqlDbTypeUtils.GetSqlDbType<TId>()).Value = aggregateId;
 
                     using (var reader = command.ExecuteReader())
                     {
@@ -83,7 +84,7 @@ SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggreg
         public void SaveEvents(TId id, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion, int expectedVersion)
         {
             var dataTable = new DataTable();
-            dataTable.Columns.Add("AggregateId", typeof(Guid));
+            dataTable.Columns.Add("AggregateId", typeof(TId));
             dataTable.Columns.Add("Version", typeof(long));
             dataTable.Columns.Add("EventDateTime", typeof(DateTime));
             dataTable.Columns.Add("Payload", typeof(string));
@@ -101,8 +102,8 @@ SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggreg
                 {
                     command.Connection = connection;
                     command.CommandType = CommandType.StoredProcedure;
-                    command.CommandText = "dbo.usp_InsertAccountEvents";
-                    command.Parameters.Add("@aggregateId", SqlDbType.UniqueIdentifier).Value = id;
+                    command.CommandText = "dbo.usp_Insert{aggName}Events".Replace("{aggName}", AggregateRootUtils.GetAggregateRootName(aggregateType));
+                    command.Parameters.Add("@aggregateId", SqlDbTypeUtils.GetSqlDbType<TId>()).Value = id;
                     command.Parameters.Add("@expectedVersion", SqlDbType.BigInt).Value = expectedVersion;
 
                     var tableParameter = new SqlParameter();
@@ -130,11 +131,11 @@ SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggreg
             {
                 connection.Open();
 
-                var getLatestVersionSql = @"DELETE FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggregateId".Replace("{aggName}", "Account");
+                var getLatestVersionSql = @"DELETE FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggregateId".Replace("{aggName}", AggregateRootUtils.GetAggregateRootName(aggregateType));
 
                 using (var command = new SqlCommand(getLatestVersionSql, connection))
                 {
-                    command.Parameters.Add("@aggregateId", SqlDbType.UniqueIdentifier).Value = id;
+                    command.Parameters.Add("@aggregateId", SqlDbTypeUtils.GetSqlDbType<TId>()).Value = id;
                     command.ExecuteNonQuery();
                 }
             }

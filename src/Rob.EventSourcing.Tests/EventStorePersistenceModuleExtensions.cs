@@ -20,6 +20,7 @@
 #endregion
 
 using Autofac;
+using Rob.EventSourcing.Sql;
 
 namespace Rob.EventSourcing.Tests
 {

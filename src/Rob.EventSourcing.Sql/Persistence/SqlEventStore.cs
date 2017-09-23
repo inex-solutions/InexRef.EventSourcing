@@ -28,9 +28,11 @@ using System.Text;
 using Newtonsoft.Json;
 using Rob.EventSourcing.Contracts.Messages;
 using Rob.EventSourcing.Contracts.Persistence;
+using Rob.EventSourcing.Persistence;
+using Rob.EventSourcing.Sql.Utils;
 using Rob.EventSourcing.Utils;
 
-namespace Rob.EventSourcing.Persistence
+namespace Rob.EventSourcing.Sql.Persistence
 {
     public class SqlEventStore<TId> : IEventStore<TId> where TId : IEquatable<TId>, IComparable<TId>
     {

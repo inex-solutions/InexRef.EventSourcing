@@ -96,6 +96,10 @@
       <Project>{55071AF7-67F7-4C14-8A11-D759C99F67D0}</Project>
       <Name>Rob.EventSourcing.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Rob.EventSourcing.Sql\Rob.EventSourcing.Sql.csproj">
+      <Project>{32B7B270-01C3-43C9-AEA5-795B414231A7}</Project>
+      <Name>Rob.EventSourcing.Sql</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rob.EventSourcing\Rob.EventSourcing.csproj">
       <Project>{83871704-2589-4981-88EB-11613994A5F9}</Project>
       <Name>Rob.EventSourcing</Name>

@@ -22,10 +22,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using Rob.EventSourcing.Persistence;
+using Rob.EventSourcing.NaturalKey;
+using Rob.EventSourcing.Sql.Persistence;
+using Rob.EventSourcing.Sql.Utils;
 using Rob.EventSourcing.Utils;
 
-namespace Rob.EventSourcing.NaturalKey
+namespace Rob.EventSourcing.Sql.NaturalKey
 {
     public class SqlServerNaturalKeyToAggregateIdMap<TNaturalKey, TInternalId, TAggregate> : INaturalKeyToAggregateIdMap<TNaturalKey, TInternalId, TAggregate>
     {

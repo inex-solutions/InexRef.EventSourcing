@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{83871704-2589-4981-88EB-11613994A5F9}</ProjectGuid>
+    <ProjectGuid>{32B7B270-01C3-43C9-AEA5-795B414231A7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rob.EventSourcing</RootNamespace>
-    <AssemblyName>Rob.EventSourcing</AssemblyName>
+    <RootNamespace>Rob.EventSourcing.Sql</RootNamespace>
+    <AssemblyName>Rob.EventSourcing.Sql</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,42 +46,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AggregateRoot.cs" />
-    <Compile Include="Bus\HandlerNotFoundException.cs" />
-    <Compile Include="Bus\HandlerRegistrationException.cs" />
-    <Compile Include="Bus\InMemoryBus.cs" />
-    <Compile Include="EventSourcingCoreModule.cs" />
-    <Compile Include="EventSourcingInMemoryInfrastructureModule.cs" />
-    <Compile Include="IAggregateRootInternal.cs" />
-    <Compile Include="Messages\Command.cs" />
-    <Compile Include="Messages\Event.cs" />
-    <Compile Include="Messages\IEventInternal.cs" />
-    <Compile Include="NaturalKey\GuidAggregateIdCreator.cs" />
-    <Compile Include="NaturalKey\IAggregateIdCreator.cs" />
-    <Compile Include="NaturalKey\INaturalKeyDrivenAggregateRepository.cs" />
-    <Compile Include="NaturalKey\INaturalKeyToAggregateIdMap.cs" />
-    <Compile Include="NaturalKey\InMemoryNaturalKeyToAggregateIdMap.cs" />
-    <Compile Include="Persistence\AggregateNotFoundException.cs" />
-    <Compile Include="Persistence\AggregateRepository.cs" />
-    <Compile Include="Persistence\EventStoreConcurrencyException.cs" />
-    <Compile Include="Persistence\IMapNaturalKeysToAggregateIds.cs" />
-    <Compile Include="Persistence\InMemoryEventStore.cs" />
-    <Compile Include="Persistence\Metadata.cs" />
-    <Compile Include="NaturalKey\NaturalKeyDrivenAggregateRepository.cs" />
-    <Compile Include="Persistence\PersistedAggregate.cs" />
-    <Compile Include="Persistence\StoredEvent.cs" />
+    <Compile Include="EventSourcingSqlServerInfrastructureModule.cs" />
+    <Compile Include="NaturalKey\SqlServerNaturalKeyToAggregateIdMap.cs" />
+    <Compile Include="Persistence\SqlEventStore.cs" />
+    <Compile Include="Persistence\SqlServerPersistenceConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\AggregateRootUtils.cs" />
-    <Compile Include="Utils\DynamicExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="Utils\SqlDbTypeUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rob.EventSourcing.Contracts\Rob.EventSourcing.Contracts.csproj">
       <Project>{55071AF7-67F7-4C14-8A11-D759C99F67D0}</Project>
       <Name>Rob.EventSourcing.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Rob.EventSourcing\Rob.EventSourcing.csproj">
+      <Project>{83871704-2589-4981-88EB-11613994A5F9}</Project>
+      <Name>Rob.EventSourcing</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

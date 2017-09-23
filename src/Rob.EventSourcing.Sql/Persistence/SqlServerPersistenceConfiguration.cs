@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017 INEX Solutions Ltd
@@ -18,28 +18,10 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
-
-using Autofac;
-using Rob.EventSourcing.Bus;
-using Rob.EventSourcing.Contracts.Bus;
-using Rob.EventSourcing.Contracts.Persistence;
-using Rob.EventSourcing.NaturalKey;
-using Rob.EventSourcing.Persistence;
-
-namespace Rob.EventSourcing
+namespace Rob.EventSourcing.Sql.Persistence
 {
-    public class EventSourcingSqlServerInfrastructureModule : Module
+    public class SqlServerPersistenceConfiguration
     {
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<InMemoryBus>().As<IBus>().As<IEventBus>().As<ICommandBus>().SingleInstance();
-            var sqlServerPersistenceConfiguration = new SqlServerPersistenceConfiguration
-            {
-                ConnectionString = "Server=localhost;Database=Rob.EventStore;Trusted_Connection=True"
-            };
-            builder.RegisterInstance(sqlServerPersistenceConfiguration);
-            builder.RegisterGeneric(typeof(SqlEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
-            builder.RegisterGeneric(typeof(SqlServerNaturalKeyToAggregateIdMap<,,>)).As(typeof(INaturalKeyToAggregateIdMap<,,>)).SingleInstance();
-        }
+        public string ConnectionString { get; set; }
     }
 }

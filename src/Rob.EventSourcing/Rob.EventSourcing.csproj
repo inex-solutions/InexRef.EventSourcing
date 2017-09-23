@@ -52,7 +52,6 @@
     <Compile Include="Bus\HandlerRegistrationException.cs" />
     <Compile Include="Bus\InMemoryBus.cs" />
     <Compile Include="EventSourcingCoreModule.cs" />
-    <Compile Include="EventSourcingFileSystemInfrastructureModule.cs" />
     <Compile Include="EventSourcingInMemoryInfrastructureModule.cs" />
     <Compile Include="EventSourcingSqlServerInfrastructureModule.cs" />
     <Compile Include="IAggregateRootInternal.cs" />
@@ -67,8 +66,6 @@
     <Compile Include="Persistence\AggregateNotFoundException.cs" />
     <Compile Include="Persistence\AggregateRepository.cs" />
     <Compile Include="Persistence\EventStoreConcurrencyException.cs" />
-    <Compile Include="Persistence\FilePersistenceConfiguration.cs" />
-    <Compile Include="Persistence\FileSystemEventStore.cs" />
     <Compile Include="Persistence\IMapNaturalKeysToAggregateIds.cs" />
     <Compile Include="Persistence\InMemoryEventStore.cs" />
     <Compile Include="Persistence\Metadata.cs" />

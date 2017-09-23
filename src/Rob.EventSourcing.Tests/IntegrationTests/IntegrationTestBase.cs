@@ -30,7 +30,6 @@ using Rob.EventSourcing.Tests.SpecificationTests;
 
 namespace Rob.EventSourcing.Tests.IntegrationTests
 {
-    //[TestFixture("EventStorePersistence=FileSystem")]
     [TestFixture("EventStorePersistence=InMemory")]
     //[TestFixture("EventStorePersistence=SqlServer")]
     public abstract class IntegrationTestBase : SpecificationBase<IBus>

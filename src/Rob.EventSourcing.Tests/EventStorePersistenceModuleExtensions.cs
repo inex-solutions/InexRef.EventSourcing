@@ -32,9 +32,6 @@ namespace Rob.EventSourcing.Tests
                 case "InMemory":
                     containerBuilder.RegisterModule<EventSourcingInMemoryInfrastructureModule>();
                     break;
-                case "FileSystem":
-                    containerBuilder.RegisterModule<EventSourcingFileSystemInfrastructureModule>();
-                    break;
                 case "SqlServer":
                     containerBuilder.RegisterModule<EventSourcingSqlServerInfrastructureModule>();
                     break;

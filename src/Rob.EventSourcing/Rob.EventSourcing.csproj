@@ -63,6 +63,7 @@
     <Compile Include="NaturalKey\INaturalKeyDrivenAggregateRepository.cs" />
     <Compile Include="NaturalKey\INaturalKeyToAggregateIdMap.cs" />
     <Compile Include="NaturalKey\InMemoryNaturalKeyToAggregateIdMap.cs" />
+    <Compile Include="NaturalKey\SqlServerNaturalKeyToAggregateIdMap.cs" />
     <Compile Include="Persistence\AggregateNotFoundException.cs" />
     <Compile Include="Persistence\AggregateRepository.cs" />
     <Compile Include="Persistence\EventStoreConcurrencyException.cs" />

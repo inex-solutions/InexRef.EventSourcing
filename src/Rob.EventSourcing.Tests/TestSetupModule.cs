@@ -19,10 +19,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-namespace Rob.EventSourcing.Sql.Persistence
+using Autofac;
+using Rob.EventSourcing.Sql.Persistence;
+
+namespace Rob.EventSourcing.Tests
 {
-    public class SqlServerPersistenceConfiguration
+    public class TestSetupModule : Module
     {
-        public string ConnectionString { get; set; }
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<ConfigFileSqlServerPersistenceConfiguration>().As<SqlServerPersistenceConfiguration>();
+        }
     }
 }

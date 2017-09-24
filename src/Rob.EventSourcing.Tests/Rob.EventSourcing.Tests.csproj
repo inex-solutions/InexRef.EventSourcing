@@ -41,6 +41,7 @@
       <HintPath>..\packages\Shouldly.2.8.3\lib\net451\Shouldly.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
@@ -60,6 +61,7 @@
     <Compile Include="AggregateTests\when_I_reset_an_account_containing_one_pound.cs" />
     <Compile Include="AmountAddedEvent.cs" />
     <Compile Include="BalanceResetEvent.cs" />
+    <Compile Include="ConfigFileSqlServerPersistenceConfiguration.cs" />
     <Compile Include="IntegrationTests\HandlerModule.cs" />
     <Compile Include="IntegrationTests\BalanceEntry.cs" />
     <Compile Include="IntegrationTests\BalanceReadModel.cs" />
@@ -87,8 +89,10 @@
     <Compile Include="SpecificationTests\SpecificationException.cs" />
     <Compile Include="SpecificationTests\ThenAttribute.cs" />
     <Compile Include="TestSetupException.cs" />
+    <Compile Include="TestSetupModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

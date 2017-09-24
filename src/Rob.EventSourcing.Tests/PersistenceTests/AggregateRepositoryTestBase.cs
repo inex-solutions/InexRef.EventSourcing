@@ -55,6 +55,7 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
             containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
+            containerBuilder.RegisterModule<TestSetupModule>();
 
             var container = containerBuilder.Build();
 

@@ -34,11 +34,6 @@ namespace Rob.EventSourcing.Sql
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<InMemoryBus>().As<IBus>().As<IEventBus>().As<ICommandBus>().SingleInstance();
-            var sqlServerPersistenceConfiguration = new SqlServerPersistenceConfiguration
-            {
-                ConnectionString = "Server=localhost;Database=Rob.EventStore;Trusted_Connection=True"
-            };
-            builder.RegisterInstance(sqlServerPersistenceConfiguration);
             builder.RegisterGeneric(typeof(SqlEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
             builder.RegisterGeneric(typeof(SqlServerNaturalKeyToAggregateIdMap<,,>)).As(typeof(INaturalKeyToAggregateIdMap<,,>)).SingleInstance();
         }

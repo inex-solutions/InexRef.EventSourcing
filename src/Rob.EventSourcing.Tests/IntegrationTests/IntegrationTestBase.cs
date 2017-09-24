@@ -59,6 +59,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
             containerBuilder.RegisterModule<HandlerModule>();
             containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
+            containerBuilder.RegisterModule<TestSetupModule>();
 
             var container = containerBuilder.Build();
             Subject = container.Resolve<IBus>();

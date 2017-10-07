@@ -24,18 +24,18 @@ using Rob.EventSourcing.Messages;
 
 namespace Rob.EventSourcing.Tests
 {
-    public class AccountIdSetEvent : Event<Guid>
+    public class AccountInitialisedEvent : Event<Guid>
     {
         public string AccountId { get; }
 
-        public AccountIdSetEvent(Guid id, string accountId) : base(id)
+        public AccountInitialisedEvent(Guid id, string accountId) : base(id)
         {
             AccountId = accountId;
         }
 
         public override string ToString()
         {
-            return $"AccountIdSetEvent: Id={Id}, AccountId={AccountId}, Version={Version}";
+            return $"AccountInitialisedEvent: Id={Id}, AccountId={AccountId}, Version={Version}";
         }
     }
 }

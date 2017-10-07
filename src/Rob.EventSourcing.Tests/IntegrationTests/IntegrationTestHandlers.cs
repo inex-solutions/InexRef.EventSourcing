@@ -40,7 +40,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
             {
                 var item = _naturalKeyDrivenRepository.GetOrCreateNewByNaturalKey(
                     naturalKey: command.Id,
-                    onCreateNew: newItem => newItem.SetAccountNumber(command.Id));
+                    onCreateNew: newItem => newItem.InitialiseAccount(newItem.Id, command.Id));
                 item.AddAmount(command.Amount);
                 _naturalKeyDrivenRepository.Save(item);
             }
@@ -57,7 +57,7 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
             {
                 var item = _naturalKeyDrivenRepository.GetOrCreateNewByNaturalKey(
                     naturalKey: command.Id,
-                    onCreateNew: newItem => newItem.SetAccountNumber(command.Id));
+                    onCreateNew: newItem => newItem.InitialiseAccount(newItem.Id, command.Id));
                 item.ResetBalance();
                 _naturalKeyDrivenRepository.Save(item);
             }

@@ -26,13 +26,15 @@ namespace Rob.EventSourcing.Tests
 {
     public class AccountAggregateRoot : AggregateRoot<Guid>
     {
-        public AccountAggregateRoot()
+        private readonly ICalculator _calculator;
+
+        public AccountAggregateRoot() : this(new Calculator())
         {
         }
 
-        public AccountAggregateRoot(Guid id)
+        public AccountAggregateRoot(ICalculator calculator)
         {
-            Id = id;
+            _calculator = calculator;
         }
 
         public string AccountId { get; private set; }
@@ -41,9 +43,9 @@ namespace Rob.EventSourcing.Tests
 
         public decimal Balance { get; private set; }
 
-        public void SetAccountNumber(string accountId)
+        public void InitialiseAccount(Guid id, string accountId)
         {
-            Apply(new AccountIdSetEvent(Id, accountId));
+            Apply(new AccountInitialisedEvent(id, accountId));
         }
 
         public void AddAmount(decimal amount)
@@ -56,14 +58,15 @@ namespace Rob.EventSourcing.Tests
             Apply(new BalanceResetEvent(Id));
         }
 
-        public void HandleEvent(AccountIdSetEvent @event, bool isNew)
+        public void HandleEvent(AccountInitialisedEvent @event, bool isNew)
         {
+            Id = @event.Id;
             AccountId = @event.AccountId;
         }
 
         public void HandleEvent(AmountAddedEvent @event, bool isNew)
         {
-            Balance += @event.Amount;
+            Balance = _calculator.Add(Balance, @event.Amount);
             PublishEvent(new BalanceUpdatedEvent(Id, AccountId, Balance), isNew);
         }
 

@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountAggregateRoot.cs" />
-    <Compile Include="AccountIdSetEvent.cs" />
+    <Compile Include="AccountInitialisedEvent.cs" />
     <Compile Include="AddAmountCommand.cs" />
     <Compile Include="AggregateTests\AggregateRootTestBase.cs" />
     <Compile Include="AggregateTests\when_I_add_an_one_pound_to_an_empty_account.cs" />
@@ -61,7 +61,9 @@
     <Compile Include="AggregateTests\when_I_reset_an_account_containing_one_pound.cs" />
     <Compile Include="AmountAddedEvent.cs" />
     <Compile Include="BalanceResetEvent.cs" />
+    <Compile Include="Calculator.cs" />
     <Compile Include="ConfigFileSqlServerPersistenceConfiguration.cs" />
+    <Compile Include="ICalculator.cs" />
     <Compile Include="IntegrationTests\HandlerModule.cs" />
     <Compile Include="IntegrationTests\BalanceEntry.cs" />
     <Compile Include="IntegrationTests\BalanceReadModel.cs" />

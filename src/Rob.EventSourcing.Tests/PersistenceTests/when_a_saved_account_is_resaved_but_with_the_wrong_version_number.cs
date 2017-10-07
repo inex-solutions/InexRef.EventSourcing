@@ -31,7 +31,8 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 
         protected override void Given()
         {
-            ReloadedAccountAggregateRoot = new NonDisposingAccountAggregateRoot(AggregateId);
+            ReloadedAccountAggregateRoot = new NonDisposingAccountAggregateRoot();
+            ReloadedAccountAggregateRoot.InitialiseAccount(AggregateId, "account-id");
             ReloadedAccountAggregateRoot.AddAmount(2.00M);
 
             // intermediate save should cause a concurrency error when we save below

@@ -26,7 +26,7 @@ using Rob.EventSourcing.Contracts.Persistence;
 namespace Rob.EventSourcing.NaturalKey
 {
     public class NaturalKeyDrivenAggregateRepository<TAggregate, TInternalId, TNaturalKey> : INaturalKeyDrivenAggregateRepository<TAggregate, TInternalId, TNaturalKey>
-        where TAggregate : IAggregateRoot<TInternalId>, IAggregateRootInternal<TInternalId>, new()
+        where TAggregate : IAggregateRoot<TInternalId>, IAggregateRootInternal<TInternalId>
         where TInternalId : IEquatable<TInternalId>, IComparable<TInternalId>
         where TNaturalKey : IEquatable<TNaturalKey>, IComparable<TNaturalKey>
     {

@@ -28,10 +28,6 @@ namespace Rob.EventSourcing.Tests
     {
         private readonly ICalculator _calculator;
 
-        public AccountAggregateRoot() : this(new Calculator())
-        {
-        }
-
         public AccountAggregateRoot(ICalculator calculator)
         {
             _calculator = calculator;

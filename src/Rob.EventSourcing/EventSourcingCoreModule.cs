@@ -31,6 +31,7 @@ namespace Rob.EventSourcing
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<AggregateRootFactory>().As<IAggregateRootFactory>();
             builder.RegisterType<GuidAggregateIdCreator>().As<IAggregateIdCreator<Guid>>();
             builder.RegisterGeneric(typeof(AggregateRepository<,>)).As(typeof(IAggregateRepository<,>));
             builder.RegisterGeneric(typeof(NaturalKeyDrivenAggregateRepository<,,>)).As(typeof(INaturalKeyDrivenAggregateRepository<,,>));

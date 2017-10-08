@@ -61,13 +61,16 @@ namespace Rob.EventSourcing.Tests.IntegrationTests
             containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
             containerBuilder.RegisterModule<TestSetupModule>();
 
+            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
+            containerBuilder.RegisterType<AccountAggregateRoot>();
+
             var container = containerBuilder.Build();
+
             Subject = container.Resolve<IBus>();
             Repository = container.Resolve<INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string>>();
+            BalanceReadModel = container.Resolve<BalanceReadModel>();
 
             AccountId = IdGenerator.CreateAggregateId();
-
-            BalanceReadModel = container.Resolve<BalanceReadModel>();
         }
 
         protected override void Cleanup()

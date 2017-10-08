@@ -19,17 +19,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using Autofac;
 using Rob.EventSourcing.Tests.SpecificationTests;
 
 namespace Rob.EventSourcing.Tests.AggregateTests
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase where TAggregateRoot : new() 
+    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
     {
         protected TAggregateRoot Subject { get; set; }
 
         protected override void SetUp()
         {
-            Subject = new TAggregateRoot();
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+
+            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
+            containerBuilder.RegisterType<AccountAggregateRoot>();
+
+            var container = containerBuilder.Build();
+            var factory = container.Resolve<IAggregateRootFactory>();
+            Subject = factory.Create<TAggregateRoot>();
         }
     }
 }

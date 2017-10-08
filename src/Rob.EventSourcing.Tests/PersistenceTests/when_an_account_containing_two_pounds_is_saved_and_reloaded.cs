@@ -30,7 +30,7 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 
         protected override void Given()
         {
-            var aggregate = new AccountAggregateRoot();
+            var aggregate = AggregateRootFactory.Create<AccountAggregateRoot>();
             aggregate.InitialiseAccount(AggregateId, "account-id");
             aggregate.AddAmount(2.00M);
             Subject.Save(aggregate);

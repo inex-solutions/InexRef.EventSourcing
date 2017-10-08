@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017 INEX Solutions Ltd
@@ -19,18 +19,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-namespace Rob.EventSourcing.Tests.PersistenceTests
+using Autofac;
+
+namespace Rob.EventSourcing
 {
-    public class NonDisposingAccountAggregateRoot : AccountAggregateRoot
+    public class AggregateRootFactory : IAggregateRootFactory
     {
-        public NonDisposingAccountAggregateRoot(ICalculator calculator) : base(calculator)
+        private readonly IComponentContext _componentContext;
+
+        public AggregateRootFactory(IComponentContext componentContext)
         {
+            _componentContext = componentContext;
         }
 
-        protected override void Dispose(bool disposing)
+        public TAggregateRoot Create<TAggregateRoot>()
         {
-            // override the default dispose behaviour (which is to render the aggregate unusable on saving), so that 
-            // it can be saved multiple times in order to test concurrency handling
+            return _componentContext.Resolve<TAggregateRoot>();
         }
     }
 }

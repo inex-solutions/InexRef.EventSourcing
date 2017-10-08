@@ -31,14 +31,19 @@ using Rob.EventSourcing.Messages;
 namespace Rob.EventSourcing.Persistence
 {
     public class AggregateRepository<TAggregate, TId> : IAggregateRepository<TAggregate, TId>
-        where TAggregate : IAggregateRoot<TId>, IAggregateRootInternal<TId>, new()
+        where TAggregate : IAggregateRoot<TId>, IAggregateRootInternal<TId>
         where TId : IEquatable<TId>, IComparable<TId>
     {
+        private readonly IAggregateRootFactory _aggregateRootFactory;
         private readonly IEventStore<TId> _eventStore;
         private readonly IBus _bus;
 
-        public AggregateRepository(IEventStore<TId> eventStore, IBus bus)
+        public AggregateRepository(
+            IAggregateRootFactory aggregateRootFactory,
+            IEventStore<TId> eventStore, 
+            IBus bus)
         {
+            _aggregateRootFactory = aggregateRootFactory;
             _eventStore = eventStore;
             _bus = bus;
         }
@@ -74,7 +79,7 @@ namespace Rob.EventSourcing.Persistence
 
         public TAggregate Get(TId id)
         {
-            IAggregateRootInternal<TId> aggregate = new TAggregate();
+            IAggregateRootInternal<TId> aggregate = _aggregateRootFactory.Create<TAggregate>();
             var events = _eventStore.LoadEvents(id, typeof(TAggregate), throwIfNotFound: true).ToList();
             aggregate.Load(id, events);
             return (TAggregate)aggregate;
@@ -82,7 +87,7 @@ namespace Rob.EventSourcing.Persistence
 
         public TAggregate GetOrCreateNew(TId id, Action<TAggregate> onCreateNew)
         {
-            var aggregate = new TAggregate();
+            var aggregate = _aggregateRootFactory.Create<TAggregate>();
             IList<IEvent<TId>> events = _eventStore.LoadEvents(id, typeof(TAggregate), throwIfNotFound: false).ToList();
 
             aggregate.Load(id, events);

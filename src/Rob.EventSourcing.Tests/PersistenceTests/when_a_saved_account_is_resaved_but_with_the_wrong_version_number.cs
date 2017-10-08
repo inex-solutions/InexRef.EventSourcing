@@ -31,7 +31,7 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 
         protected override void Given()
         {
-            ReloadedAccountAggregateRoot = new NonDisposingAccountAggregateRoot();
+            ReloadedAccountAggregateRoot = AggregateRootFactory.Create<NonDisposingAccountAggregateRoot>();
             ReloadedAccountAggregateRoot.InitialiseAccount(AggregateId, "account-id");
             ReloadedAccountAggregateRoot.AddAmount(2.00M);
 

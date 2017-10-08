@@ -43,6 +43,8 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
 
         protected Exception CaughtException { get; set; }
 
+        protected IAggregateRootFactory AggregateRootFactory { get; private set; }
+
         protected AggregateRepositoryTestBase(string testFixtureOptions)
         {
             _testFixtureOptions = testFixtureOptions
@@ -57,10 +59,14 @@ namespace Rob.EventSourcing.Tests.PersistenceTests
             containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
             containerBuilder.RegisterModule<TestSetupModule>();
 
+            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
+            containerBuilder.RegisterType<AccountAggregateRoot>();
+            containerBuilder.RegisterType<NonDisposingAccountAggregateRoot>();
+
             var container = containerBuilder.Build();
 
             Subject = container.Resolve<IAggregateRepository<AccountAggregateRoot, Guid>>();
-
+            AggregateRootFactory = container.Resolve<IAggregateRootFactory>();
             AggregateId = CreateAggregateId();
         }
 

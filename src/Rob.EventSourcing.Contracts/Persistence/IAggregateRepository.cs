@@ -24,7 +24,7 @@ using System;
 namespace Rob.EventSourcing.Contracts.Persistence
 {
     public interface IAggregateRepository<TAggregate, in TId> 
-        where TAggregate : IAggregateRoot<TId>, new() 
+        where TAggregate : IAggregateRoot<TId>
         where TId : IEquatable<TId>, IComparable<TId>
     {
         void Save(TAggregate aggregate);

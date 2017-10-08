@@ -48,11 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateRoot.cs" />
+    <Compile Include="AggregateRootFactory.cs" />
     <Compile Include="Bus\HandlerNotFoundException.cs" />
     <Compile Include="Bus\HandlerRegistrationException.cs" />
     <Compile Include="Bus\InMemoryBus.cs" />
     <Compile Include="EventSourcingCoreModule.cs" />
     <Compile Include="EventSourcingInMemoryInfrastructureModule.cs" />
+    <Compile Include="IAggregateRootFactory.cs" />
     <Compile Include="IAggregateRootInternal.cs" />
     <Compile Include="Messages\Command.cs" />
     <Compile Include="Messages\Event.cs" />

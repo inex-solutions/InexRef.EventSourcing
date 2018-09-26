@@ -71,6 +71,6 @@
     <Build Include="dbo\Tables\NaturalKeyToAggregateIdMap-Account.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Rob.EventSourcing.Tests.Db.LOCAL.publish.xml" />
+    <None Include="Rob.EventSourcing.Tests.Db.LOCAL.SA.publish.xml" />
   </ItemGroup>
 </Project>

@@ -21,11 +21,11 @@
 
 using System;
 
-namespace InexRef.EventSourcing.Bus
+namespace InexRef.EventSourcing.Contracts.Bus
 {
-    public class HandlerRegistrationException : Exception
+    public class HandlerNotFoundException : Exception
     {
-        public HandlerRegistrationException(string message) : base(message)
+        public HandlerNotFoundException(string message) : base (message)
         {
         }
     }

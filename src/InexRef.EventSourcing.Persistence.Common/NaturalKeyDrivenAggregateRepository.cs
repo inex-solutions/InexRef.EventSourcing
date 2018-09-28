@@ -23,7 +23,7 @@ using System;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Persistence;
 
-namespace InexRef.EventSourcing.NaturalKey
+namespace InexRef.EventSourcing.Persistence.Common
 {
     public class NaturalKeyDrivenAggregateRepository<TAggregate, TInternalId, TNaturalKey> : INaturalKeyDrivenAggregateRepository<TAggregate, TInternalId, TNaturalKey>
         where TAggregate : IAggregateRoot<TInternalId>, IAggregateRootInternal<TInternalId>

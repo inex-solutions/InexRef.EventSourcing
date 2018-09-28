@@ -20,7 +20,7 @@
 #endregion
 
 using System;
-using InexRef.EventSourcing.Messages;
+using InexRef.EventSourcing.Contracts.Messages;
 
 namespace InexRef.EventSourcing.Tests
 {

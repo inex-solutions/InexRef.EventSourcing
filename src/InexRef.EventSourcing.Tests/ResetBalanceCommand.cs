@@ -19,14 +19,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using InexRef.EventSourcing.Messages;
+using InexRef.EventSourcing.Contracts.Messages;
 
 namespace InexRef.EventSourcing.Tests
 {
-    public class ResetBalanceCommand : Command<string>
+    public class ResetBalanceCommand : ICommand<string>
     {
-        public ResetBalanceCommand(string id) : base(id)
+        public string Id { get; }
+
+        public ResetBalanceCommand(string id)
         {
+            Id = id;
         }
 
         public override string ToString()

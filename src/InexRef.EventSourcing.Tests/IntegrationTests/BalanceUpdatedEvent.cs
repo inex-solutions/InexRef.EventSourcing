@@ -20,7 +20,7 @@
 #endregion
 
 using System;
-using InexRef.EventSourcing.Messages;
+using InexRef.EventSourcing.Contracts.Messages;
 
 namespace InexRef.EventSourcing.Tests.IntegrationTests
 {
@@ -39,7 +39,6 @@ namespace InexRef.EventSourcing.Tests.IntegrationTests
         public override string ToString()
         {
             return $"BalanceUpdatedEvent: AccountId={AccountId} Balance={Balance}, Version={Version} (AggregateId={Id})";
-
         }
     }
 }

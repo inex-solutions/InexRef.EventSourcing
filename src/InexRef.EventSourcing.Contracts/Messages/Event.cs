@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -20,17 +20,23 @@
 #endregion
 
 using System;
-using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Messages
+namespace InexRef.EventSourcing.Contracts.Messages
 {
-    public abstract class Command<TId> : ICommand<TId> where TId : IEquatable<TId>, IComparable<TId>
+    public abstract class Event<TId> : IEvent<TId>, IEventInternal where TId : IEquatable<TId>, IComparable<TId>
     {
-        protected Command(TId id)
+        public TId Id { get; }
+
+        public int Version { get; set; }
+
+        protected Event(TId id)
         {
             Id = id;
         }
 
-        public TId Id { get; }
+        void IEventInternal.SetVersion(int version)
+        {
+            Version = version;
+        }
     }
 }

@@ -19,16 +19,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using InexRef.EventSourcing.Messages;
+using InexRef.EventSourcing.Contracts.Messages;
 
 namespace InexRef.EventSourcing.Tests
 {
-    public class AddAmountCommand : Command<string>
+    public class AddAmountCommand : ICommand<string>
     {
+        public string Id { get; }
+
         public decimal Amount { get; }
 
-        public AddAmountCommand(string id, decimal amount) : base(id)
+        public AddAmountCommand(string id, decimal amount)
         {
+            Id = id;
             Amount = amount;
         }
 

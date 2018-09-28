@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Messages;
 using InexRef.EventSourcing.Utils;
 
 namespace InexRef.EventSourcing
@@ -40,7 +39,7 @@ namespace InexRef.EventSourcing
 
         public abstract string Name { get; }
 
-        protected void PublishEvent(Event<TId> @event, bool isNew)
+        protected void PublishEvent(IEvent<TId> @event, bool isNew)
         {
             ThrowIfDisposed();
 

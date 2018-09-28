@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing", "In
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "InexRef.EventSourcing.Tests.Db", "InexRef.EventSourcing.Tests.Db\InexRef.EventSourcing.Tests.Db.sqlproj", "{BF592A7E-A5B9-4976-B71B-A9CAD1840C0A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Persistence.InMemory", "InexRef.EventSourcing.Persistence.InMemory\InexRef.EventSourcing.Persistence.InMemory.csproj", "{5CA81487-29DF-451D-B58E-4CD7B2CC4FBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{BF592A7E-A5B9-4976-B71B-A9CAD1840C0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF592A7E-A5B9-4976-B71B-A9CAD1840C0A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BF592A7E-A5B9-4976-B71B-A9CAD1840C0A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{5CA81487-29DF-451D-B58E-4CD7B2CC4FBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CA81487-29DF-451D-B58E-4CD7B2CC4FBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CA81487-29DF-451D-B58E-4CD7B2CC4FBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CA81487-29DF-451D-B58E-4CD7B2CC4FBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

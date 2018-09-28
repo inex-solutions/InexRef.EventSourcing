@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -18,28 +18,14 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
-
-using System.Collections.Concurrent;
-using InexRef.EventSourcing.Contracts.Bus;
-
-namespace InexRef.EventSourcing.Tests.IntegrationTests
+namespace InexRef.EventSourcing.Contracts.Persistence
 {
-    public class BalanceReadModel : IHandle<BalanceUpdatedEvent>
+    public interface INaturalKeyToAggregateIdMap<in TNaturalKey, out TInternalId, TAggregate>
     {
-        private readonly ConcurrentDictionary<string, BalanceEntry> _balances = new ConcurrentDictionary<string, BalanceEntry>();
+        TInternalId this[TNaturalKey naturalKey] { get; }
 
-        public void Handle(BalanceUpdatedEvent @event)
-        {
-            _balances.AddOrUpdate(
-                key: @event.AccountId,
-                addValue: new BalanceEntry { Version = @event.Version, Balance = @event.Balance },
-                updateValueFactory: (id, entry) => @event.Version < entry.Version
-                    ? entry
-                    : new BalanceEntry { Version = @event.Version, Balance = @event.Balance });
-        }
+        TInternalId GetOrCreateNew(TNaturalKey naturalKey);
 
-        public decimal this[string id] => _balances[id].Balance;
-
-        public int GetVersion(string id) => _balances[id].Version;
+        void Delete(TNaturalKey naturalKey);
     }
 }

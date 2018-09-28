@@ -1,7 +1,7 @@
 #region Copyright & License
 // The MIT License (MIT)
 // 
-// Copyright 2017 INEX Solutions Ltd
+// Copyright 2017-2018 INEX Solutions Ltd
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 // and associated documentation files (the "Software"), to deal in the Software without
@@ -27,8 +27,8 @@ using System.IO;
 using System.Text;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Contracts.Persistence;
+using InexRef.EventSourcing.Persistence.Common;
 using InexRef.EventSourcing.Persistence.SqlServer.Utils;
-using InexRef.EventSourcing.Utils;
 using Newtonsoft.Json;
 
 namespace InexRef.EventSourcing.Persistence.SqlServer.Persistence

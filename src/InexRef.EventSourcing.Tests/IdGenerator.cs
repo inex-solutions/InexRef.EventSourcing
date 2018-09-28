@@ -1,7 +1,7 @@
 #region Copyright & License
 // The MIT License (MIT)
 // 
-// Copyright 2017 INEX Solutions Ltd
+// Copyright 2017-2018 INEX Solutions Ltd
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 // and associated documentation files (the "Software"), to deal in the Software without
@@ -20,7 +20,6 @@
 #endregion
 
 using System;
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
 
@@ -44,30 +43,5 @@ namespace InexRef.EventSourcing.Tests
             _generatedIds.Add(id);
             return id;
         }
-
-     //   public string this[int index] => _generatedIds[index];
-    }
-
-    public class ConcurrentHashSet<T>
-    {
-        private readonly ConcurrentDictionary<T, bool> _dictionary;
-
-        public ConcurrentHashSet()
-        {
-            _dictionary = new ConcurrentDictionary<T, bool>();
-        }
-
-        public void Add(T id)
-        {
-            if (!_dictionary.TryAdd(id, false))
-            {
-                throw new InvalidOperationException($"Item already exists: {id}");
-            }
-        }
-
-        //public string this[int index]
-        //{
-        //    get { return _dictionary[index]; }
-        //}
     }
 }

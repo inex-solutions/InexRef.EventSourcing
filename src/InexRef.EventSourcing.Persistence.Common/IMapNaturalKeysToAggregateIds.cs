@@ -1,7 +1,7 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
-// Copyright 2017 INEX Solutions Ltd
+// Copyright 2017-2018 INEX Solutions Ltd
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 // and associated documentation files (the "Software"), to deal in the Software without
@@ -19,22 +19,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Bus;
-using InexRef.EventSourcing.Contracts.Bus;
-using InexRef.EventSourcing.Contracts.Persistence;
-using InexRef.EventSourcing.NaturalKey;
-using InexRef.EventSourcing.Persistence;
+using System;
 
-namespace InexRef.EventSourcing
+namespace InexRef.EventSourcing.Persistence.Common
 {
-    public class EventSourcingInMemoryInfrastructureModule : Module
+    public interface IMapNaturalKeysToAggregateIds<in TNaturalKey, out TInternalId> where TInternalId : IEquatable<TInternalId>, IComparable<TInternalId>
     {
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<InMemoryBus>().As<IBus>().As<IEventBus>().As<ICommandBus>().SingleInstance();
-            builder.RegisterGeneric(typeof(InMemoryEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
-            builder.RegisterGeneric(typeof(InMemoryNaturalKeyToAggregateIdMap<,,>)).As(typeof(INaturalKeyToAggregateIdMap<,,>)).SingleInstance();
-        }
+        TInternalId GetOrCreateNew(TNaturalKey naturalKey);
+
+        TInternalId this[TNaturalKey id] { get; }
     }
 }

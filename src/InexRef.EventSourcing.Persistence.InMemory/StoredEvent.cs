@@ -1,7 +1,7 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
-// Copyright 2017 INEX Solutions Ltd
+// Copyright 2017-2018 INEX Solutions Ltd
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 // and associated documentation files (the "Software"), to deal in the Software without
@@ -20,19 +20,23 @@
 #endregion
 
 using System;
+using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Persistence
+namespace InexRef.EventSourcing.Persistence.InMemory
 {
-    public class EventStoreConcurrencyException : Exception
+    internal class StoredEvent<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
-        public EventStoreConcurrencyException()
-        {
-            
-        }
+        public int Version { get; }
 
-        public EventStoreConcurrencyException(string message) : base(message)
+        public TId AggregateId { get; }
+
+        public IEvent<TId> EventData { get; }
+
+        public StoredEvent(TId aggregateId, int version, IEvent<TId> eventData)
         {
-            
+            AggregateId = aggregateId;
+            Version = version;
+            EventData = eventData;
         }
     }
 }

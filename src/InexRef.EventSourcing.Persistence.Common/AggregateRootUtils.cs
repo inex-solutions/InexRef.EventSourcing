@@ -1,7 +1,7 @@
 ﻿#region Copyright & License
 // The MIT License (MIT)
 // 
-// Copyright 2017 INEX Solutions Ltd
+// Copyright 2017-2018 INEX Solutions Ltd
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 // and associated documentation files (the "Software"), to deal in the Software without
@@ -20,18 +20,19 @@
 #endregion
 
 using System;
-using InexRef.EventSourcing.Contracts;
 
-namespace InexRef.EventSourcing.NaturalKey
+namespace InexRef.EventSourcing.Persistence.Common
 {
-    public interface INaturalKeyDrivenAggregateRepository<TAggregate, TInternalId, TNaturalKey>
-        where TAggregate : IAggregateRoot<TInternalId>, IAggregateRootInternal<TInternalId>
-        where TInternalId : IEquatable<TInternalId>, IComparable<TInternalId>
-        where TNaturalKey : IEquatable<TNaturalKey>, IComparable<TNaturalKey>
+    public class AggregateRootUtils
     {
-        void DeleteByNaturalKey(TNaturalKey key);
-        TAggregate GetByNaturalKey(TNaturalKey id);
-        TAggregate GetOrCreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew);
-        void Save(TAggregate aggregate);
+        public static string GetAggregateRootName<TAggregateRoot>()
+        {
+            return GetAggregateRootName(typeof(TAggregateRoot));
+        }
+
+        public static string GetAggregateRootName(Type aggregateRootType)
+        {
+            return aggregateRootType.Name.Replace("AggregateRoot", "");
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,27 +19,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Collections.Concurrent;
-using InexRef.EventSourcing.Contracts.Bus;
+using Autofac;
+using InexRef.EventSourcing.Contracts.Persistence;
+using InexRef.EventSourcing.Persistence.SqlServer.NaturalKey;
+using InexRef.EventSourcing.Persistence.SqlServer.Persistence;
 
-namespace InexRef.EventSourcing.Tests.IntegrationTests
+namespace InexRef.EventSourcing.Persistence.SqlServer
 {
-    public class BalanceReadModel : IHandle<BalanceUpdatedEvent>
+    public class EventSourcingSqlServerPersistenceModule : Module
     {
-        private readonly ConcurrentDictionary<string, BalanceEntry> _balances = new ConcurrentDictionary<string, BalanceEntry>();
-
-        public void Handle(BalanceUpdatedEvent @event)
+        protected override void Load(ContainerBuilder builder)
         {
-            _balances.AddOrUpdate(
-                key: @event.AccountId,
-                addValue: new BalanceEntry { Version = @event.Version, Balance = @event.Balance },
-                updateValueFactory: (id, entry) => @event.Version < entry.Version
-                    ? entry
-                    : new BalanceEntry { Version = @event.Version, Balance = @event.Balance });
+            builder.RegisterGeneric(typeof(SqlEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
+            builder.RegisterGeneric(typeof(SqlServerNaturalKeyToAggregateIdMap<,,>)).As(typeof(INaturalKeyToAggregateIdMap<,,>)).SingleInstance();
         }
-
-        public decimal this[string id] => _balances[id].Balance;
-
-        public int GetVersion(string id) => _balances[id].Version;
     }
 }

@@ -1,7 +1,7 @@
 ﻿#region Copyright & License
 // The MIT License (MIT)
 // 
-// Copyright 2017 INEX Solutions Ltd
+// Copyright 2017-2018 INEX Solutions Ltd
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 // and associated documentation files (the "Software"), to deal in the Software without
@@ -20,6 +20,7 @@
 #endregion
 
 using Autofac;
+using InexRef.EventSourcing.Persistence.InMemory;
 using InexRef.EventSourcing.Persistence.SqlServer;
 
 namespace InexRef.EventSourcing.Tests
@@ -31,10 +32,10 @@ namespace InexRef.EventSourcing.Tests
             switch (persistenceProvider)
             {
                 case "InMemory":
-                    containerBuilder.RegisterModule<EventSourcingInMemoryInfrastructureModule>();
+                    containerBuilder.RegisterModule<EventSourcingInMemoryPersistenceModule>();
                     break;
                 case "SqlServer":
-                    containerBuilder.RegisterModule<EventSourcingSqlServerInfrastructureModule>();
+                    containerBuilder.RegisterModule<EventSourcingSqlServerPersistenceModule>();
                     break;
                 default:
                     throw new TestSetupException($"Test setup failed. Persistence provider '{persistenceProvider}' not supported.");

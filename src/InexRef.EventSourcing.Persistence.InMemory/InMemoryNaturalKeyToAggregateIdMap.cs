@@ -1,7 +1,7 @@
 #region Copyright & License
 // The MIT License (MIT)
 // 
-// Copyright 2017 INEX Solutions Ltd
+// Copyright 2017-2018 INEX Solutions Ltd
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 // and associated documentation files (the "Software"), to deal in the Software without
@@ -19,24 +19,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using InexRef.EventSourcing.Contracts.Messages;
+using System.Collections.Concurrent;
+using InexRef.EventSourcing.Contracts.Persistence;
 
-namespace InexRef.EventSourcing.Persistence
+namespace InexRef.EventSourcing.Persistence.InMemory
 {
-    internal class StoredEvent<TId> where TId : IEquatable<TId>, IComparable<TId>
+    public class InMemoryNaturalKeyToAggregateIdMap<TNaturalKey, TInternalId, TAggregate> : INaturalKeyToAggregateIdMap<TNaturalKey, TInternalId, TAggregate>
+
     {
-        public int Version { get; }
+        private readonly IAggregateIdCreator<TInternalId> _aggregateIdCreator;
+        private readonly ConcurrentDictionary<TNaturalKey, TInternalId> _keyMap = new ConcurrentDictionary<TNaturalKey, TInternalId>();
 
-        public TId AggregateId { get; }
+        public TInternalId this[TNaturalKey naturalKey] => _keyMap[naturalKey];
 
-        public IEvent<TId> EventData { get; }
-
-        public StoredEvent(TId aggregateId, int version, IEvent<TId> eventData)
+        public InMemoryNaturalKeyToAggregateIdMap(IAggregateIdCreator<TInternalId> aggregateIdCreator)
         {
-            AggregateId = aggregateId;
-            Version = version;
-            EventData = eventData;
+            _aggregateIdCreator = aggregateIdCreator;
+        }
+
+        public TInternalId GetOrCreateNew(TNaturalKey naturalKey)
+        {
+            return _keyMap.GetOrAdd(key: naturalKey, valueFactory: key => _aggregateIdCreator.Create());
+        }
+
+        public void Delete(TNaturalKey naturalKey)
+        {
+            TInternalId removedItem;
+            _keyMap.TryRemove(naturalKey, out removedItem);
         }
     }
 }

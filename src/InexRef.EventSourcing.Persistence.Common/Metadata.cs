@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,27 +19,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Collections.Concurrent;
-using InexRef.EventSourcing.Contracts.Bus;
+using System;
 
-namespace InexRef.EventSourcing.Tests.IntegrationTests
+namespace InexRef.EventSourcing.Persistence.Common
 {
-    public class BalanceReadModel : IHandle<BalanceUpdatedEvent>
+    public class Metadata<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
-        private readonly ConcurrentDictionary<string, BalanceEntry> _balances = new ConcurrentDictionary<string, BalanceEntry>();
+        public TId Id { get; set; }
 
-        public void Handle(BalanceUpdatedEvent @event)
-        {
-            _balances.AddOrUpdate(
-                key: @event.AccountId,
-                addValue: new BalanceEntry { Version = @event.Version, Balance = @event.Balance },
-                updateValueFactory: (id, entry) => @event.Version < entry.Version
-                    ? entry
-                    : new BalanceEntry { Version = @event.Version, Balance = @event.Balance });
-        }
+        public string AggregateType { get; set; }
 
-        public decimal this[string id] => _balances[id].Balance;
-
-        public int GetVersion(string id) => _balances[id].Version;
+        public int Version { get; set; }
     }
 }

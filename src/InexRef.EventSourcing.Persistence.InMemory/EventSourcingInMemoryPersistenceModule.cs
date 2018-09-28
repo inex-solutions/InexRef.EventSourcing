@@ -1,7 +1,7 @@
 #region Copyright & License
 // The MIT License (MIT)
 // 
-// Copyright 2017 INEX Solutions Ltd
+// Copyright 2017-2018 INEX Solutions Ltd
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 // and associated documentation files (the "Software"), to deal in the Software without
@@ -19,32 +19,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Collections.Concurrent;
+using Autofac;
 
-namespace InexRef.EventSourcing.NaturalKey
+namespace InexRef.EventSourcing.Persistence.InMemory
 {
-    public class InMemoryNaturalKeyToAggregateIdMap<TNaturalKey, TInternalId, TAggregate> : INaturalKeyToAggregateIdMap<TNaturalKey, TInternalId, TAggregate>
-
+    public class EventSourcingInMemoryPersistenceModule : Module
     {
-        private readonly IAggregateIdCreator<TInternalId> _aggregateIdCreator;
-        private readonly ConcurrentDictionary<TNaturalKey, TInternalId> _keyMap = new ConcurrentDictionary<TNaturalKey, TInternalId>();
-
-        public TInternalId this[TNaturalKey naturalKey] => _keyMap[naturalKey];
-
-        public InMemoryNaturalKeyToAggregateIdMap(IAggregateIdCreator<TInternalId> aggregateIdCreator)
+        protected override void Load(ContainerBuilder builder)
         {
-            _aggregateIdCreator = aggregateIdCreator;
-        }
-
-        public TInternalId GetOrCreateNew(TNaturalKey naturalKey)
-        {
-            return _keyMap.GetOrAdd(key: naturalKey, valueFactory: key => _aggregateIdCreator.Create());
-        }
-
-        public void Delete(TNaturalKey naturalKey)
-        {
-            TInternalId removedItem;
-            _keyMap.TryRemove(naturalKey, out removedItem);
+            builder.RegisterModule<InMemoryPersistenceModule>();
         }
     }
 }

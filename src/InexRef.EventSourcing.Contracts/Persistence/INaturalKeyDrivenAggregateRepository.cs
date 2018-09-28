@@ -1,7 +1,7 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
-// Copyright 2017 INEX Solutions Ltd
+// Copyright 2017-2018 INEX Solutions Ltd
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 // and associated documentation files (the "Software"), to deal in the Software without
@@ -19,23 +19,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Bus;
-using InexRef.EventSourcing.Contracts.Bus;
-using InexRef.EventSourcing.Contracts.Persistence;
-using InexRef.EventSourcing.NaturalKey;
-using InexRef.EventSourcing.Persistence.SqlServer.NaturalKey;
-using InexRef.EventSourcing.Persistence.SqlServer.Persistence;
+using System;
 
-namespace InexRef.EventSourcing.Persistence.SqlServer
+namespace InexRef.EventSourcing.Contracts.Persistence
 {
-    public class EventSourcingSqlServerInfrastructureModule : Module
+    public interface INaturalKeyDrivenAggregateRepository<TAggregate, TInternalId, TNaturalKey>
+        where TAggregate : IAggregateRoot<TInternalId>, IAggregateRootInternal<TInternalId>
+        where TInternalId : IEquatable<TInternalId>, IComparable<TInternalId>
+        where TNaturalKey : IEquatable<TNaturalKey>, IComparable<TNaturalKey>
     {
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<InMemoryBus>().As<IBus>().As<IEventBus>().As<ICommandBus>().SingleInstance();
-            builder.RegisterGeneric(typeof(SqlEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
-            builder.RegisterGeneric(typeof(SqlServerNaturalKeyToAggregateIdMap<,,>)).As(typeof(INaturalKeyToAggregateIdMap<,,>)).SingleInstance();
-        }
+        void DeleteByNaturalKey(TNaturalKey key);
+        TAggregate GetByNaturalKey(TNaturalKey id);
+        TAggregate GetOrCreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew);
+        void Save(TAggregate aggregate);
     }
 }

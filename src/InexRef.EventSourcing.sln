@@ -23,17 +23,17 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "InexRef.EventSourcing.Tests
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Account Test Domain", "Account Test Domain", "{082FCFF7-2018-486B-8236-DA8A1D251765}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InexRef.EventSourcing.Tests.Account.Domain", "InexRef.EventSourcing.Tests.Account.Domain\InexRef.EventSourcing.Tests.Account.Domain.csproj", "{FCF0EEFC-1E5A-4596-923F-A5C316AF830F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.Domain", "InexRef.EventSourcing.Tests.Account.Domain\InexRef.EventSourcing.Tests.Account.Domain.csproj", "{FCF0EEFC-1E5A-4596-923F-A5C316AF830F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InexRef.EventSourcing.Tests.Account.Messages", "InexRef.EventSourcing.Tests.Account.Contract.Public\InexRef.EventSourcing.Tests.Account.Messages.csproj", "{A9D8F230-C556-4DC0-9A19-7CFE682E97C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.Messages", "InexRef.EventSourcing.Tests.Account.Contract.Public\InexRef.EventSourcing.Tests.Account.Messages.csproj", "{A9D8F230-C556-4DC0-9A19-7CFE682E97C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InexRef.EventSourcing.Tests.Account.DomainHost", "InexRef.EventSourcing.Tests.Account.DomainHost\InexRef.EventSourcing.Tests.Account.DomainHost.csproj", "{FE4320F4-4AD9-4B9A-B269-8817B05760DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.DomainHost", "InexRef.EventSourcing.Tests.Account.DomainHost\InexRef.EventSourcing.Tests.Account.DomainHost.csproj", "{FE4320F4-4AD9-4B9A-B269-8817B05760DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InexRef.EventSourcing.Tests.Account.ReadModels", "InexRef.EventSourcing.Tests.Account.ReadModels\InexRef.EventSourcing.Tests.Account.ReadModels.csproj", "{4BB29364-48BF-401A-A30F-C652CB87A4C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.ReadModels", "InexRef.EventSourcing.Tests.Account.ReadModels\InexRef.EventSourcing.Tests.Account.ReadModels.csproj", "{4BB29364-48BF-401A-A30F-C652CB87A4C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InexRef.EventSourcing.Tests.Account.DomainHost.Tests", "InexRef.EventSourcing.Tests.Account\InexRef.EventSourcing.Tests.Account.DomainHost.Tests.csproj", "{6457CF1C-3CC7-4202-AAA2-6BC4944C4C54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.DomainHost.Tests", "InexRef.EventSourcing.Tests.Account\InexRef.EventSourcing.Tests.Account.DomainHost.Tests.csproj", "{6457CF1C-3CC7-4202-AAA2-6BC4944C4C54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InexRef.EventSourcing.Tests.Account.Domain.Tests", "InexRef.EventSourcing.Tests.Account.Domain.Tests\InexRef.EventSourcing.Tests.Account.Domain.Tests.csproj", "{A1819AE0-2376-41A2-887C-8F0DEC55928A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.Domain.Tests", "InexRef.EventSourcing.Tests.Account.Domain.Tests\InexRef.EventSourcing.Tests.Account.Domain.Tests.csproj", "{A1819AE0-2376-41A2-887C-8F0DEC55928A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,5 +117,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {838452C3-B710-4762-9037-4C0E0F750D56}
+	EndGlobalSection
+	GlobalSection(NDepend) = preSolution
+		Project = ".\InexRef.EventSourcing.ndproj"
 	EndGlobalSection
 EndGlobal

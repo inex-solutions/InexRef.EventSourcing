@@ -22,7 +22,7 @@
 using Autofac;
 using InexRef.EventSourcing.Contracts;
 
-namespace InexRef.EventSourcing
+namespace InexRef.EventSourcing.Domain
 {
     public class AggregateRootFactory : IAggregateRootFactory
     {

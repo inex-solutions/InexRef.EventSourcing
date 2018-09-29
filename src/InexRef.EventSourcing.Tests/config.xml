@@ -1,5 +1,5 @@
 ﻿<configuration>
   <SqlEventStore>
-    <DbConnectionString>Server=localhost;Database=Rob.EventSourcing.Tests;User Id=sa;Password=EventSourceT3st!</DbConnectionString>
+    <DbConnectionString>Server=localhost;Database=InexRef.EventSourcing.Tests;Trusted_Connection=True;</DbConnectionString>
   </SqlEventStore>
 </configuration>

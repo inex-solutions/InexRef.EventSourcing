@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using InexRef.EventSourcing.Domain;
 using InexRef.EventSourcing.Tests.IntegrationTests;
 
 namespace InexRef.EventSourcing.Tests

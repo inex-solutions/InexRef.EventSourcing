@@ -25,6 +25,7 @@ using InexRef.EventSourcing.Bus;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Persistence;
+using InexRef.EventSourcing.Domain;
 using InexRef.EventSourcing.NaturalKey;
 using InexRef.EventSourcing.Persistence.Common;
 

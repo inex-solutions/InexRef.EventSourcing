@@ -24,8 +24,9 @@ using System.Collections.Generic;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Utils;
+using InexRef.EventSourcing.Utils.Dynamic;
 
-namespace InexRef.EventSourcing
+namespace InexRef.EventSourcing.Domain
 {
     public abstract class AggregateRoot<TId> : IAggregateRoot<TId>, IAggregateRootInternal<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
@@ -55,10 +56,15 @@ namespace InexRef.EventSourcing
             Apply(@event, true);
         }
 
+        private void HandleEvent(IEvent<TId> @event, bool isNew)
+        {
+            this.AsDynamic(OnMissingMember.ThrowException()).HandleEvent(@event, isNew);
+        }
+
         private void Apply(IEvent<TId> @event, bool isNew)
         {
             ThrowIfDisposed();
-            this.AsDynamic().HandleEvent(@event, isNew);
+            HandleEvent(@event, isNew);
 
             if (@event.Version > Version)
             {

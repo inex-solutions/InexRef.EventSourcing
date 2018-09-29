@@ -23,23 +23,25 @@ using System;
 using System.Dynamic;
 using System.Reflection;
 
-namespace InexRef.EventSourcing.Utils
+namespace InexRef.EventSourcing.Utils.Dynamic
 {
     public static class DynamicExtensions
     {
-        public static dynamic AsDynamic(this object obj)
+        public static dynamic AsDynamic(this object obj, OnMissingMember onMissingMember = null)
         {
-            return new DynamicHelper(obj);
+            return new DynamicHelper(obj, onMissingMember);
         }
 
         private class DynamicHelper : DynamicObject
         {
             private readonly object _wrappedObject;
+            private readonly OnMissingMember _onMissingMember;
             private readonly Type _wrappedObjectType;
 
-            public DynamicHelper(object wrappedObject)
+            public DynamicHelper(object wrappedObject, OnMissingMember onMissingMember = null)
             {
                 _wrappedObject = wrappedObject;
+                _onMissingMember = onMissingMember;
                 _wrappedObjectType = wrappedObject.GetType();
             }
 
@@ -57,10 +59,19 @@ namespace InexRef.EventSourcing.Utils
                 }
                 catch (MissingMethodException)
                 {
-                    result = null;
-                    return false;
+                    if (_onMissingMember == null
+                        || _onMissingMember.Exception)
+                    {
+                        result = null;
+                        return false;
+                    }
+
+                    result = _onMissingMember.ReturnValue;
+                    return true;
                 }
             }
         }
+
+        
     }
 }

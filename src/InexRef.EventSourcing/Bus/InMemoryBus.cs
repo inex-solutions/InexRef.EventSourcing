@@ -25,6 +25,7 @@ using Autofac;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Utils;
+using InexRef.EventSourcing.Utils.Dynamic;
 
 namespace InexRef.EventSourcing.Bus
 {
@@ -44,7 +45,7 @@ namespace InexRef.EventSourcing.Bus
             var handlers = (IEnumerable)_componentContext.Resolve(listOfEventHandlerTypes);
             foreach (var handler in handlers)
             {
-                handler.AsDynamic().Handle(@event);
+                handler.AsDynamic(OnMissingMember.Ignore()).Handle(@event);
             }
         }
 
@@ -52,7 +53,7 @@ namespace InexRef.EventSourcing.Bus
         {
             var commandHandlerType = typeof(IHandle<>).MakeGenericType(command.GetType());
             var handler = _componentContext.Resolve(commandHandlerType);
-            handler.AsDynamic().Handle(command);
+            handler.AsDynamic(OnMissingMember.ThrowException()).Handle(command);
         }
     }
 }

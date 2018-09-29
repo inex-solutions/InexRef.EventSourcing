@@ -42,9 +42,11 @@ namespace InexRef.EventSourcing.Tests.IntegrationTests
         public void the_account_balance_on_the_read_model_is_zero() => BalanceReadModel[AccountId].ShouldBe(0.00M);
 
         [Then]
-        public void the_aggregate_is_version_three() => Repository.GetByNaturalKey(AccountId).Version.ShouldBe(3);
+        public void the_reloaded_aggregate_version_is_at_least_3_being_the_previous_version_plus_the_reset_action() 
+            => Repository.GetByNaturalKey(AccountId).Version.ShouldBeGreaterThanOrEqualTo(3);
 
         [Then]
-        public void the_version_on_the_read_model_subscribed_to_external_events_is_three() => BalanceReadModel.GetVersion(AccountId).ShouldBe(3);
+        public void the_version_on_the_read_model_subscribed_to_external_events_is_at_least_3_being_the_previous_version_plus_the_reset_action() 
+            => BalanceReadModel.GetVersion(AccountId).ShouldBeGreaterThanOrEqualTo(3);
     }
 }

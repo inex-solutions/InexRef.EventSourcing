@@ -23,32 +23,21 @@ using System;
 using System.Collections.Generic;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Utils;
 using InexRef.EventSourcing.Utils.Dynamic;
 
 namespace InexRef.EventSourcing.Domain
 {
     public abstract class AggregateRoot<TId> : IAggregateRoot<TId>, IAggregateRootInternal<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
-        private readonly List<IEvent<TId>> _uncommittedEvents = new List<IEvent<TId>>();
-        private readonly List<IEvent<TId>> _eventsToPublish = new List<IEvent<TId>>();
         private bool _isDisposed;
+
+        private readonly List<IEvent<TId>> _uncommittedEvents = new List<IEvent<TId>>();
 
         public TId Id { get; protected set; }
 
         public int Version { get; protected set; }
 
         public abstract string Name { get; }
-
-        protected void PublishEvent(IEvent<TId> @event, bool isNew)
-        {
-            ThrowIfDisposed();
-
-            if (isNew)
-            {
-                _eventsToPublish.Add(@event);
-            }
-        }
 
         protected void Apply(IEvent<TId> @event)
         {
@@ -58,10 +47,11 @@ namespace InexRef.EventSourcing.Domain
 
         private void HandleEvent(IEvent<TId> @event, bool isNew)
         {
-            this.AsDynamic(OnMissingMember.ThrowException()).HandleEvent(@event, isNew);
+            ThrowIfDisposed();
+            this.DynamicallyInvokeMethod(OnMissingMethod.Ignore()).HandleEvent(@event, isNew);
         }
 
-        private void Apply(IEvent<TId> @event, bool isNew)
+        protected void Apply(IEvent<TId> @event, bool isNew)
         {
             ThrowIfDisposed();
             HandleEvent(@event, isNew);
@@ -93,19 +83,12 @@ namespace InexRef.EventSourcing.Domain
             return _uncommittedEvents;
         }
 
-        IEnumerable<IEvent<TId>> IAggregateRootInternal<TId>.GetUnpublishedEvents()
-        {
-            ThrowIfDisposed();
-            return _eventsToPublish;
-        }
-
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
                 _isDisposed = true;
                 _uncommittedEvents.Clear();
-                _eventsToPublish.Clear();
             }
         }
 

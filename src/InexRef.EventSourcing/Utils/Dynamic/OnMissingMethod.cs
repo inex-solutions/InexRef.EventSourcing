@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -18,30 +18,22 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
-
-using InexRef.EventSourcing.Tests.SpecificationTests;
-using Shouldly;
-
-namespace InexRef.EventSourcing.Tests.IntegrationTests
+namespace InexRef.EventSourcing.Utils.Dynamic
 {
-    public class when_an_existing_account_aggregate_containing_four_pounds_is_reloaded : IntegrationTestBase
+    public class OnMissingMethod
     {
-        private AccountAggregateRoot Aggregate { get; set; }
-
-        public when_an_existing_account_aggregate_containing_four_pounds_is_reloaded(string testFixtureOptions) : base(testFixtureOptions) { }
-
-        protected override void Given()
+        private OnMissingMethod(bool throwException, object returnValue)
         {
-            Subject.Send(new AddAmountCommand(AccountId, 2.00M));
-            Subject.Send(new AddAmountCommand(AccountId, 2.00M));
+            Exception = throwException;
+            ReturnValue = returnValue;
         }
 
-        protected override void When() => Aggregate = Repository.GetByNaturalKey(AccountId);
+        public static OnMissingMethod ThrowException() => new OnMissingMethod(true, null);
 
-        [Then]
-        public void the_reloaded_aggregate_has_a_balance_of_four_pounds() => Aggregate.Balance.ShouldBe(4.0m);
+        public static OnMissingMethod Ignore(object returnValue = null) => new OnMissingMethod(false, returnValue);
 
-        [Then]
-        public void the_reloaded_aggregate_version_is_at_least_3_being_the_initial_version_plus_two_actions() => Aggregate.Version.ShouldBeGreaterThanOrEqualTo(3);
+        public bool Exception { get; }
+
+        public object ReturnValue { get; }
     }
 }

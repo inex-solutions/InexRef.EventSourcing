@@ -39,9 +39,11 @@ namespace InexRef.EventSourcing.Tests.IntegrationTests
         public void the_account_balance_on_the_read_model_is_two_pounds() => BalanceReadModel[AccountId].ShouldBe(2.00M);
 
         [Then]
-        public void the_aggregate_is_version_two() => Repository.GetByNaturalKey(AccountId).Version.ShouldBe(2);
+        public void the_aggregate_is_at_least_two_being_the_initial_version_plus_one_add_action() 
+            => Repository.GetByNaturalKey(AccountId).Version.ShouldBeGreaterThanOrEqualTo(2);
 
         [Then]
-        public void the_version_on_the_read_model_is_two() => BalanceReadModel.GetVersion(AccountId).ShouldBe(2);
+        public void the_version_on_the_read_model_is_at_least_two_being_the_initial_version_plus_one_add_action() 
+            => BalanceReadModel.GetVersion(AccountId).ShouldBeGreaterThanOrEqualTo(2);
     }
 }

@@ -30,7 +30,5 @@ namespace InexRef.EventSourcing.Contracts
         void Load(TId id, IEnumerable<IEvent<TId>> history);
 
         IEnumerable<IEvent<TId>> GetUncommittedEvents();
-
-        IEnumerable<IEvent<TId>> GetUnpublishedEvents();
     }
 }

@@ -64,13 +64,13 @@ namespace InexRef.EventSourcing.Tests
         public void HandleEvent(AmountAddedEvent @event, bool isNew)
         {
             Balance = _calculator.Add(Balance, @event.Amount);
-            PublishEvent(new BalanceUpdatedEvent(Id, AccountId, Balance), isNew);
+            Apply(new BalanceUpdatedEvent(Id, AccountId, Balance), isNew);
         }
 
         public void HandleEvent(BalanceResetEvent @event, bool isNew)
         {
             Balance = 0;
-            PublishEvent(new BalanceUpdatedEvent(Id, AccountId, Balance), isNew);
+            Apply(new BalanceUpdatedEvent(Id, AccountId, Balance), isNew);
         }
     }
 }

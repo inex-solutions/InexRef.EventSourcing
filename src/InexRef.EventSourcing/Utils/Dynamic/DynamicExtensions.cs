@@ -27,21 +27,21 @@ namespace InexRef.EventSourcing.Utils.Dynamic
 {
     public static class DynamicExtensions
     {
-        public static dynamic AsDynamic(this object obj, OnMissingMember onMissingMember = null)
+        public static dynamic DynamicallyInvokeMethod(this object obj, OnMissingMethod onMissingMethod = null)
         {
-            return new DynamicHelper(obj, onMissingMember);
+            return new DynamicHelper(obj, onMissingMethod);
         }
 
         private class DynamicHelper : DynamicObject
         {
             private readonly object _wrappedObject;
-            private readonly OnMissingMember _onMissingMember;
+            private readonly OnMissingMethod _onMissingMethod;
             private readonly Type _wrappedObjectType;
 
-            public DynamicHelper(object wrappedObject, OnMissingMember onMissingMember = null)
+            public DynamicHelper(object wrappedObject, OnMissingMethod onMissingMethod = null)
             {
                 _wrappedObject = wrappedObject;
-                _onMissingMember = onMissingMember;
+                _onMissingMethod = onMissingMethod;
                 _wrappedObjectType = wrappedObject.GetType();
             }
 
@@ -59,14 +59,14 @@ namespace InexRef.EventSourcing.Utils.Dynamic
                 }
                 catch (MissingMethodException)
                 {
-                    if (_onMissingMember == null
-                        || _onMissingMember.Exception)
+                    if (_onMissingMethod == null
+                        || _onMissingMethod.Exception)
                     {
                         result = null;
                         return false;
                     }
 
-                    result = _onMissingMember.ReturnValue;
+                    result = _onMissingMethod.ReturnValue;
                     return true;
                 }
             }

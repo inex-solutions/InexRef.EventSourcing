@@ -65,13 +65,6 @@ namespace InexRef.EventSourcing.Persistence.Common
                 _bus.PublishEvent(eventToStore);
             }
 
-            var eventsToPublish = internalAggregate.GetUnpublishedEvents();
-            foreach (IEventInternal @event in eventsToPublish)
-            {
-                @event.SetVersion(version);
-                _bus.PublishEvent((IEvent<TId>)@event);
-            }
-
             _eventStore.SaveEvents(aggregate.Id, typeof(TAggregate), events, version, aggregate.Version);
             internalAggregate.Dispose();
         }

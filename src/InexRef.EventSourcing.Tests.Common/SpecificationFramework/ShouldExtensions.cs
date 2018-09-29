@@ -19,28 +19,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts;
-using InexRef.EventSourcing.Tests.Common.AccountDomain;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace InexRef.EventSourcing.Tests.AggregateTests
+namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
+    public static class ShouldExtensions
     {
-        protected TAggregateRoot Subject { get; set; }
-
-        protected override void SetUp()
+        public static void ShouldHaveACountOf<T>(this IEnumerable<T> items, int expectedCount)
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
-
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
-
-            var container = containerBuilder.Build();
-            var factory = container.Resolve<IAggregateRootFactory>();
-            Subject = factory.Create<TAggregateRoot>();
+            var itemList = items.ToList();
+            if (itemList.Count != expectedCount)
+            {
+                throw new SpecificationException(
+                    $"Expected {expectedCount} item(s) in the collection, but was {itemList.Count}:\n " +
+                    string.Join("\n ", itemList));
+            }
         }
     }
 }

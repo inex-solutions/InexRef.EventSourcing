@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,28 +19,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts;
-using InexRef.EventSourcing.Tests.Common.AccountDomain;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using System;
+using InexRef.EventSourcing.Domain;
 
-namespace InexRef.EventSourcing.Tests.AggregateTests
+namespace InexRef.EventSourcing.Persistence.Tests
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
+    public class CounterAggregateRoot : AggregateRoot<Guid>
     {
-        protected TAggregateRoot Subject { get; set; }
+        public override string Name => "Counter";
 
-        protected override void SetUp()
+        public int CurrentValue { get; private set; }
+
+        public void Initialise(Guid id)
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            Apply(new CounterInitialisedEvent(id));
+        }
 
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
+        public void Increment()
+        {
+            Apply(new CounterIncrementedEvent(Id));
+        }
 
-            var container = containerBuilder.Build();
-            var factory = container.Resolve<IAggregateRootFactory>();
-            Subject = factory.Create<TAggregateRoot>();
+        public void HandleEvent(CounterInitialisedEvent @event, bool isNew)
+        {
+            Id = @event.Id;
+        }
+
+        public void HandleEvent(CounterIncrementedEvent @event, bool isNew)
+        {
+            CurrentValue++;
         }
     }
 }

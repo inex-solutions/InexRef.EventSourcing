@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,28 +19,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts;
-using InexRef.EventSourcing.Tests.Common.AccountDomain;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Tests.AggregateTests
+namespace InexRef.EventSourcing.Tests.Common.AccountDomain
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
+    public class AddAmountCommand : ICommand<string>
     {
-        protected TAggregateRoot Subject { get; set; }
+        public string Id { get; }
 
-        protected override void SetUp()
+        public decimal Amount { get; }
+
+        public AddAmountCommand(string id, decimal amount)
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            Id = id;
+            Amount = amount;
+        }
 
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
-
-            var container = containerBuilder.Build();
-            var factory = container.Resolve<IAggregateRootFactory>();
-            Subject = factory.Create<TAggregateRoot>();
+        public override string ToString()
+        {
+            return $"AddAmountCommand: id={Id}, amount={Amount}";
         }
     }
 }

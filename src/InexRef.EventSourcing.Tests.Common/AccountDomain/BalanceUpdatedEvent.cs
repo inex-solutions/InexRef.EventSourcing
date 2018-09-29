@@ -19,28 +19,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts;
-using InexRef.EventSourcing.Tests.Common.AccountDomain;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using System;
+using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Tests.AggregateTests
+namespace InexRef.EventSourcing.Tests.Common.AccountDomain
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
+    public class BalanceUpdatedEvent : Event<Guid>
     {
-        protected TAggregateRoot Subject { get; set; }
+        public decimal Balance { get; }
 
-        protected override void SetUp()
+        public string AccountId { get; }
+
+        public BalanceUpdatedEvent(Guid aggregateId, string accountId, decimal balance) : base(aggregateId)
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            Balance = balance;
+            AccountId = accountId;
+        }
 
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
-
-            var container = containerBuilder.Build();
-            var factory = container.Resolve<IAggregateRootFactory>();
-            Subject = factory.Create<TAggregateRoot>();
+        public override string ToString()
+        {
+            return $"BalanceUpdatedEvent: AccountId={AccountId} Balance={Balance}, Version={Version} (AggregateId={Id})";
         }
     }
 }

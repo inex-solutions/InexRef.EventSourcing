@@ -19,28 +19,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts;
-using InexRef.EventSourcing.Tests.Common.AccountDomain;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using NUnit.Framework;
 
-namespace InexRef.EventSourcing.Tests.AggregateTests
+namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
+    [TestFixture]
+    public abstract class SpecificationBase
     {
-        protected TAggregateRoot Subject { get; set; }
-
-        protected override void SetUp()
+        [OneTimeSetUp]
+        public void Init()
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
-
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
-
-            var container = containerBuilder.Build();
-            var factory = container.Resolve<IAggregateRootFactory>();
-            Subject = factory.Create<TAggregateRoot>();
+            SetUp();
+            Given();
+            When();
         }
+
+        protected virtual void SetUp()
+        {
+        }
+
+        protected abstract void When();
+
+        protected abstract void Given();
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            Cleanup();
+        }
+
+        protected virtual void Cleanup()
+        {
+        }
+    }
+
+    public abstract class SpecificationBase<TSubject> : SpecificationBase
+    {
+        protected TSubject Subject { get; set; }
     }
 }

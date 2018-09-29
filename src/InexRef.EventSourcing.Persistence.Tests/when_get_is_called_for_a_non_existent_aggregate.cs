@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,28 +19,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts;
-using InexRef.EventSourcing.Tests.Common.AccountDomain;
+using InexRef.EventSourcing.Persistence.Common;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using Shouldly;
 
-namespace InexRef.EventSourcing.Tests.AggregateTests
+namespace InexRef.EventSourcing.Persistence.Tests
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
+    public class when_get_is_called_for_a_non_existent_aggregate : AggregateRepositoryTestBase
     {
-        protected TAggregateRoot Subject { get; set; }
+        public when_get_is_called_for_a_non_existent_aggregate(string testFixtureOptions) : base(testFixtureOptions) { }
 
-        protected override void SetUp()
+        protected override void Given()
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
-
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
-
-            var container = containerBuilder.Build();
-            var factory = container.Resolve<IAggregateRootFactory>();
-            Subject = factory.Create<TAggregateRoot>();
         }
+
+        protected override void When() => CaughtException = Catch.Exception(() => Subject.Get(AggregateId));
+
+        [Then]
+        public void an_aggregate_not_found_exception_is_thrown() => CaughtException.ShouldBeOfType<AggregateNotFoundException>();
     }
 }

@@ -20,27 +20,26 @@
 #endregion
 
 using Autofac;
-using InexRef.EventSourcing.Contracts;
-using InexRef.EventSourcing.Tests.Common.AccountDomain;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using InexRef.EventSourcing.Persistence.InMemory;
+using InexRef.EventSourcing.Persistence.SqlServer;
 
-namespace InexRef.EventSourcing.Tests.AggregateTests
+namespace InexRef.EventSourcing.Tests.Common.AccountDomain
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
+    public static class EventStorePersistenceModuleExtensions
     {
-        protected TAggregateRoot Subject { get; set; }
-
-        protected override void SetUp()
+        public static void RegisterEventStorePersistenceModule(this ContainerBuilder containerBuilder, string persistenceProvider)
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
-
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
-
-            var container = containerBuilder.Build();
-            var factory = container.Resolve<IAggregateRootFactory>();
-            Subject = factory.Create<TAggregateRoot>();
+            switch (persistenceProvider)
+            {
+                case "InMemory":
+                    containerBuilder.RegisterModule<EventSourcingInMemoryPersistenceModule>();
+                    break;
+                case "SqlServer":
+                    containerBuilder.RegisterModule<EventSourcingSqlServerPersistenceModule>();
+                    break;
+                default:
+                    throw new TestSetupException($"Test setup failed. Persistence provider '{persistenceProvider}' not supported.");
+            }
         }
     }
 }

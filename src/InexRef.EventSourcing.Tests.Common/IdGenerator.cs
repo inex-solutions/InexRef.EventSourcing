@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,28 +19,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts;
-using InexRef.EventSourcing.Tests.Common.AccountDomain;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using System;
+using System.Diagnostics;
+using System.Threading;
 
-namespace InexRef.EventSourcing.Tests.AggregateTests
+namespace InexRef.EventSourcing.Tests.Common
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
+    public class IdGenerator
     {
-        protected TAggregateRoot Subject { get; set; }
+        private static int _count;
+        private readonly string _prefix;
 
-        protected override void SetUp()
+        public IdGenerator(string prefix)
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            _prefix = prefix;
+        }
 
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
-
-            var container = containerBuilder.Build();
-            var factory = container.Resolve<IAggregateRootFactory>();
-            Subject = factory.Create<TAggregateRoot>();
+        public string CreateAggregateId()
+        {
+            var count = Interlocked.Increment(ref _count);
+            var id = $"{_prefix}-{DateTime.Now:yyyyMMddHHmmss}-{count:D2}-{Process.GetCurrentProcess().Id}-{Thread.CurrentThread.ManagedThreadId}";
+            return id;
         }
     }
 }

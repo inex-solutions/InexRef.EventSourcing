@@ -21,6 +21,7 @@
 
 using System.Collections.Concurrent;
 using InexRef.EventSourcing.Contracts.Bus;
+using InexRef.EventSourcing.Tests.Common.AccountDomain;
 
 namespace InexRef.EventSourcing.Tests.IntegrationTests
 {

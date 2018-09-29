@@ -19,28 +19,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts;
-using InexRef.EventSourcing.Tests.Common.AccountDomain;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Tests.AggregateTests
+namespace InexRef.EventSourcing.Tests.Common.AccountDomain
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
+    public class ResetBalanceCommand : ICommand<string>
     {
-        protected TAggregateRoot Subject { get; set; }
+        public string Id { get; }
 
-        protected override void SetUp()
+        public ResetBalanceCommand(string id)
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            Id = id;
+        }
 
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
-
-            var container = containerBuilder.Build();
-            var factory = container.Resolve<IAggregateRootFactory>();
-            Subject = factory.Create<TAggregateRoot>();
+        public override string ToString()
+        {
+            return $"ResetBalanceCommand: id={Id}";
         }
     }
 }

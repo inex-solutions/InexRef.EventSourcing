@@ -22,6 +22,7 @@
 using System;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Persistence;
+using InexRef.EventSourcing.Tests.Common.AccountDomain;
 
 namespace InexRef.EventSourcing.Tests.IntegrationTests
 {

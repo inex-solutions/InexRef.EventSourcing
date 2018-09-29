@@ -19,28 +19,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.IO;
 using Autofac;
-using InexRef.EventSourcing.Contracts;
-using InexRef.EventSourcing.Tests.Common.AccountDomain;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using InexRef.EventSourcing.Persistence.SqlServer.Persistence;
+using Microsoft.Extensions.Configuration;
 
-namespace InexRef.EventSourcing.Tests.AggregateTests
+namespace InexRef.EventSourcing.Tests.Common
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
+    public class TestSetupModule : Module
     {
-        protected TAggregateRoot Subject { get; set; }
-
-        protected override void SetUp()
+        protected override void Load(ContainerBuilder builder)
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddXmlFile("config.xml", optional: false, reloadOnChange: false)
+                .Build();
 
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
-
-            var container = containerBuilder.Build();
-            var factory = container.Resolve<IAggregateRootFactory>();
-            Subject = factory.Create<TAggregateRoot>();
+            var sqlConfig = new SqlEventStoreConfiguration();
+            config.GetSection("SqlEventStore").Bind(sqlConfig);
+            builder.RegisterInstance(sqlConfig).As<SqlEventStoreConfiguration>();
         }
     }
 }

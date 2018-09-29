@@ -19,28 +19,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts;
-using InexRef.EventSourcing.Tests.Common.AccountDomain;
+using InexRef.EventSourcing.Persistence.Common;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using Shouldly;
 
-namespace InexRef.EventSourcing.Tests.AggregateTests
+namespace InexRef.EventSourcing.Persistence.Tests
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
+    public class when_a_saved_counter_is_resaved_but_with_the_wrong_version_number : AggregateRepositoryTestBase
     {
-        protected TAggregateRoot Subject { get; set; }
+        public when_a_saved_counter_is_resaved_but_with_the_wrong_version_number(string testFixtureOptions) : base(testFixtureOptions) { }
 
-        protected override void SetUp()
+        protected override void Given()
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            ReloadedCounterAggregateRoot = AggregateRootFactory.Create<NonDisposingCounterAggregateRoot>();
+            ReloadedCounterAggregateRoot.Initialise(AggregateId);
 
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
+            ReloadedCounterAggregateRoot.Increment();
 
-            var container = containerBuilder.Build();
-            var factory = container.Resolve<IAggregateRootFactory>();
-            Subject = factory.Create<TAggregateRoot>();
+            // intermediate save should cause a concurrency error when we save below
+            Subject.Save(ReloadedCounterAggregateRoot);
+
+            ReloadedCounterAggregateRoot.Increment();
         }
+
+        protected override void When() => CaughtException = Catch.Exception (() => Subject.Save(ReloadedCounterAggregateRoot));
+
+        [Then]
+        public void a_EventStoreConcurrencyException_should_be_thrown() => CaughtException.ShouldBeOfType<EventStoreConcurrencyException>();
     }
 }

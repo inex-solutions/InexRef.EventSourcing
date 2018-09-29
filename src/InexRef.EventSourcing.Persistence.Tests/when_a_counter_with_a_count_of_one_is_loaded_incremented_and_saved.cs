@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,28 +19,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts;
-using InexRef.EventSourcing.Tests.Common.AccountDomain;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using Shouldly;
 
-namespace InexRef.EventSourcing.Tests.AggregateTests
+namespace InexRef.EventSourcing.Persistence.Tests
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
+    public class when_a_counter_with_a_count_of_one_is_loaded_incremented_and_saved : AggregateRepositoryTestBase
     {
-        protected TAggregateRoot Subject { get; set; }
+        public when_a_counter_with_a_count_of_one_is_loaded_incremented_and_saved(string testFixtureOptions) : base(testFixtureOptions) { }
 
-        protected override void SetUp()
+        protected override void Given()
         {
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            var aggregate = AggregateRootFactory.Create<CounterAggregateRoot>();
+            aggregate.Initialise(AggregateId);
+            aggregate.Increment();
+            Subject.Save(aggregate);
 
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
-
-            var container = containerBuilder.Build();
-            var factory = container.Resolve<IAggregateRootFactory>();
-            Subject = factory.Create<TAggregateRoot>();
+            ReloadedCounterAggregateRoot = Subject.Get(AggregateId);
+            ReloadedCounterAggregateRoot.Increment();
+            Subject.Save(ReloadedCounterAggregateRoot);
         }
+
+        protected override void When() => ReloadedCounterAggregateRoot = Subject.Get(AggregateId);
+
+        [Then]
+        public void then_the_counter_has_a_value_of_two_when_reloaded() => ReloadedCounterAggregateRoot.CurrentValue.ShouldBe(2);
     }
 }

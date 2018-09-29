@@ -19,7 +19,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using InexRef.EventSourcing.Tests.SpecificationTests;
+using InexRef.EventSourcing.Tests.Common.AccountDomain;
+using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
 
 namespace InexRef.EventSourcing.Tests.IntegrationTests

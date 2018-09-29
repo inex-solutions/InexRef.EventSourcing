@@ -17,14 +17,13 @@
   <ItemGroup>
     <ProjectReference Include="..\InexRef.EventSourcing.Persistence.InMemory\InexRef.EventSourcing.Persistence.InMemory.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Persistence.SqlServer\InexRef.EventSourcing.Persistence.SqlServer.csproj" />
-    <ProjectReference Include="..\InexRef.EventSourcing.Tests.Common\InexRef.EventSourcing.Tests.Common.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing\InexRef.EventSourcing.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="config.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Reference Include="Microsoft.Extensions.Configuration">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.configuration\2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

@@ -70,8 +70,6 @@ namespace InexRef.EventSourcing.Utils.Dynamic
                     return true;
                 }
             }
-        }
-
-        
+        }        
     }
 }

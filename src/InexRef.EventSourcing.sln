@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Persi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Contracts", "InexRef.EventSourcing.Contracts\InexRef.EventSourcing.Contracts.csproj", "{43D1B7A2-A336-4B89-9EA3-6DFD5332CCCA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests", "InexRef.EventSourcing.Tests\InexRef.EventSourcing.Tests.csproj", "{AEB5E93C-2110-4AA0-8AF9-23B1E5F19F75}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing", "InexRef.EventSourcing\InexRef.EventSourcing.csproj", "{B33B74BD-C833-4975-A88B-2496753A1CAB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Persistence.InMemory", "InexRef.EventSourcing.Persistence.InMemory\InexRef.EventSourcing.Persistence.InMemory.csproj", "{5CA81487-29DF-451D-B58E-4CD7B2CC4FBA}"
@@ -53,10 +51,6 @@ Global
 		{43D1B7A2-A336-4B89-9EA3-6DFD5332CCCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43D1B7A2-A336-4B89-9EA3-6DFD5332CCCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43D1B7A2-A336-4B89-9EA3-6DFD5332CCCA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AEB5E93C-2110-4AA0-8AF9-23B1E5F19F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AEB5E93C-2110-4AA0-8AF9-23B1E5F19F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AEB5E93C-2110-4AA0-8AF9-23B1E5F19F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AEB5E93C-2110-4AA0-8AF9-23B1E5F19F75}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B33B74BD-C833-4975-A88B-2496753A1CAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B33B74BD-C833-4975-A88B-2496753A1CAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B33B74BD-C833-4975-A88B-2496753A1CAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -117,8 +111,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {838452C3-B710-4762-9037-4C0E0F750D56}
-	EndGlobalSection
-	GlobalSection(NDepend) = preSolution
-		Project = ".\InexRef.EventSourcing.ndproj"
 	EndGlobalSection
 EndGlobal

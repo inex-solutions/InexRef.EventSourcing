@@ -112,4 +112,7 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {838452C3-B710-4762-9037-4C0E0F750D56}
 	EndGlobalSection
+	GlobalSection(NDepend) = preSolution
+		Project = ".\InexRef.EventSourcing.ndproj"
+	EndGlobalSection
 EndGlobal

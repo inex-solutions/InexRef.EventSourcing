@@ -28,13 +28,10 @@ namespace InexRef.EventSourcing.Persistence.InMemory
     {
         public int Version { get; }
 
-        public TId AggregateId { get; }
-
         public IEvent<TId> EventData { get; }
 
-        public StoredEvent(TId aggregateId, int version, IEvent<TId> eventData)
+        public StoredEvent(int version, IEvent<TId> eventData)
         {
-            AggregateId = aggregateId;
             Version = version;
             EventData = eventData;
         }

@@ -35,7 +35,7 @@ namespace InexRef.EventSourcing.Persistence.InMemory
 
         public void SaveEvents(TId aggregateId, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion, int expectedVersion)
         {
-            IEnumerable<StoredEvent<TId>> eventsToStore = events.Select(@event => new StoredEvent<TId>(aggregateId, @event.Version, @event)).ToList();
+            IEnumerable<StoredEvent<TId>> eventsToStore = events.Select(@event => new StoredEvent<TId>(@event.Version, @event)).ToList();
 
             _storedEvents.AddOrUpdate(
                 key: aggregateId,

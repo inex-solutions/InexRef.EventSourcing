@@ -19,10 +19,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 
 namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
 {
+    [SuppressMessage("NDepend", "ND2102:AvoidDefiningMultipleTypesInASourceFile")]
     [TestFixture]
     public abstract class SpecificationBase
     {

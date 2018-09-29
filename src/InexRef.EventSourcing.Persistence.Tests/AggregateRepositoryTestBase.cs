@@ -42,7 +42,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
 
         protected CounterAggregateRoot ReloadedCounterAggregateRoot { get; set; }
 
-        protected List<Guid> CreatedGuids = new List<Guid>();
+        protected List<Guid> CreatedGuids { get; } = new List<Guid>();
 
         protected Exception CaughtException { get; set; }
 

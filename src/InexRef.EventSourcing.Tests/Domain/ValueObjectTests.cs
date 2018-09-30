@@ -43,110 +43,70 @@ namespace InexRef.EventSourcing.Tests.Domain
 
     public class ValueObjectTestBase : SpecificationBase
     {
-        protected MonetaryAmount Value1;
-        protected MonetaryAmount Value2;
-        protected bool EqualsResult;
-        protected int GetHashCodeResult;
+        protected MonetaryAmount Value1 { get; set; }
+        protected MonetaryAmount Value2 { get; set; }
+        protected bool EqualsResult { get; set; }
+        protected int GetHashCodeResult { get; set; }
     }
 
-    public class when_equality_checking_a_value_object_instance_to_null : ValueObjectTestBase
+    public class when_equality_checking_a_value_object : ValueObjectTestBase
     {
-
         protected override void Given() => Value1 = MonetaryAmount.Create(1.00M, "GBP");
 
-        protected override void When() => EqualsResult = Value1.Equals(null);
+        [Then]
+        public void comparing_to_null_returns_false() 
+            => Value1.Equals(null).ShouldBeFalse();
 
         [Then]
-        public void equals_returns_false() => EqualsResult.ShouldBeFalse();
-    }
-
-    public class when_equality_checking_a_value_object_instance_to_itself : ValueObjectTestBase
-    {
-
-        protected override void Given() => Value1 = MonetaryAmount.Create(1.00M, "GBP");
-
-        protected override void When() => EqualsResult = Value1.Equals(Value1);
+        public void comparing_to_itself_returns_true()
+            => Value1.Equals(Value1).ShouldBeTrue();
 
         [Then]
-        public void equals_returns_true() => EqualsResult.ShouldBeTrue();
+        public void comparing_to_a_different_but_identical_instance_returns_true()
+            => Value1.Equals(MonetaryAmount.Create(1.00M, "GBP")).ShouldBeTrue();
+
+        [Then]
+        public void comparing_to_a_different_instance_with_a_different_value_on_its_first_field_returns_false()
+            => Value1.Equals(MonetaryAmount.Create(2.00M, "GBP")).ShouldBeFalse();
+
+        [Then]
+        public void comparing_to_a_different_instance_with_a_different_value_on_its_second_field_returns_false()
+            => Value1.Equals(MonetaryAmount.Create(1.00M, "USD")).ShouldBeFalse();
+
+        [Then]
+        public void comparing_to_a_different_instance_with_different_values_on_all_fields_returns_false()
+            => Value1.Equals(MonetaryAmount.Create(2.00M, "USD")).ShouldBeFalse();
+
+        [Then]
+        public void comparing_to_a_different_but_identical_instance_with_null_as_one_field_value_returns_true()
+            => MonetaryAmount.Create(1.00M, null).Equals(MonetaryAmount.Create(1.00M, null)).ShouldBeTrue();
     }
 
-    public class when_equality_checking_a_value_object_instance_to_a_different_but_identical_instance : ValueObjectTestBase
+    public class when_equality_checking_a_value_object_which_contains_an_enumerable_field : ValueObjectTestBase
     {
+        protected override void When() =>
+            CaughtException = Catch.Exception(
+                () => EqualsResult = ValueObjectWithEnumerable.Create(1, 2, 3).Equals(ValueObjectWithEnumerable.Create(1, 2, 3)));
 
-        protected override void Given()
+        [Then]
+        public void a_NotSupported_Exception_is_thrown() => CaughtException.ShouldBeOfType<NotSupportedException>();
+
+        public class ValueObjectWithEnumerable : ValueObject<ValueObjectWithEnumerable>
         {
-            Value1 = MonetaryAmount.Create(1.00M, "GBP");
-            Value2 = MonetaryAmount.Create(1.00M, "GBP");
+            private ValueObjectWithEnumerable(params int[] numbers)
+            {
+                Numbers = numbers;
+            }
+
+            public int[] Numbers { get; }
+
+
+            public static ValueObjectWithEnumerable Create(params int[] numbers)
+                => new ValueObjectWithEnumerable(numbers);
         }
-
-        protected override void When() => EqualsResult = Value1.Equals(Value2);
-
-        [Then]
-        public void equals_returns_true() => EqualsResult.ShouldBeTrue();
     }
 
-    public class when_equality_checking_a_value_object_instance_to_a_different_instance_with_different_values_on_its_first_field : ValueObjectTestBase
-    {
-
-        protected override void Given()
-        {
-            Value1 = MonetaryAmount.Create(1.00M, "GBP");
-            Value2 = MonetaryAmount.Create(2.00M, "GBP");
-        }
-
-        protected override void When() =>  EqualsResult = Value1.Equals(Value2);
-
-        [Then]
-        public void equals_returns_false() => EqualsResult.ShouldBeFalse();
-    }
-
-    public class when_equality_checking_a_value_object_instance_to_a_different_instance_with_different_values_on_its_second_field : ValueObjectTestBase
-    {
-
-        protected override void Given()
-        {
-            Value1 = MonetaryAmount.Create(1.00M, "GBP");
-            Value2 = MonetaryAmount.Create(1.00M, "USD");
-        }
-
-        protected override void When() => EqualsResult = Value1.Equals(Value2);
-
-        [Then]
-        public void equals_returns_false() => EqualsResult.ShouldBeFalse();
-    }
-
-    public class when_equality_checking_a_value_object_instance_to_a_different_instance_with_different_values_on_all_fields : ValueObjectTestBase
-    {
-
-        protected override void Given()
-        {
-            Value1 = MonetaryAmount.Create(1.00M, "GBP");
-            Value2 = MonetaryAmount.Create(2.00M, "USD");
-        }
-
-        protected override void When() => EqualsResult = Value1.Equals(Value2);
-
-        [Then]
-        public void equals_returns_false() => EqualsResult.ShouldBeFalse();
-    }
-
-    public class when_equality_checking_a_value_object_instance_to_a_different_but_identical_instance_with_null_as_one_field_value : ValueObjectTestBase
-    {
-
-        protected override void Given()
-        {
-            Value1 = MonetaryAmount.Create(1.00M, null);
-            Value2 = MonetaryAmount.Create(1.00M, null);
-        }
-
-        protected override void When() => EqualsResult = Value1.Equals(Value2);
-
-        [Then]
-        public void equals_returns_true() => EqualsResult.ShouldBeTrue();
-    }
-
-    public class when_getting_hash_code_for_an_instance : ValueObjectTestBase
+    public class when_getting_hash_code_for_a_value_object : ValueObjectTestBase
     {
 
         protected override void Given()
@@ -164,29 +124,5 @@ namespace InexRef.EventSourcing.Tests.Domain
         [Then]
         public void get_hash_code_returns_the_difference_value_to_a_an_instance_with_different_values()
             => GetHashCodeResult.ShouldNotBe(MonetaryAmount.Create(2.00M, "GBP").GetHashCode());
-    }
-
-    public class when_equality_checking_a_value_object_which_contains_an_enumerable_field : ValueObjectTestBase
-    {
-        protected override void When() => 
-            CaughtException = Catch.Exception(
-                () => EqualsResult = ValueObjectWithEnumerable.Create(1,2,3).Equals(ValueObjectWithEnumerable.Create(1,2,3)));
-
-        [Then]
-        public void a_NotSupported_Exception_is_thrown() => CaughtException.ShouldBeOfType<NotSupportedException>();
-    }
-
-    public class ValueObjectWithEnumerable : ValueObject<ValueObjectWithEnumerable>
-    {
-        private ValueObjectWithEnumerable(params int[] numbers)
-        {
-            Numbers = numbers;
-        }
-
-        public int[] Numbers { get; }
-
-
-        public static ValueObjectWithEnumerable Create(params int[] numbers)
-            => new ValueObjectWithEnumerable(numbers);
     }
 }

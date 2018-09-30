@@ -34,9 +34,10 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
         {
             _calculator = calculator;
             Balance = Balance.Zero;
+            AccountId = AccountId.Null;
         }
 
-        public string AccountId { get; private set; }
+        public AccountId AccountId { get; private set; }
 
         public override string Name => "Account";
 
@@ -60,7 +61,7 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
         public void HandleEvent(AccountInitialisedEvent @event, bool isNew)
         {
             Id = @event.Id;
-            AccountId = @event.AccountId;
+            AccountId = AccountId.Parse(@event.AccountId);
         }
 
         public void HandleEvent(AmountAddedEvent @event, bool isNew)

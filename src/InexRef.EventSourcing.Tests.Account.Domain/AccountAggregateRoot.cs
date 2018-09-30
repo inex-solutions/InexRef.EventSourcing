@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using InexRef.EventSourcing.Domain;
 using InexRef.EventSourcing.Tests.Account.Messages;
 

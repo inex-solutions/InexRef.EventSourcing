@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 
@@ -28,6 +29,8 @@ namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
     [TestFixture]
     public abstract class SpecificationBase
     {
+        protected Exception CaughtException { get; set; }
+
         [OneTimeSetUp]
         public void Init()
         {
@@ -40,9 +43,9 @@ namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
         {
         }
 
-        protected abstract void When();
+        protected virtual void When() { }
 
-        protected abstract void Given();
+        protected virtual void Given() { }
 
         [OneTimeTearDown]
         public void TearDown()

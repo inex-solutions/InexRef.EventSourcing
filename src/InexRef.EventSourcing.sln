@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.Domain.Tests", "InexRef.EventSourcing.Tests.Account.Domain.Tests\InexRef.EventSourcing.Tests.Account.Domain.Tests.csproj", "{A1819AE0-2376-41A2-887C-8F0DEC55928A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InexRef.EventSourcing.Tests", "InexRef.EventSourcing.Tests\InexRef.EventSourcing.Tests.csproj", "{9C674B23-F652-4AB6-B710-B8C493E2FA44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{A1819AE0-2376-41A2-887C-8F0DEC55928A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1819AE0-2376-41A2-887C-8F0DEC55928A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1819AE0-2376-41A2-887C-8F0DEC55928A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C674B23-F652-4AB6-B710-B8C493E2FA44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C674B23-F652-4AB6-B710-B8C493E2FA44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C674B23-F652-4AB6-B710-B8C493E2FA44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C674B23-F652-4AB6-B710-B8C493E2FA44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,8 +117,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {838452C3-B710-4762-9037-4C0E0F750D56}
-	EndGlobalSection
-	GlobalSection(NDepend) = preSolution
-		Project = ".\InexRef.EventSourcing.ndproj"
 	EndGlobalSection
 EndGlobal

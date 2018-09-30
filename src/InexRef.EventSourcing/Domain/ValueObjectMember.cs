@@ -20,20 +20,27 @@
 #endregion
 
 using System;
-using InexRef.EventSourcing.Contracts.Messages;
+using System.Reflection;
 
-namespace InexRef.EventSourcing.Persistence.InMemory
+namespace InexRef.EventSourcing.Domain
 {
-    internal class StoredEvent<TId> where TId : IEquatable<TId>, IComparable<TId>
+    public class ValueObjectMember
     {
-        public int Version { get; }
+        public string Name { get; }
+        public Type Type { get; }
+        public Func<object, object> GetValue { get; }
 
-        public IEvent<TId> EventData { get; }
-
-        public StoredEvent(int version, IEvent<TId> eventData)
+        private ValueObjectMember(string name, Type type, Func<object, object> getValue)
         {
-            Version = version;
-            EventData = eventData;
+            Name = name;
+            Type = type;
+            GetValue = getValue;
         }
+
+        public static ValueObjectMember FromFieldInfo(FieldInfo item)
+            => new ValueObjectMember(item.Name, item.FieldType, item.GetValue);
+
+        public static ValueObjectMember FromPropertyInfo(PropertyInfo item)
+            => new ValueObjectMember(item.Name, item.PropertyType, item.GetValue);
     }
 }

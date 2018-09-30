@@ -68,7 +68,7 @@
   <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
   <Report Kind="0" SectionsEnabled="110591" XslPath="" Flags="261120" />
   <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
-  <BaselineInUISetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
+  <BaselineInUISetting ProjectMode="DontCompare" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.ndproj" BuildFileToCompareWith="C:\Dev\git\InexRef.EventSourcing\src\NDependOut\NDependAnalysisResult_InexRef_EventSourcing_2018Sep30_20h45.ndar" NDaysAgo="30" />
   <CoverageFiles CoverageDir="" UncoverableAttribute="" />
   <TrendMetrics UseCustomLog="False" LogRecurrence="3" LogLabel="2" UseCustomDir="False" CustomDir="">
     <Chart Name="Size" ShowInReport="True">
@@ -1174,7 +1174,7 @@ select new {
 // The estimated Debt, which means the effort to fix such issue,
 // is of 3 minutes per method overload.
 //</HowToFix>]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid methods potentially poorly commented</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid methods potentially poorly commented</Name>
 // <Id>ND1006:AvoidMethodsPotentiallyPoorlyCommented</Id>
 warnif count > 0 from t in JustMyCode.Types where
    // Entity Framework ModelSnapshot and DbContext and Migration have large uncommented methods.
@@ -2420,6 +2420,7 @@ let testAttributes = Types
 from t in JustMyCode.Types
 where  t.IsClass &&
       !t.DeriveFrom("InexRef.EventSourcing.Tests.Common.SpecificationFramework.SpecificationBase") &&
+      !t.DeriveFrom("Autofac.Module") &&
     //!t.IsPublic &&   // if you are developing a framework, 
                        // you might not want to match public classes
       !t.IsStatic && 
@@ -4551,7 +4552,7 @@ select new {
 //</HowToFix>]]></Query>
     </Group>
     <Group Name="API Breaking Changes" Active="True" ShownInReport="True">
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Types</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Types</Name>
 // <Id>ND1500:APIBreakingChangesTypes</Id>
 
 warnif count > 0 from t in codeBase.OlderVersion().Application.Types
@@ -4597,7 +4598,7 @@ select new {
 // because an API Breaking change can provoque significant
 // friction with consumers of the API.
 //</HowToFix>]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Methods</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Methods</Name>
 // <Id>ND1501:APIBreakingChangesMethods</Id>
 
 warnif count > 0 from m in codeBase.OlderVersion().Application.Methods
@@ -4675,7 +4676,7 @@ select new {
 // friction with consumers of the API.
 //</HowToFix>
 ]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Fields</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Fields</Name>
 // <Id>ND1502:APIBreakingChangesFields</Id>
 
 warnif count > 0 from f in codeBase.OlderVersion().Application.Fields
@@ -4725,7 +4726,7 @@ select new {
 // because an API Breaking change can provoque significant
 // friction with consumers of the API.
 //</HowToFix>]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Interfaces and Abstract Classes</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Interfaces and Abstract Classes</Name>
 // <Id>ND1503:APIBreakingChangesInterfacesAndAbstractClasses</Id>
 
 warnif count > 0 from tNewer in Application.Types where 

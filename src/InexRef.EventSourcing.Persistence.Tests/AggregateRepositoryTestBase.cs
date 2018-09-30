@@ -81,6 +81,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
         protected override void Cleanup()
         {
             Subject.Delete(AggregateId);
+            ReloadedCounterAggregateRoot?.Dispose();
         }
     }
 }

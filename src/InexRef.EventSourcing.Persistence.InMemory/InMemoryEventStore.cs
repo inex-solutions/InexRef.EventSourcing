@@ -76,5 +76,18 @@ namespace InexRef.EventSourcing.Persistence.InMemory
 
             return events.Select(@event => @event.EventData);
         }
+
+        private class StoredEvent<T> where T : IEquatable<T>, IComparable<T>
+        {
+            internal int Version { get; }
+
+            internal IEvent<T> EventData { get; }
+
+            internal StoredEvent(int version, IEvent<T> eventData)
+            {
+                Version = version;
+                EventData = eventData;
+            }
+        }
     }
 }

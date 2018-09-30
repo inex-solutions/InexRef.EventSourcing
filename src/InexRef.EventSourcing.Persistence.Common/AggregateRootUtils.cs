@@ -23,7 +23,7 @@ using System;
 
 namespace InexRef.EventSourcing.Persistence.Common
 {
-    public class AggregateRootUtils
+    public static class AggregateRootUtils
     {
         public static string GetAggregateRootName<TAggregateRoot>()
         {

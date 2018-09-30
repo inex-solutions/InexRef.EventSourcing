@@ -61,5 +61,12 @@ namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
     public abstract class SpecificationBase<TSubject> : SpecificationBase
     {
         protected TSubject Subject { get; set; }
+
+        protected override void Cleanup()
+        {
+            base.Cleanup();
+            var disposable = Subject as IDisposable;
+            disposable?.Dispose();
+        }
     }
 }

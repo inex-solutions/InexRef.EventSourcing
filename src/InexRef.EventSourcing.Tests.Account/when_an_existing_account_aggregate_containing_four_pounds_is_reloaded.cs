@@ -41,7 +41,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
         protected override void When() => Aggregate = Repository.GetByNaturalKey(AccountId);
 
         [Then]
-        public void the_reloaded_aggregate_has_a_balance_of_four_pounds() => Aggregate.Balance.ShouldBe(4.0m);
+        public void the_reloaded_aggregate_has_a_balance_of_four_pounds() => Aggregate.Balance.ShouldBe(Balance.FromDecimal(4.0M));
 
         [Then]
         public void the_reloaded_aggregate_version_is_at_least_3_being_the_initial_version_plus_two_actions() => Aggregate.Version.ShouldBeGreaterThanOrEqualTo(3);

@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using InexRef.EventSourcing.Tests.Account.Domain;
 using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
@@ -37,7 +38,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
         protected override void When() => Subject.Send(new ResetBalanceCommand(AccountId));
 
         [Then]
-        public void the_account_balance_is_zero() => Repository.GetByNaturalKey(AccountId).Balance.ShouldBe(0.00M);
+        public void the_account_balance_is_zero() => Repository.GetByNaturalKey(AccountId).Balance.ShouldBe(Balance.FromDecimal(0.0M));
 
         [Then]
         public void the_account_balance_on_the_read_model_is_zero() => BalanceReadModel[AccountId].ShouldBe(0.00M);

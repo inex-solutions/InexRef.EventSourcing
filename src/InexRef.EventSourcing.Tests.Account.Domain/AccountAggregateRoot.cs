@@ -33,13 +33,14 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
         public AccountAggregateRoot(ICalculator calculator)
         {
             _calculator = calculator;
+            Balance = Balance.Zero;
         }
 
         public string AccountId { get; private set; }
 
         public override string Name => "Account";
 
-        public decimal Balance { get; private set; }
+        public Balance Balance { get; private set; }
 
         public void InitialiseAccount(Guid id, string accountId)
         {
@@ -64,14 +65,14 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
 
         public void HandleEvent(AmountAddedEvent @event, bool isNew)
         {
-            Balance = _calculator.Add(Balance, @event.Amount);
-            Apply(new BalanceUpdatedEvent(Id, AccountId, Balance), isNew);
+            Balance = _calculator.AddToBalance(Balance, @event.Amount);
+            Apply(new BalanceUpdatedEvent(Id, AccountId, Balance.ToDecimal()), isNew);
         }
 
         public void HandleEvent(BalanceResetEvent @event, bool isNew)
         {
-            Balance = 0;
-            Apply(new BalanceUpdatedEvent(Id, AccountId, Balance), isNew);
+            Balance = Balance.Zero;
+            Apply(new BalanceUpdatedEvent(Id, AccountId, Balance.ToDecimal()), isNew);
         }
     }
 }

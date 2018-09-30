@@ -31,6 +31,6 @@ namespace InexRef.EventSourcing.Tests.Account.Domain.Tests
         protected override void When() => Subject.ResetBalance();
 
         [Then]
-        public void the_balance_is_zero() => Subject.Balance.ShouldBe(0.00M);
+        public void the_balance_is_zero() => Subject.Balance.ShouldBe(Balance.FromDecimal(0.0M));
     }
 }

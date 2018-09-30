@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using InexRef.EventSourcing.Tests.Account.Domain;
 using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
@@ -37,7 +38,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
         protected override void When() => Subject.Send(new AddAmountCommand(AccountId, 3.00M));
 
         [Then]
-        public void the_account_balance_is_five_pounds() => Repository.GetByNaturalKey(AccountId).Balance.ShouldBe(5.00M);
+        public void the_account_balance_is_five_pounds() => Repository.GetByNaturalKey(AccountId).Balance.ShouldBe(Balance.FromDecimal(5.0M));
 
         [Then]
         public void the_aggregate_version_is_at_least_3_being_the_previous_version_plus_the_add_amount_action() 

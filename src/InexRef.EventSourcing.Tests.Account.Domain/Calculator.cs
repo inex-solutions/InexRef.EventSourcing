@@ -22,9 +22,9 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
 {
     public class Calculator : ICalculator
     {
-        public decimal Add(decimal x, decimal y)
+        public Balance AddToBalance(Balance x, decimal y)
         {
-            return x + y;
+            return x.AddDecimal(y);
         }
     }
 }

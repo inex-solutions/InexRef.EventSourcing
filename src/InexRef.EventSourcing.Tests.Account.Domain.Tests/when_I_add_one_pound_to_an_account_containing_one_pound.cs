@@ -31,6 +31,6 @@ namespace InexRef.EventSourcing.Tests.Account.Domain.Tests
         protected override void When() => Subject.AddAmount(1.00M);
 
         [Then]
-        public void the_balance_is_two_pounds() => Subject.Balance.ShouldBe(2.00M);
+        public void the_balance_is_two_pounds() => Subject.Balance.ShouldBe(Balance.FromDecimal(2.0M));
     }
 }

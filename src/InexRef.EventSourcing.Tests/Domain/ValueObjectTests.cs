@@ -74,7 +74,7 @@ namespace InexRef.EventSourcing.Tests.Domain
             Value2 = MonetaryAmount.Create(2.00M, "GBP");
         }
 
-        protected override void When() => EqualsResult = Value1.Equals(Value2);
+        protected override void When() =>  EqualsResult = Value1.Equals(Value2);
 
         [Then]
         public void equals_returns_false() => EqualsResult.ShouldBeFalse();

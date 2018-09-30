@@ -22,6 +22,6 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
 {
     public interface ICalculator
     {
-        decimal Add(decimal x, decimal y);
+        Balance AddToBalance(Balance x, decimal y);
     }
 }

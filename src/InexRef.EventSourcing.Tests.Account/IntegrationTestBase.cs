@@ -28,7 +28,7 @@ using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Tests.Account.Domain;
 using InexRef.EventSourcing.Tests.Account.ReadModels;
 using InexRef.EventSourcing.Tests.Common;
-using InexRef.EventSourcing.Tests.Common.AccountDomain;
+using InexRef.EventSourcing.Tests.Common.Persistence;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using NUnit.Framework;
 

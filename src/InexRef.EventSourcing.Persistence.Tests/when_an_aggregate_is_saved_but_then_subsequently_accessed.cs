@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,27 +19,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Persistence.InMemory;
-using InexRef.EventSourcing.Persistence.SqlServer;
+using System;
+using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using Shouldly;
 
-namespace InexRef.EventSourcing.Tests.Common.AccountDomain
+namespace InexRef.EventSourcing.Persistence.Tests
 {
-    public static class EventStorePersistenceModuleExtensions
+    public class when_an_aggregate_is_saved_but_then_subsequently_accessed : AggregateRepositoryTestBase
     {
-        public static void RegisterEventStorePersistenceModule(this ContainerBuilder containerBuilder, string persistenceProvider)
+        public when_an_aggregate_is_saved_but_then_subsequently_accessed(string testFixtureOptions) : base(testFixtureOptions) { }
+
+        protected override void Given()
         {
-            switch (persistenceProvider)
-            {
-                case "InMemory":
-                    containerBuilder.RegisterModule<EventSourcingInMemoryPersistenceModule>();
-                    break;
-                case "SqlServer":
-                    containerBuilder.RegisterModule<EventSourcingSqlServerPersistenceModule>();
-                    break;
-                default:
-                    throw new TestSetupException($"Test setup failed. Persistence provider '{persistenceProvider}' not supported.");
-            }
+            Aggregate = AggregateRootFactory.Create<CounterAggregateRoot>();
+            Aggregate.Initialise(AggregateId);
+            Subject.Save(Aggregate);
         }
+
+        public CounterAggregateRoot Aggregate { get; set; }
+
+        protected override void When() => CaughtException = Catch.Exception(() => Aggregate.Increment());
+
+        [Then]
+        public void an_ObjectDisposedException_is_thrown() => CaughtException.ShouldBeOfType<ObjectDisposedException>();
     }
 }

@@ -42,5 +42,12 @@ namespace InexRef.EventSourcing.Tests.Account.ReadModels
         public decimal this[string id] => _balances[id].Balance;
 
         public int GetVersion(string id) => _balances[id].Version;
+
+        private class BalanceEntry
+        {
+            public decimal Balance { get; set; }
+
+            public int Version { get; set; }
+        }
     }
 }

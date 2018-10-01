@@ -5,8 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\InexRef.EventSourcing.Contracts\InexRef.EventSourcing.Contracts.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Tests.Common\InexRef.EventSourcing.Tests.Common.csproj" />
+    <ProjectReference Include="..\InexRef.EventSourcing.Tests\InexRef.EventSourcing.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>

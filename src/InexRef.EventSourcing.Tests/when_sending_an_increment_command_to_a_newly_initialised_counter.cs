@@ -24,23 +24,21 @@ using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using InexRef.EventSourcing.Tests.Domain;
 using Shouldly;
 
-namespace InexRef.EventSourcing.Persistence.Tests
+namespace InexRef.EventSourcing.Tests
 {
-    public class when_a_counter_with_a_count_of_one_is_saved_and_reloaded : AggregateRepositoryTestBase
+    public class when_sending_an_increment_command_to_a_newly_initialised_counter : CounterTestBase
     {
-        public when_a_counter_with_a_count_of_one_is_saved_and_reloaded(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_sending_an_increment_command_to_a_newly_initialised_counter(string testFixtureOptions) : base(testFixtureOptions) { }
 
         protected override void Given()
         {
-            var aggregate = AggregateRootFactory.Create<CounterAggregateRoot>();
-            aggregate.Initialise(MessageMetadata.CreateDefault(), AggregateId);
-            aggregate.Increment(MessageMetadata.CreateDefault());
-            Subject.Save(aggregate);
+            Subject.Send(new InitialiseCounterCommand(MessageMetadata.CreateDefault(), NaturalId));
         }
 
-        protected override void When() => ReloadedCounterAggregateRoot = Subject.Get(AggregateId);
+        protected override void When() => Subject.Send(new IncrementCounterCommand (MessageMetadata.CreateDefault(), NaturalId));
 
         [Then]
-        public void the_reloaded_counter_should_have_a_value_of_one() => ReloadedCounterAggregateRoot.CurrentValue.ShouldBe(1);
+        public void the_counter_value_is_one()
+            => Repository.GetByNaturalKey(NaturalId).CurrentValue.ShouldBe(1);
     }
 }

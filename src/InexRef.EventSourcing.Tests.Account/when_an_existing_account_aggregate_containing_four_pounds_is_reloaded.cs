@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Account.Domain;
 using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
@@ -26,7 +27,7 @@ using Shouldly;
 
 namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
-    public class when_an_existing_account_aggregate_containing_four_pounds_is_reloaded : IntegrationTestBase
+    public class when_an_existing_account_aggregate_containing_four_pounds_is_reloaded : AccountDomainTestBase
     {
         private AccountAggregateRoot Aggregate { get; set; }
 
@@ -34,11 +35,11 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 
         protected override void Given()
         {
-            Subject.Send(new AddAmountCommand(AccountId, 2.00M));
-            Subject.Send(new AddAmountCommand(AccountId, 2.00M));
+            Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, 2.00M));
+            Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, 2.00M));
         }
 
-        protected override void When() => Aggregate = Repository.GetByNaturalKey(AccountId);
+        protected override void When() => Aggregate = Repository.GetByNaturalKey(NaturalId);
 
         [Then]
         public void the_reloaded_aggregate_has_a_balance_of_four_pounds() => Aggregate.Balance.ShouldBe(Balance.FromDecimal(4.0M));

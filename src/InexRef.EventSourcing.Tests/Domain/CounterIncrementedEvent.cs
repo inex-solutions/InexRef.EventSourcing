@@ -19,28 +19,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
-using InexRef.EventSourcing.Tests.Domain;
-using Shouldly;
 
-namespace InexRef.EventSourcing.Persistence.Tests
+namespace InexRef.EventSourcing.Tests.Domain
 {
-    public class when_a_counter_with_a_count_of_one_is_saved_and_reloaded : AggregateRepositoryTestBase
+    public class CounterIncrementedEvent : Event<Guid>
     {
-        public when_a_counter_with_a_count_of_one_is_saved_and_reloaded(string testFixtureOptions) : base(testFixtureOptions) { }
-
-        protected override void Given()
+        public CounterIncrementedEvent(MessageMetadata metadata, Guid id) : base(metadata, id)
         {
-            var aggregate = AggregateRootFactory.Create<CounterAggregateRoot>();
-            aggregate.Initialise(MessageMetadata.CreateDefault(), AggregateId);
-            aggregate.Increment(MessageMetadata.CreateDefault());
-            Subject.Save(aggregate);
         }
-
-        protected override void When() => ReloadedCounterAggregateRoot = Subject.Get(AggregateId);
-
-        [Then]
-        public void the_reloaded_counter_should_have_a_value_of_one() => ReloadedCounterAggregateRoot.CurrentValue.ShouldBe(1);
     }
 }

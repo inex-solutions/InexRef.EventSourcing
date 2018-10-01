@@ -19,28 +19,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
-using InexRef.EventSourcing.Tests.Domain;
-using Shouldly;
+using InexRef.EventSourcing.Domain;
 
-namespace InexRef.EventSourcing.Persistence.Tests
+namespace InexRef.EventSourcing.Tests.Domain
 {
-    public class when_a_counter_with_a_count_of_one_is_saved_and_reloaded : AggregateRepositoryTestBase
+    public class CounterAggregateRoot : AggregateRoot<Guid>
     {
-        public when_a_counter_with_a_count_of_one_is_saved_and_reloaded(string testFixtureOptions) : base(testFixtureOptions) { }
+        public override string Name => "Counter";
 
-        protected override void Given()
+        public int CurrentValue { get; private set; }
+
+        public void Initialise(MessageMetadata messageMetadata, Guid id)
         {
-            var aggregate = AggregateRootFactory.Create<CounterAggregateRoot>();
-            aggregate.Initialise(MessageMetadata.CreateDefault(), AggregateId);
-            aggregate.Increment(MessageMetadata.CreateDefault());
-            Subject.Save(aggregate);
+            Apply(new CounterInitialisedEvent(messageMetadata, id));
         }
 
-        protected override void When() => ReloadedCounterAggregateRoot = Subject.Get(AggregateId);
+        public void Increment(MessageMetadata messageMetadata)
+        {
+            Apply(new CounterIncrementedEvent(messageMetadata, Id));
+        }
 
-        [Then]
-        public void the_reloaded_counter_should_have_a_value_of_one() => ReloadedCounterAggregateRoot.CurrentValue.ShouldBe(1);
+        public void HandleEvent(CounterInitialisedEvent @event, bool isNew)
+        {
+            Id = @event.Id;
+        }
+
+        public void HandleEvent(CounterIncrementedEvent @event, bool isNew)
+        {
+            CurrentValue++;
+            if (CurrentValue % 2 == 0)
+            {
+                Apply(new CounterValueDivisibleByTwoEvent(@event.MessageMetadata, Id, CurrentValue));
+            }
+        }
     }
 }

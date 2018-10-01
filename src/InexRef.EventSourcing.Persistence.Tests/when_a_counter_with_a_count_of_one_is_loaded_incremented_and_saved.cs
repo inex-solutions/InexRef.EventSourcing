@@ -19,7 +19,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using InexRef.EventSourcing.Tests.Domain;
 using Shouldly;
 
 namespace InexRef.EventSourcing.Persistence.Tests
@@ -31,12 +33,12 @@ namespace InexRef.EventSourcing.Persistence.Tests
         protected override void Given()
         {
             var aggregate = AggregateRootFactory.Create<CounterAggregateRoot>();
-            aggregate.Initialise(AggregateId);
-            aggregate.Increment();
+            aggregate.Initialise(MessageMetadata.CreateDefault(), AggregateId);
+            aggregate.Increment(MessageMetadata.CreateDefault());
             Subject.Save(aggregate);
 
             ReloadedCounterAggregateRoot = Subject.Get(AggregateId);
-            ReloadedCounterAggregateRoot.Increment();
+            ReloadedCounterAggregateRoot.Increment(MessageMetadata.CreateDefault());
             Subject.Save(ReloadedCounterAggregateRoot);
         }
 

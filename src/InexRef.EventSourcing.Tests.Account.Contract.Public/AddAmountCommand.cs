@@ -25,19 +25,21 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
 {
     public class AddAmountCommand : ICommand<string>
     {
+        public MessageMetadata MessageMetadata { get; }
         public string Id { get; }
 
         public decimal Amount { get; }
 
-        public AddAmountCommand(string id, decimal amount)
+        public AddAmountCommand(MessageMetadata messageMetadata, string id, decimal amount)
         {
+            MessageMetadata = messageMetadata;
             Id = id;
             Amount = amount;
         }
 
         public override string ToString()
         {
-            return $"AddAmountCommand: id={Id}, amount={Amount}";
+            return $"AddAmountCommand: messageMetadata={MessageMetadata}, id={Id}, amount={Amount}";
         }
     }
 }

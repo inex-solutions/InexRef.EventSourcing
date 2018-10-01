@@ -25,16 +25,19 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
 {
     public class ResetBalanceCommand : ICommand<string>
     {
+        public MessageMetadata MessageMetadata { get; }
+
         public string Id { get; }
 
-        public ResetBalanceCommand(string id)
+        public ResetBalanceCommand(MessageMetadata messageMetadata, string id)
         {
+            MessageMetadata = messageMetadata;
             Id = id;
         }
 
         public override string ToString()
         {
-            return $"ResetBalanceCommand: id={Id}";
+            return $"ResetBalanceCommand: messageMetadata={MessageMetadata}, id={Id}";
         }
     }
 }

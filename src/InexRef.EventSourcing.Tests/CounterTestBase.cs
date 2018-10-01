@@ -18,14 +18,34 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
-namespace InexRef.EventSourcing.Persistence.Tests
+
+using Autofac;
+using InexRef.EventSourcing.Tests.Common;
+using InexRef.EventSourcing.Tests.Domain;
+using NUnit.Framework;
+
+namespace InexRef.EventSourcing.Tests
 {
-    public class NonDisposingCounterAggregateRoot : CounterAggregateRoot
+    public class CounterTestBase : IntegrationTestBase<CounterAggregateRoot>
     {
-        protected override void Dispose(bool disposing)
+        public CounterTestBase(string testFixtureOptions) : base(testFixtureOptions)
         {
-            // override the default dispose behaviour (which is to render the aggregate unusable on saving), so that 
-            // it can be saved multiple times in order to test concurrency handling
+        }
+
+
+        protected override void RegisterWithContainerBuilder(ContainerBuilder containerBuilder)
+        {
+            containerBuilder.RegisterModule<CounterDomainHostModule>();
+            containerBuilder.RegisterType<CounterAggregateRoot>();
+        }
+
+        protected override void ResolveFromContainer(IContainer container)
+        {
+        }
+
+        public void DirectlyReferenceNUnitToAidTestRunner()
+        {
+            Assert.IsTrue(true);
         }
     }
 }

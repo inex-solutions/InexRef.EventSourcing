@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Domain;
 using InexRef.EventSourcing.Tests.Account.Messages;
 
@@ -42,19 +43,19 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
 
         public Balance Balance { get; private set; }
 
-        public void InitialiseAccount(Guid id, string accountId)
+        public void InitialiseAccount(MessageMetadata messageMetadata, Guid id, string accountId)
         {
-            Apply(new AccountInitialisedEvent(id, accountId));
+            Apply(new AccountInitialisedEvent(messageMetadata, id, accountId));
         }
 
-        public void AddAmount(decimal amount)
+        public void AddAmount(MessageMetadata messageMetadata, decimal amount)
         {
-            Apply(new AmountAddedEvent(Id, amount));
+            Apply(new AmountAddedEvent(messageMetadata, Id, amount));
         }
 
-        public void ResetBalance()
+        public void ResetBalance(MessageMetadata messageMetadata)
         {
-            Apply(new BalanceResetEvent(Id));
+            Apply(new BalanceResetEvent(messageMetadata, Id));
         }
 
         public void HandleEvent(AccountInitialisedEvent @event, bool isNew)
@@ -66,13 +67,13 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
         public void HandleEvent(AmountAddedEvent @event, bool isNew)
         {
             Balance = _calculator.AddToBalance(Balance, @event.Amount);
-            Apply(new BalanceUpdatedEvent(Id, AccountId, Balance.ToDecimal()), isNew);
+            Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event),  Id, AccountId, Balance.ToDecimal()), isNew);
         }
 
         public void HandleEvent(BalanceResetEvent @event, bool isNew)
         {
             Balance = Balance.Zero;
-            Apply(new BalanceUpdatedEvent(Id, AccountId, Balance.ToDecimal()), isNew);
+            Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event), Id, AccountId, Balance.ToDecimal()), isNew);
         }
     }
 }

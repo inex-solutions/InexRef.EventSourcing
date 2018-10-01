@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
 
@@ -28,7 +29,7 @@ namespace InexRef.EventSourcing.Tests.Account.Domain.Tests
     {
         protected override void Given() { }
 
-        protected override void When() => Subject.AddAmount(1.00M);
+        protected override void When() => Subject.AddAmount(MessageMetadata.CreateDefault(), 1.00M);
 
         [Then]
         public void the_balance_is_one_pound() => Subject.Balance.ShouldBe(Balance.FromDecimal(1.0M));

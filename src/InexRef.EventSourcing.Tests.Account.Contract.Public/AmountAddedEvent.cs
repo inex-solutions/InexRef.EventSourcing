@@ -28,14 +28,14 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
     {
         public decimal Amount { get; }
 
-        public AmountAddedEvent(Guid id, decimal amount) : base(id)
+        public AmountAddedEvent(MessageMetadata messageMetadata, Guid id, decimal amount) : base(messageMetadata, id)
         {
             Amount = amount;
         }
 
         public override string ToString()
         {
-            return $"AmountAddedEvent: Id={Id}, Amount={Amount}, Version={Version}";
+            return $"AmountAddedEvent: MessageMetadata={MessageMetadata}, Id={Id}, Amount={Amount}, Version={Version}";
         }
     }
 }

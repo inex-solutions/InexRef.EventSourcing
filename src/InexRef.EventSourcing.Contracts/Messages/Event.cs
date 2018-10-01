@@ -25,14 +25,17 @@ namespace InexRef.EventSourcing.Contracts.Messages
 {
     public abstract class Event<TId> : IEvent<TId>, IEventInternal where TId : IEquatable<TId>, IComparable<TId>
     {
+        protected Event(MessageMetadata messageMetadata, TId id)
+        {
+            MessageMetadata = messageMetadata;
+            Id = id;
+        }
+
         public TId Id { get; }
 
         public int Version { get; set; }
 
-        protected Event(TId id)
-        {
-            Id = id;
-        }
+        public MessageMetadata MessageMetadata { get; }
 
         void IEventInternal.SetVersion(int version)
         {

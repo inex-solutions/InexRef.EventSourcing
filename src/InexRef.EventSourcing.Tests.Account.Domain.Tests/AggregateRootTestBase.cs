@@ -22,6 +22,7 @@
 using Autofac;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using NUnit.Framework;
 
 namespace InexRef.EventSourcing.Tests.Account.Domain.Tests
 {
@@ -40,6 +41,11 @@ namespace InexRef.EventSourcing.Tests.Account.Domain.Tests
             var container = containerBuilder.Build();
             var factory = container.Resolve<IAggregateRootFactory>();
             Subject = factory.Create<TAggregateRoot>();
+        }
+
+        public void DirectlyReferenceNUnitToAidTestRunner()
+        {
+            Assert.IsTrue(true);
         }
     }
 }

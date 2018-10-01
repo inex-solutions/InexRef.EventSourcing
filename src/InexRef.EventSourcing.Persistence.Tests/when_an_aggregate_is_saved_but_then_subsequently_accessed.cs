@@ -20,7 +20,9 @@
 #endregion
 
 using System;
+using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using InexRef.EventSourcing.Tests.Domain;
 using Shouldly;
 
 namespace InexRef.EventSourcing.Persistence.Tests
@@ -32,13 +34,13 @@ namespace InexRef.EventSourcing.Persistence.Tests
         protected override void Given()
         {
             Aggregate = AggregateRootFactory.Create<CounterAggregateRoot>();
-            Aggregate.Initialise(AggregateId);
+            Aggregate.Initialise(MessageMetadata.CreateDefault(), AggregateId);
             Subject.Save(Aggregate);
         }
 
         public CounterAggregateRoot Aggregate { get; set; }
 
-        protected override void When() => CaughtException = Catch.Exception(() => Aggregate.Increment());
+        protected override void When() => CaughtException = Catch.Exception(() => Aggregate.Increment(MessageMetadata.CreateDefault()));
 
         [Then]
         public void an_ObjectDisposedException_is_thrown() => CaughtException.ShouldBeOfType<ObjectDisposedException>();

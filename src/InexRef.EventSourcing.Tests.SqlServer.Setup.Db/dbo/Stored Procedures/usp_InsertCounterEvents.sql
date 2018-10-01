@@ -14,7 +14,7 @@ SELECT @currentLatestVersion = ISNULL(MAX([Version]),0) FROM [dbo].[EventStore-C
 
 IF (@expectedVersion = @currentLatestVersion)
 BEGIN
-	INSERT INTO [dbo].[EventStore-Counter] ([AggregateId], [Version], [EventDateTime], [Payload])  
+	INSERT INTO [dbo].[EventStore-Counter] ([AggregateId], [Version], [EventDateTime], [SourceCorrelationId], [Payload])  
 	SELECT * FROM @eventsToInsert
 END
 ELSE

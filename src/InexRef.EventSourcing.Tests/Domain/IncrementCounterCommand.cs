@@ -19,14 +19,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Persistence.Tests
+namespace InexRef.EventSourcing.Tests.Domain
 {
-    public class CounterIncrementedEvent : Event<Guid>
+    public class IncrementCounterCommand : Command<string>
     {
-        public CounterIncrementedEvent(Guid id) : base(id)
+        public IncrementCounterCommand(MessageMetadata messageMetadata, string counterId) : base(messageMetadata, counterId)
         {
         }
     }

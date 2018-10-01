@@ -30,7 +30,8 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
 
         public string AccountId { get; }
 
-        public BalanceUpdatedEvent(Guid aggregateId, string accountId, decimal balance) : base(aggregateId)
+        public BalanceUpdatedEvent(MessageMetadata messageMetadata, Guid aggregateId, string accountId, decimal balance) 
+            : base(messageMetadata, aggregateId)
         {
             Balance = balance;
             AccountId = accountId;
@@ -38,7 +39,7 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
 
         public override string ToString()
         {
-            return $"BalanceUpdatedEvent: AccountId={AccountId} Balance={Balance}, Version={Version} (AggregateId={Id})";
+            return $"BalanceUpdatedEvent: MessageMetadata={MessageMetadata}, AccountId={AccountId} Balance={Balance}, Version={Version} (AggregateId={Id})";
         }
     }
 }

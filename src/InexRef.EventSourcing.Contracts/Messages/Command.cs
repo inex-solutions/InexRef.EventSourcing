@@ -19,28 +19,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
-using InexRef.EventSourcing.Tests.Domain;
-using Shouldly;
+using System;
 
-namespace InexRef.EventSourcing.Persistence.Tests
+namespace InexRef.EventSourcing.Contracts.Messages
 {
-    public class when_a_counter_with_a_count_of_one_is_saved_and_reloaded : AggregateRepositoryTestBase
+    public abstract class Command<TId> : ICommand<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
-        public when_a_counter_with_a_count_of_one_is_saved_and_reloaded(string testFixtureOptions) : base(testFixtureOptions) { }
-
-        protected override void Given()
+        protected Command(MessageMetadata messageMetadata, TId id)
         {
-            var aggregate = AggregateRootFactory.Create<CounterAggregateRoot>();
-            aggregate.Initialise(MessageMetadata.CreateDefault(), AggregateId);
-            aggregate.Increment(MessageMetadata.CreateDefault());
-            Subject.Save(aggregate);
+            MessageMetadata = messageMetadata;
+            Id = id;
         }
 
-        protected override void When() => ReloadedCounterAggregateRoot = Subject.Get(AggregateId);
+        public MessageMetadata MessageMetadata { get; }
 
-        [Then]
-        public void the_reloaded_counter_should_have_a_value_of_one() => ReloadedCounterAggregateRoot.CurrentValue.ShouldBe(1);
+        public TId Id { get; }
     }
 }

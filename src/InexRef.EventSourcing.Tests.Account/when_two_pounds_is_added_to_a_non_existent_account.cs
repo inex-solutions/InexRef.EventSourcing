@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Account.Domain;
 using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
@@ -26,27 +27,27 @@ using Shouldly;
 
 namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
-    public class when_two_pounds_is_added_to_a_non_existent_account : IntegrationTestBase
+    public class when_two_pounds_is_added_to_a_non_existent_account : AccountDomainTestBase
     {
         public when_two_pounds_is_added_to_a_non_existent_account(string testFixtureOptions) : base(testFixtureOptions) { }
 
         protected override void Given() { }
 
-        protected override void When() => Subject.Send(new AddAmountCommand(AccountId, 2.00M));
+        protected override void When() => Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, 2.00M));
 
         [Then]
         public void a_new_account_is_created_with_a_balance_of_two_pounds() 
-            => Repository.GetByNaturalKey(AccountId).Balance.ShouldBe(Balance.FromDecimal(2.0M));
+            => Repository.GetByNaturalKey(NaturalId).Balance.ShouldBe(Balance.FromDecimal(2.0M));
 
         [Then]
-        public void the_account_balance_on_the_read_model_is_two_pounds() => BalanceReadModel[AccountId].ShouldBe(2.00M);
+        public void the_account_balance_on_the_read_model_is_two_pounds() => BalanceReadModel[NaturalId].ShouldBe(2.00M);
 
         [Then]
         public void the_aggregate_is_at_least_two_being_the_initial_version_plus_one_add_action() 
-            => Repository.GetByNaturalKey(AccountId).Version.ShouldBeGreaterThanOrEqualTo(2);
+            => Repository.GetByNaturalKey(NaturalId).Version.ShouldBeGreaterThanOrEqualTo(2);
 
         [Then]
         public void the_version_on_the_read_model_is_at_least_two_being_the_initial_version_plus_one_add_action() 
-            => BalanceReadModel.GetVersion(AccountId).ShouldBeGreaterThanOrEqualTo(2);
+            => BalanceReadModel.GetVersion(NaturalId).ShouldBeGreaterThanOrEqualTo(2);
     }
 }

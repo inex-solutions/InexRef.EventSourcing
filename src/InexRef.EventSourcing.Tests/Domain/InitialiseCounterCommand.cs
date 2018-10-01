@@ -19,35 +19,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using InexRef.EventSourcing.Domain;
+using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Persistence.Tests
+namespace InexRef.EventSourcing.Tests.Domain
 {
-    public class CounterAggregateRoot : AggregateRoot<Guid>
+    public class InitialiseCounterCommand : Command<string>
     {
-        public override string Name => "Counter";
-
-        public int CurrentValue { get; private set; }
-
-        public void Initialise(Guid id)
+        public InitialiseCounterCommand(MessageMetadata messageMetadata, string counterId) : base(messageMetadata, counterId)
         {
-            Apply(new CounterInitialisedEvent(id));
-        }
 
-        public void Increment()
-        {
-            Apply(new CounterIncrementedEvent(Id));
-        }
-
-        public void HandleEvent(CounterInitialisedEvent @event, bool isNew)
-        {
-            Id = @event.Id;
-        }
-
-        public void HandleEvent(CounterIncrementedEvent @event, bool isNew)
-        {
-            CurrentValue++;
         }
     }
 }

@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Account.Domain;
 using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
@@ -26,29 +27,29 @@ using Shouldly;
 
 namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
-    public class when_the_balance_is_reset_on_an_account_containing_two_pounds : IntegrationTestBase
+    public class when_the_balance_is_reset_on_an_account_containing_two_pounds : AccountDomainTestBase
     {
         public when_the_balance_is_reset_on_an_account_containing_two_pounds(string testFixtureOptions) : base(testFixtureOptions) { }
 
         protected override void Given()
         {
-            Subject.Send(new AddAmountCommand(AccountId, 2.00M));
+            Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(),  NaturalId, 2.00M));
         }
 
-        protected override void When() => Subject.Send(new ResetBalanceCommand(AccountId));
+        protected override void When() => Subject.Send(new ResetBalanceCommand(MessageMetadata.CreateDefault(), NaturalId));
 
         [Then]
-        public void the_account_balance_is_zero() => Repository.GetByNaturalKey(AccountId).Balance.ShouldBe(Balance.FromDecimal(0.0M));
+        public void the_account_balance_is_zero() => Repository.GetByNaturalKey(NaturalId).Balance.ShouldBe(Balance.FromDecimal(0.0M));
 
         [Then]
-        public void the_account_balance_on_the_read_model_is_zero() => BalanceReadModel[AccountId].ShouldBe(0.00M);
+        public void the_account_balance_on_the_read_model_is_zero() => BalanceReadModel[NaturalId].ShouldBe(0.00M);
 
         [Then]
         public void the_reloaded_aggregate_version_is_at_least_3_being_the_previous_version_plus_the_reset_action() 
-            => Repository.GetByNaturalKey(AccountId).Version.ShouldBeGreaterThanOrEqualTo(3);
+            => Repository.GetByNaturalKey(NaturalId).Version.ShouldBeGreaterThanOrEqualTo(3);
 
         [Then]
         public void the_version_on_the_read_model_subscribed_to_external_events_is_at_least_3_being_the_previous_version_plus_the_reset_action() 
-            => BalanceReadModel.GetVersion(AccountId).ShouldBeGreaterThanOrEqualTo(3);
+            => BalanceReadModel.GetVersion(NaturalId).ShouldBeGreaterThanOrEqualTo(3);
     }
 }

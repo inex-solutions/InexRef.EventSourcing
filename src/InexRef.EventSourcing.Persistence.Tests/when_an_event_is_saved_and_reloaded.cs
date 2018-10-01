@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -23,32 +23,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using InexRef.EventSourcing.Contracts.Bus;
+using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Contracts.Persistence;
-using InexRef.EventSourcing.Tests.Account.Domain;
-using InexRef.EventSourcing.Tests.Account.ReadModels;
 using InexRef.EventSourcing.Tests.Common;
 using InexRef.EventSourcing.Tests.Common.Persistence;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using InexRef.EventSourcing.Tests.Domain;
 using NUnit.Framework;
+using Shouldly;
 
-namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
+namespace InexRef.EventSourcing.Persistence.Tests
 {
-    [TestFixture("EventStorePersistence=InMemory")]
-    [TestFixture("EventStorePersistence=SqlServer")]
-    public abstract class IntegrationTestBase : SpecificationBase<IBus>
+    [TestFixture("EventStorePersistence=InMemory", Category = "DomainOnly")]
+    [TestFixture("EventStorePersistence=SqlServer", Category = "DomainHosting")]
+    public class when_an_event_is_saved_and_reloaded : SpecificationBase
     {
-        private readonly IDictionary<string, string> _testFixtureOptions;
+        private Event<Guid> _eventToSave;
+        private MessageMetadata _messageMetadata;
+        private Guid _id;
+        private readonly Dictionary<string, string> _testFixtureOptions;
+        private IEventStore<Guid> EventStore { get; set; }
+        private IEvent<Guid> ReloadedEvent { get; set; }
 
-        protected string AccountId { get; private set; }
-
-        protected INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string> Repository { get; private set; }
-
-        protected BalanceReadModel BalanceReadModel { get; private set; }
-
-        protected IdGenerator IdGenerator { get; private set; }
-
-        protected IntegrationTestBase(string testFixtureOptions)
+        public when_an_event_is_saved_and_reloaded(string testFixtureOptions)
         {
             _testFixtureOptions = testFixtureOptions
                 .Split(',')
@@ -57,29 +54,34 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 
         protected override void SetUp()
         {
-            IdGenerator = new IdGenerator("my-root");
-
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
-            containerBuilder.RegisterModule<HandlerModule>();
             containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
             containerBuilder.RegisterModule<TestSetupModule>();
 
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
-
             var container = containerBuilder.Build();
 
-            Subject = container.Resolve<IBus>();
-            Repository = container.Resolve<INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string>>();
-            BalanceReadModel = container.Resolve<BalanceReadModel>();
-
-            AccountId = IdGenerator.CreateAggregateId();
+            EventStore = container.Resolve<IEventStore<Guid>>();
         }
 
-        protected override void Cleanup()
+        protected override void Given()
         {
-            Repository.DeleteByNaturalKey(AccountId);
+            _id = Guid.NewGuid();
+            _messageMetadata = MessageMetadata.CreateDefault();
+            _eventToSave = new CounterIncrementedEvent(_messageMetadata, _id);
+
+            EventStore.SaveEvents(_id, typeof(CounterAggregateRoot), new [] {_eventToSave }, 1, 0);
         }
+
+        protected override void When() 
+            => ReloadedEvent = EventStore.LoadEvents(_id, typeof(CounterAggregateRoot), true).FirstOrDefault();
+
+        [Then]
+        public void the_reloaded_event_metadata_has_the_correct_correlation_id()
+            => ReloadedEvent.MessageMetadata.SourceCorrelationId.ShouldBe(_messageMetadata.SourceCorrelationId);
+
+        [Then]
+        public void the_reloaded_event_metadata_is_the_same_as_the_metatdata_on_the_saved_event()
+            => ReloadedEvent.MessageMetadata.ShouldBe(_messageMetadata);
     }
 }

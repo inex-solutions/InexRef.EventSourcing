@@ -26,13 +26,13 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
 {
     public class BalanceResetEvent : Event<Guid>
     {
-        public BalanceResetEvent(Guid id) : base(id)
+        public BalanceResetEvent(MessageMetadata messageMetadata, Guid id) : base(messageMetadata, id)
         {
         }
 
         public override string ToString()
         {
-            return $"BalanceResetEvent: Id={Id}, Version={Version}";
+            return $"BalanceResetEvent: MessageMetadata={MessageMetadata}, Id={Id}, Version={Version}";
 
         }
     }

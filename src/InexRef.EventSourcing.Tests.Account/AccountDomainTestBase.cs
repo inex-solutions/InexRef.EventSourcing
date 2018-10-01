@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,28 +19,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
-using InexRef.EventSourcing.Tests.Domain;
-using Shouldly;
+using Autofac;
+using InexRef.EventSourcing.Tests.Account.Domain;
+using InexRef.EventSourcing.Tests.Account.ReadModels;
+using InexRef.EventSourcing.Tests.Common;
+using NUnit.Framework;
 
-namespace InexRef.EventSourcing.Persistence.Tests
+namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
-    public class when_a_counter_with_a_count_of_one_is_saved_and_reloaded : AggregateRepositoryTestBase
+    public class AccountDomainTestBase : IntegrationTestBase<AccountAggregateRoot>
     {
-        public when_a_counter_with_a_count_of_one_is_saved_and_reloaded(string testFixtureOptions) : base(testFixtureOptions) { }
-
-        protected override void Given()
+        public AccountDomainTestBase(string testFixtureOptions) : base(testFixtureOptions)
         {
-            var aggregate = AggregateRootFactory.Create<CounterAggregateRoot>();
-            aggregate.Initialise(MessageMetadata.CreateDefault(), AggregateId);
-            aggregate.Increment(MessageMetadata.CreateDefault());
-            Subject.Save(aggregate);
         }
 
-        protected override void When() => ReloadedCounterAggregateRoot = Subject.Get(AggregateId);
+        protected BalanceReadModel BalanceReadModel { get; private set; }
 
-        [Then]
-        public void the_reloaded_counter_should_have_a_value_of_one() => ReloadedCounterAggregateRoot.CurrentValue.ShouldBe(1);
+        protected override void RegisterWithContainerBuilder(ContainerBuilder containerBuilder)
+        {
+            containerBuilder.RegisterModule<AccountDomainHostModule>();
+            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
+            containerBuilder.RegisterType<AccountAggregateRoot>();
+        }
+
+        protected override void ResolveFromContainer(IContainer container)
+        {
+            BalanceReadModel = container.Resolve<BalanceReadModel>();
+        }
+
+        public void DirectlyReferenceNUnitToAidTestRunner()
+        {
+            Assert.IsTrue(true);
+        }
     }
 }

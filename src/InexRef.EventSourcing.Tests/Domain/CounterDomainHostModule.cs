@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,15 +19,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using InexRef.EventSourcing.Contracts.Messages;
+using Autofac;
+using InexRef.EventSourcing.Contracts.Bus;
 
-namespace InexRef.EventSourcing.Persistence.Tests
+namespace InexRef.EventSourcing.Tests.Domain
 {
-    public class CounterInitialisedEvent : Event<Guid>
+    public class CounterDomainHostModule : Module
     {
-        public CounterInitialisedEvent(Guid id) : base(id)
+        protected override void Load(ContainerBuilder containerBuilder)
         {
+            containerBuilder
+                .RegisterType<CounterDomainTestHandlers>()
+                .As<IHandle<InitialiseCounterCommand>>()
+                .As<IHandle<IncrementCounterCommand>>();
         }
     }
 }

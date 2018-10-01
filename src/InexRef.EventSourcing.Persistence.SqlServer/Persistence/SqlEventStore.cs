@@ -54,7 +54,7 @@ namespace InexRef.EventSourcing.Persistence.SqlServer.Persistence
                 connection.Open();
 
                 var sql = @"  
-SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggregateId ORDER BY [Version] ASC"
+SELECT [EventDateTime], [SourceCorrelationId], [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggregateId ORDER BY [Version] ASC"
                     .Replace("{aggName}", AggregateRootUtils.GetAggregateRootName(aggregateType));
 
                 using (var command = new SqlCommand(sql, connection))
@@ -75,7 +75,7 @@ SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggreg
 
                         while (reader.Read())
                         {
-                            yield return (IEvent<TId>) Deserialize((string) reader[0]);
+                            yield return (IEvent<TId>) Deserialize((string) reader[2]);
                         }
                     }
                 }
@@ -88,11 +88,17 @@ SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggreg
             dataTable.Columns.Add("AggregateId", typeof(TId));
             dataTable.Columns.Add("Version", typeof(long));
             dataTable.Columns.Add("EventDateTime", typeof(DateTime));
+            dataTable.Columns.Add("SourceCorrelationId", typeof(string));
             dataTable.Columns.Add("Payload", typeof(string));
 
             foreach (var @event in events)
             {
-                dataTable.Rows.Add(@event.Id, @event.Version, DateTime.Now, Serialize(@event));
+                dataTable.Rows.Add(
+                    @event.Id, 
+                    @event.Version, 
+                    @event.MessageMetadata.MessageDateTime, 
+                    @event.MessageMetadata.SourceCorrelationId, 
+                    Serialize(@event));
             }
 
             using (var connection = new SqlConnection(_sqlEventStoreConfiguration.DbConnectionString))

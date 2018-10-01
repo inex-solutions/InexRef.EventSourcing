@@ -24,7 +24,7 @@ using InexRef.EventSourcing.Domain;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
 
-namespace InexRef.EventSourcing.Tests.Domain
+namespace InexRef.EventSourcing.Tests
 {
     public class MonetaryAmount : ValueObject<MonetaryAmount>
     {

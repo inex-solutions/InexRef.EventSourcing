@@ -28,14 +28,14 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
     {
         public string AccountId { get; }
 
-        public AccountInitialisedEvent(Guid id, string accountId) : base(id)
+        public AccountInitialisedEvent(MessageMetadata messageMetadata, Guid id, string accountId) : base(messageMetadata, id)
         {
             AccountId = accountId;
         }
 
         public override string ToString()
         {
-            return $"AccountInitialisedEvent: Id={Id}, AccountId={AccountId}, Version={Version}";
+            return $"AccountInitialisedEvent: MessageMetadata={MessageMetadata}, Id={Id}, AccountId={AccountId}, Version={Version}";
         }
     }
 }

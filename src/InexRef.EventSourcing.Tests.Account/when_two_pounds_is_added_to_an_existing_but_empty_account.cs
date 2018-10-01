@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Account.Domain;
 using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
@@ -26,21 +27,21 @@ using Shouldly;
 
 namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
-    public class when_two_pounds_is_added_to_an_existing_but_empty_account : IntegrationTestBase
+    public class when_two_pounds_is_added_to_an_existing_but_empty_account : AccountDomainTestBase
     {
         public when_two_pounds_is_added_to_an_existing_but_empty_account(string testFixtureOptions) : base(testFixtureOptions) { }
 
         protected override void Given()
         {
-            Subject.Send(new ResetBalanceCommand(AccountId));
+            Subject.Send(new ResetBalanceCommand(MessageMetadata.CreateDefault(), NaturalId));
         }
 
-        protected override void When() => Subject.Send(new AddAmountCommand(AccountId, 2.00M));
+        protected override void When() => Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, 2.00M));
 
         [Then]
-        public void the_account_balance_is_two_pounds() => Repository.GetByNaturalKey(AccountId).Balance.ShouldBe(Balance.FromDecimal(2.0M));
+        public void the_account_balance_is_two_pounds() => Repository.GetByNaturalKey(NaturalId).Balance.ShouldBe(Balance.FromDecimal(2.0M));
 
         [Then]
-        public void the_account_balance_on_the_read_model_is_two_pounds() => BalanceReadModel[AccountId].ShouldBe(2.00M);
+        public void the_account_balance_on_the_read_model_is_two_pounds() => BalanceReadModel[NaturalId].ShouldBe(2.00M);
     }
 }

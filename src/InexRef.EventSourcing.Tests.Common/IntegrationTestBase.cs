@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -24,30 +24,28 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using InexRef.EventSourcing.Contracts;
+using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Persistence;
-using InexRef.EventSourcing.Tests.Common;
 using InexRef.EventSourcing.Tests.Common.Persistence;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
-using InexRef.EventSourcing.Tests.Domain;
 using NUnit.Framework;
 
-namespace InexRef.EventSourcing.Persistence.Tests
+namespace InexRef.EventSourcing.Tests.Common
 {
     [TestFixture("EventStorePersistence=InMemory", Category = "DomainOnly")]
     [TestFixture("EventStorePersistence=SqlServer", Category = "DomainHosting")]
-    public abstract class AggregateRepositoryTestBase : SpecificationBase<IAggregateRepository<CounterAggregateRoot, Guid>>
+    public abstract class IntegrationTestBase <TAggregate>: SpecificationBase<IBus> 
+        where TAggregate : IAggregateRoot<Guid>, IAggregateRootInternal<Guid>
     {
         private readonly IDictionary<string, string> _testFixtureOptions;
 
-        protected Guid AggregateId { get; private set; }
+        protected string NaturalId { get; private set; }
 
-        protected CounterAggregateRoot ReloadedCounterAggregateRoot { get; set; }
+        protected INaturalKeyDrivenAggregateRepository<TAggregate, Guid, string> Repository { get; private set; }
 
-        protected List<Guid> CreatedGuids { get; } = new List<Guid>();
+        protected IdGenerator IdGenerator { get; private set; }
 
-        protected IAggregateRootFactory AggregateRootFactory { get; private set; }
-
-        protected AggregateRepositoryTestBase(string testFixtureOptions)
+        protected IntegrationTestBase(string testFixtureOptions)
         {
             _testFixtureOptions = testFixtureOptions
                 .Split(',')
@@ -56,36 +54,37 @@ namespace InexRef.EventSourcing.Persistence.Tests
 
         protected override void SetUp()
         {
+            IdGenerator = new IdGenerator("my-root");
+
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
             containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
             containerBuilder.RegisterModule<TestSetupModule>();
-            containerBuilder.RegisterType<CounterAggregateRoot>();
-            containerBuilder.RegisterType<NonDisposingCounterAggregateRoot>();
+
+            containerBuilder.RegisterType<TAggregate>();
+
+            RegisterWithContainerBuilder(containerBuilder);
 
             var container = containerBuilder.Build();
 
-            Subject = container.Resolve<IAggregateRepository<CounterAggregateRoot, Guid>>();
-            AggregateRootFactory = container.Resolve<IAggregateRootFactory>();
-            AggregateId = CreateAggregateId();
+            ResolveFromContainer(container);
+
+            Subject = container.Resolve<IBus>();
+            Repository = container.Resolve<INaturalKeyDrivenAggregateRepository<TAggregate, Guid, string>>();
+
+            NaturalId = IdGenerator.CreateAggregateId();
         }
 
-        protected Guid CreateAggregateId()
+        protected virtual void RegisterWithContainerBuilder(ContainerBuilder containerBuilder)
         {
-            var guid = Guid.NewGuid();
-            CreatedGuids.Add(guid);
-            return guid;
         }
 
+        protected virtual void ResolveFromContainer(IContainer container)
+        {
+        }
         protected override void Cleanup()
         {
-            Subject.Delete(AggregateId);
-            ReloadedCounterAggregateRoot?.Dispose();
-        }
-
-        public void DirectlyReferenceNUnitToAidTestRunner()
-        {
-            Assert.IsTrue(true);
+            Repository.DeleteByNaturalKey(NaturalId);
         }
     }
 }

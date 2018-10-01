@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,27 +19,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts.Bus;
-using InexRef.EventSourcing.Tests.Account.Messages;
-using InexRef.EventSourcing.Tests.Account.ReadModels;
+using InexRef.EventSourcing.Contracts.Messages;
+using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using InexRef.EventSourcing.Tests.Domain;
+using Shouldly;
 
-namespace InexRef.EventSourcing.Tests.Account.DomainHost
+namespace InexRef.EventSourcing.Tests
 {
-    public class HandlerModule : Module
+    public class when_sending_a_initialise_counter_command : CounterTestBase
     {
-        protected override void Load(ContainerBuilder containerBuilder)
-        {
-            containerBuilder
-                .RegisterType<BalanceReadModel>()
-                .As<BalanceReadModel>()
-                .As<IHandle<BalanceUpdatedEvent>>()
-                .SingleInstance();
+        public when_sending_a_initialise_counter_command(string testFixtureOptions) : base(testFixtureOptions) { }
 
-            containerBuilder
-                .RegisterType<IntegrationTestHandlers>()
-                .As<IHandle<AddAmountCommand>>()
-                .As<IHandle<ResetBalanceCommand>>();
-        }
+        protected override void When() => Subject.Send(new InitialiseCounterCommand(MessageMetadata.CreateDefault(), NaturalId));
+
+        [Then]
+        public void the_counter_is_created()
+            => Repository.GetByNaturalKey(NaturalId).ShouldNotBeNull();
+
+        [Then]
+        public void the_counter_value_is_zero()
+            => Repository.GetByNaturalKey(NaturalId).CurrentValue.ShouldBe(0);
     }
 }

@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
 
@@ -26,9 +27,9 @@ namespace InexRef.EventSourcing.Tests.Account.Domain.Tests
 {
     public class when_I_reset_an_account_containing_one_pound : AggregateRootTestBase<AccountAggregateRoot>
     {
-        protected override void Given() => Subject.AddAmount(1.00M);
+        protected override void Given() => Subject.AddAmount(MessageMetadata.CreateDefault(), 1.00M);
 
-        protected override void When() => Subject.ResetBalance();
+        protected override void When() => Subject.ResetBalance(MessageMetadata.CreateDefault());
 
         [Then]
         public void the_balance_is_zero() => Subject.Balance.ShouldBe(Balance.FromDecimal(0.0M));

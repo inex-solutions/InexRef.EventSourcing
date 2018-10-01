@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Account.Domain;
 using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
@@ -26,29 +27,30 @@ using Shouldly;
 
 namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
-    public class when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds : IntegrationTestBase
+    public class when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds : AccountDomainTestBase
     {
         public when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds(string testFixtureOptions) : base(testFixtureOptions) { }
 
         protected override void Given()
         {
-            Subject.Send(new AddAmountCommand(AccountId, 2.00M));
+            Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, 2.00M));
         }
 
-        protected override void When() => Subject.Send(new AddAmountCommand(AccountId, 3.00M));
+        protected override void When() => Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, 3.00M));
 
         [Then]
-        public void the_account_balance_is_five_pounds() => Repository.GetByNaturalKey(AccountId).Balance.ShouldBe(Balance.FromDecimal(5.0M));
+        public void the_account_balance_is_five_pounds() 
+            => Repository.GetByNaturalKey(NaturalId).Balance.ShouldBe(Balance.FromDecimal(5.0M));
 
         [Then]
         public void the_aggregate_version_is_at_least_3_being_the_previous_version_plus_the_add_amount_action() 
-            => Repository.GetByNaturalKey(AccountId).Version.ShouldBeGreaterThanOrEqualTo(3);
+            => Repository.GetByNaturalKey(NaturalId).Version.ShouldBeGreaterThanOrEqualTo(3);
 
         [Then]
-        public void the_account_balance_on_the_read_model_is_five_pounds() => BalanceReadModel[AccountId].ShouldBe(5.00M);
+        public void the_account_balance_on_the_read_model_is_five_pounds() => BalanceReadModel[NaturalId].ShouldBe(5.00M);
 
         [Then]
         public void the_version_on_the_read_model_is_at_least_3_being_the_previous_version_plus_the_add_amount_action() 
-            => BalanceReadModel.GetVersion(AccountId).ShouldBeGreaterThanOrEqualTo(3);
+            => BalanceReadModel.GetVersion(NaturalId).ShouldBeGreaterThanOrEqualTo(3);
     }
 }

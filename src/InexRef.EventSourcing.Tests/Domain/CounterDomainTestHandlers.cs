@@ -21,29 +21,27 @@
 
 using System;
 using InexRef.EventSourcing.Contracts.Bus;
+using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Contracts.Persistence;
-using InexRef.EventSourcing.Tests.Account.Domain;
-using InexRef.EventSourcing.Tests.Account.Messages;
 
-namespace InexRef.EventSourcing.Tests.Account.DomainHost
+namespace InexRef.EventSourcing.Tests.Domain
 {
-    public class IntegrationTestHandlers : IHandle<AddAmountCommand>, IHandle<ResetBalanceCommand>
+    public class CounterDomainTestHandlers : IHandle<InitialiseCounterCommand>, IHandle<IncrementCounterCommand>
     {
-        private readonly INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string> _naturalKeyDrivenRepository;
+        private readonly INaturalKeyDrivenAggregateRepository<CounterAggregateRoot, Guid, string> _naturalKeyDrivenRepository;
 
-        public IntegrationTestHandlers(INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string> naturalKeyDrivenRepository)
+        public CounterDomainTestHandlers(INaturalKeyDrivenAggregateRepository<CounterAggregateRoot, Guid, string> naturalKeyDrivenRepository)
         {
             _naturalKeyDrivenRepository = naturalKeyDrivenRepository;
         }
 
-        public void Handle(AddAmountCommand command)
+        public void Handle(InitialiseCounterCommand command)
         {
             try
             {
                 var item = _naturalKeyDrivenRepository.GetOrCreateNewByNaturalKey(
                     naturalKey: command.Id,
-                    onCreateNew: newItem => newItem.InitialiseAccount(newItem.Id, command.Id));
-                item.AddAmount(command.Amount);
+                    onCreateNew: newItem => newItem.Initialise(MessageMetadata.CreateFromMessage(command), newItem.Id));
                 _naturalKeyDrivenRepository.Save(item);
             }
             catch
@@ -53,14 +51,12 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
             }
         }
 
-        public void Handle(ResetBalanceCommand command)
+        public void Handle(IncrementCounterCommand command)
         {
             try
             {
-                var item = _naturalKeyDrivenRepository.GetOrCreateNewByNaturalKey(
-                    naturalKey: command.Id,
-                    onCreateNew: newItem => newItem.InitialiseAccount(newItem.Id, command.Id));
-                item.ResetBalance();
+                var item = _naturalKeyDrivenRepository.GetByNaturalKey(command.Id);
+                item.Increment(MessageMetadata.CreateFromMessage(command));
                 _naturalKeyDrivenRepository.Save(item);
             }
             catch

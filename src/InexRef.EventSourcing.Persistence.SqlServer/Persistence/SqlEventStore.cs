@@ -23,28 +23,22 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
-using System.Text;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Persistence.Common;
 using InexRef.EventSourcing.Persistence.SqlServer.Utils;
-using Newtonsoft.Json;
 
 namespace InexRef.EventSourcing.Persistence.SqlServer.Persistence
 {
     public class SqlEventStore<TId> : IEventStore<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
         private readonly SqlEventStoreConfiguration _sqlEventStoreConfiguration;
-        private readonly JsonSerializer _jsonSerializer;
+        private readonly ISqlEventStoreJsonSerializer _serializer;
 
-        public SqlEventStore(SqlEventStoreConfiguration sqlEventStoreConfiguration)
+        public SqlEventStore(SqlEventStoreConfiguration sqlEventStoreConfiguration, ISqlEventStoreJsonSerializer serializer)
         {
             _sqlEventStoreConfiguration = sqlEventStoreConfiguration;
-            _jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Objects
-            });
+            _serializer = serializer;
         }
 
         public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, Type aggregateType, bool throwIfNotFound)
@@ -75,7 +69,8 @@ SELECT [EventDateTime], [SourceCorrelationId], [Payload] FROM [dbo].[EventStore-
 
                         while (reader.Read())
                         {
-                            yield return (IEvent<TId>) Deserialize((string) reader[2]);
+                            var @event = (IEvent<TId>)_serializer.Deserialize((string)reader[2], (string)reader[1], (DateTime)reader[0]);
+                            yield return @event;
                         }
                     }
                 }
@@ -97,8 +92,8 @@ SELECT [EventDateTime], [SourceCorrelationId], [Payload] FROM [dbo].[EventStore-
                     @event.Id, 
                     @event.Version, 
                     @event.MessageMetadata.MessageDateTime, 
-                    @event.MessageMetadata.SourceCorrelationId, 
-                    Serialize(@event));
+                    @event.MessageMetadata.SourceCorrelationId,
+                    _serializer.Serialize(@event));
             }
 
             using (var connection = new SqlConnection(_sqlEventStoreConfiguration.DbConnectionString))
@@ -148,36 +143,6 @@ SELECT [EventDateTime], [SourceCorrelationId], [Payload] FROM [dbo].[EventStore-
             }
         }
 
-        private string Serialize(IEvent @event)
-        {
-            using (var ms = new MemoryStream())
-            using (var writer = new StreamWriter(ms, Encoding.UTF8))
-            {
-                _jsonSerializer.Serialize(writer, @event);
-                writer.Flush();
-                ms.Position = 0;
-
-                using (var reader = new StreamReader(ms, Encoding.UTF8))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
-        }
-
-        private IEvent Deserialize(string eventPayload)
-        {
-            using (var ms = new MemoryStream())
-            using (var writer = new StreamWriter(ms, Encoding.UTF8))
-            {
-                writer.Write(eventPayload);
-                writer.Flush();
-                ms.Position = 0;
-
-                using (var reader = new StreamReader(ms, Encoding.UTF8))
-                {
-                    return (IEvent)_jsonSerializer.Deserialize(reader, typeof(IEvent));
-                }
-            }
-        }
+       
     }
 }

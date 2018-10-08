@@ -30,6 +30,7 @@ namespace InexRef.EventSourcing.Persistence.SqlServer
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<SqlEventStoreJsonSerializer>().As<ISqlEventStoreJsonSerializer>();
             builder.RegisterGeneric(typeof(SqlEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
             builder.RegisterGeneric(typeof(SqlServerNaturalKeyToAggregateIdMap<,,>)).As(typeof(INaturalKeyToAggregateIdMap<,,>)).SingleInstance();
         }

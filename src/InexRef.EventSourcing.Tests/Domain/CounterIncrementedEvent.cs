@@ -26,7 +26,7 @@ namespace InexRef.EventSourcing.Tests.Domain
 {
     public class CounterIncrementedEvent : Event<Guid>
     {
-        public CounterIncrementedEvent(MessageMetadata metadata, Guid id) : base(metadata, id)
+        public CounterIncrementedEvent(MessageMetadata messageMetadata, Guid id) : base(messageMetadata, id)
         {
         }
     }

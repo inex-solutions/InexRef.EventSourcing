@@ -22,6 +22,8 @@
 using System;
 using Autofac;
 using InexRef.EventSourcing.Bus;
+using InexRef.EventSourcing.Common;
+using InexRef.EventSourcing.Common.Scoping;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Persistence;
@@ -40,6 +42,19 @@ namespace InexRef.EventSourcing
             builder.RegisterType<GuidAggregateIdCreator>().As<IAggregateIdCreator<Guid>>();
             builder.RegisterGeneric(typeof(AggregateRepository<,>)).As(typeof(IAggregateRepository<,>));
             builder.RegisterGeneric(typeof(NaturalKeyDrivenAggregateRepository<,,>)).As(typeof(INaturalKeyDrivenAggregateRepository<,,>));
+
+            builder
+                .Register<OperationContext>(container =>
+                {
+                    var operationScope = container.Resolve<IOperationScope>();
+                    return new OperationContext(operationScope);
+                })
+                .As<IOperationContext>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterModule<AutofacOperationScopeModule>();
+
+            builder.RegisterType<DateTimeProvider>().As<IDateTimeProvider>();
         }
     }
 }

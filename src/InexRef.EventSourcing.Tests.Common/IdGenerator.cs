@@ -38,7 +38,7 @@ namespace InexRef.EventSourcing.Tests.Common
         public string CreateAggregateId()
         {
             var count = Interlocked.Increment(ref _count);
-            var id = $"{_prefix}-{DateTime.Now:yyyyMMddHHmmss}-{count:D2}-{Process.GetCurrentProcess().Id}-{Thread.CurrentThread.ManagedThreadId}";
+            var id = $"{_prefix}-{DateTime.UtcNow:yyyyMMddHHmmss}-{count:D2}-{Process.GetCurrentProcess().Id}-{Thread.CurrentThread.ManagedThreadId}";
             return id;
         }
     }

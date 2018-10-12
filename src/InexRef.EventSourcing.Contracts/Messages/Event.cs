@@ -71,7 +71,7 @@ namespace InexRef.EventSourcing.Contracts.Messages
 
         public override string ToString()
         {
-            return $"{GetType().Namespace}: {Id} - v{Version}: {MessageMetadata}";
+            return $"{GetType().Name}: {Id} - v{Version}: {MessageMetadata}";
         }
     }
 }

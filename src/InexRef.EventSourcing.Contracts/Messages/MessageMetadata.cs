@@ -20,15 +20,17 @@
 #endregion
 
 using System;
+using Newtonsoft.Json;
 
 namespace InexRef.EventSourcing.Contracts.Messages
 {
     public class MessageMetadata
     {
-        public MessageMetadata(string sourceCorrelationId, DateTime messageDateTime)
+        [JsonConstructor]
+        private MessageMetadata(string sourceCorrelationId, DateTime messageDateTime)
         {
-            SourceCorrelationId = sourceCorrelationId;
             MessageDateTime = messageDateTime;
+            SourceCorrelationId = sourceCorrelationId;
         }
 
         public string SourceCorrelationId { get; }
@@ -36,10 +38,13 @@ namespace InexRef.EventSourcing.Contracts.Messages
         public DateTime MessageDateTime { get; }
 
         public static MessageMetadata CreateDefault()
-            => new MessageMetadata(Guid.NewGuid().ToString(), DateTime.Now);
+            => new MessageMetadata(Guid.NewGuid().ToString(), DateTime.UtcNow);
 
         public static MessageMetadata CreateFromMessage(IMessage @event)
-            => new MessageMetadata(@event.MessageMetadata.SourceCorrelationId, DateTime.Now);
+            => new MessageMetadata(@event.MessageMetadata.SourceCorrelationId, DateTime.UtcNow);
+
+        public static MessageMetadata Create(string sourceCorrelationId, DateTime messageDateTime)
+            => new MessageMetadata(sourceCorrelationId, messageDateTime);
 
         public override string ToString()
         {

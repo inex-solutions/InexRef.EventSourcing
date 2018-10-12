@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,21 +19,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts.Bus;
+using InexRef.EventSourcing.Common.Scoping;
 
-namespace InexRef.EventSourcing.Tests.Domain
+namespace InexRef.EventSourcing.Contracts.Messages
 {
-    public class CounterDomainHostModule : Module
+    public static class OperationScopeManagerExtensions
     {
-        protected override void Load(ContainerBuilder containerBuilder)
+        public static IOperationScope CreateScopeFromMessage(
+            this IOperationScopeManager operationScopeManager,
+            IMessage message)
         {
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
-
-            containerBuilder
-                .RegisterType<CounterDomainTestHandlers>()
-                .As<IHandle<InitialiseCounterCommand>>()
-                .As<IHandle<IncrementCounterCommand>>();
+            return operationScopeManager.CreateScope(message.MessageMetadata.SourceCorrelationId, message.MessageMetadata.MessageDateTime);
         }
     }
 }

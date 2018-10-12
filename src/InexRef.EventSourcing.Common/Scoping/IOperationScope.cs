@@ -19,21 +19,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts.Bus;
+using System;
 
-namespace InexRef.EventSourcing.Tests.Domain
+namespace InexRef.EventSourcing.Common.Scoping
 {
-    public class CounterDomainHostModule : Module
+    public interface IOperationScope : IDisposable
     {
-        protected override void Load(ContainerBuilder containerBuilder)
-        {
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+        T Get<T>();
 
-            containerBuilder
-                .RegisterType<CounterDomainTestHandlers>()
-                .As<IHandle<InitialiseCounterCommand>>()
-                .As<IHandle<IncrementCounterCommand>>();
-        }
+        string OperationCorrelationId { get; }
+
+        DateTime OperationStartDateTime { get; }
     }
 }

@@ -19,21 +19,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts.Bus;
+using System;
+using System.Threading;
+using InexRef.EventSourcing.Common;
 
-namespace InexRef.EventSourcing.Tests.Domain
+namespace InexRef.EventSourcing.Tests.Common
 {
-    public class CounterDomainHostModule : Module
+    public class DeterministicallyIncreasingDateTimeProvider : IDateTimeProvider
     {
-        protected override void Load(ContainerBuilder containerBuilder)
-        {
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+        private readonly Lazy<DateTime> _lazyDateTime = new Lazy<DateTime>(() => DateTime.UtcNow);
+        private int _numCalls = 0;
 
-            containerBuilder
-                .RegisterType<CounterDomainTestHandlers>()
-                .As<IHandle<InitialiseCounterCommand>>()
-                .As<IHandle<IncrementCounterCommand>>();
+        public DateTime GetUtcNow()
+        {
+            var dt = _lazyDateTime.Value;
+            var numCalls = Interlocked.Increment(ref _numCalls);
+            return dt.AddSeconds(numCalls);
         }
     }
 }

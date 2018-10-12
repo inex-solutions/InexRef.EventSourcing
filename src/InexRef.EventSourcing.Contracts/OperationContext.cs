@@ -19,21 +19,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
-using InexRef.EventSourcing.Contracts.Bus;
+using InexRef.EventSourcing.Common;
+using InexRef.EventSourcing.Common.Scoping;
+using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Tests.Domain
+namespace InexRef.EventSourcing.Contracts
 {
-    public class CounterDomainHostModule : Module
+    public class OperationContext : IOperationContext
     {
-        protected override void Load(ContainerBuilder containerBuilder)
-        {
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+        private readonly IOperationScope _operationScope;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
-            containerBuilder
-                .RegisterType<CounterDomainTestHandlers>()
-                .As<IHandle<InitialiseCounterCommand>>()
-                .As<IHandle<IncrementCounterCommand>>();
+        public OperationContext(IOperationScope operationScope)
+        {
+            _operationScope = operationScope;
+            SourceMessageMetadata = MessageMetadata.Create(_operationScope.OperationCorrelationId, _operationScope.OperationStartDateTime);
+            _dateTimeProvider = _operationScope.Get<IDateTimeProvider>();
+        }
+
+        public MessageMetadata SourceMessageMetadata { get; }
+
+        public MessageMetadata CreateNewMessageMetadata()
+        {
+            return MessageMetadata.Create(_operationScope.OperationCorrelationId, _dateTimeProvider.GetUtcNow());
         }
     }
 }

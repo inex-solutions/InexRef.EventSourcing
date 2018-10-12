@@ -18,10 +18,17 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
+
+using InexRef.EventSourcing.Contracts;
+
 namespace InexRef.EventSourcing.Tests.Domain
 {
     public class NonDisposingCounterAggregateRoot : CounterAggregateRoot
     {
+        public NonDisposingCounterAggregateRoot(IOperationContext operationContext) : base(operationContext)
+        {
+        }
+
         protected override void Dispose(bool disposing)
         {
             // override the default dispose behaviour (which is to render the aggregate unusable on saving), so that 

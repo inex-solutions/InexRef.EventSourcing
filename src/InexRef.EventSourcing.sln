@@ -33,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.Domain.Tests", "InexRef.EventSourcing.Tests.Account.Domain.Tests\InexRef.EventSourcing.Tests.Account.Domain.Tests.csproj", "{A1819AE0-2376-41A2-887C-8F0DEC55928A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InexRef.EventSourcing.Tests", "InexRef.EventSourcing.Tests\InexRef.EventSourcing.Tests.csproj", "{9C674B23-F652-4AB6-B710-B8C493E2FA44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests", "InexRef.EventSourcing.Tests\InexRef.EventSourcing.Tests.csproj", "{9C674B23-F652-4AB6-B710-B8C493E2FA44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InexRef.EventSourcing.Common", "InexRef.EventSourcing.Common\InexRef.EventSourcing.Common.csproj", "{75FA0DBA-64D6-44AA-A7A4-63B500B9E340}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,6 +105,10 @@ Global
 		{9C674B23-F652-4AB6-B710-B8C493E2FA44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C674B23-F652-4AB6-B710-B8C493E2FA44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C674B23-F652-4AB6-B710-B8C493E2FA44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75FA0DBA-64D6-44AA-A7A4-63B500B9E340}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75FA0DBA-64D6-44AA-A7A4-63B500B9E340}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75FA0DBA-64D6-44AA-A7A4-63B500B9E340}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75FA0DBA-64D6-44AA-A7A4-63B500B9E340}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -23,6 +23,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using InexRef.EventSourcing.Common;
+using InexRef.EventSourcing.Common.Scoping;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Tests.Common;
@@ -38,6 +40,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
     public abstract class AggregateRepositoryTestBase : SpecificationBase<IAggregateRepository<CounterAggregateRoot, Guid>>
     {
         private readonly IDictionary<string, string> _testFixtureOptions;
+        private IContainer _container;
 
         protected Guid AggregateId { get; private set; }
 
@@ -54,6 +57,18 @@ namespace InexRef.EventSourcing.Persistence.Tests
                 .ToDictionary(item => item.Split('=')[0].Trim(), item => item.Split('=')[1].Trim());
         }
 
+        protected void CreateNewScope()
+        {
+            OperationScope?.Dispose();
+
+            OperationScope = _container
+                .Resolve<IOperationScopeManager>()
+                .CreateScope(Guid.NewGuid().ToString(), _container.Resolve<IDateTimeProvider>().GetUtcNow());
+
+            Subject = OperationScope.Get<IAggregateRepository<CounterAggregateRoot, Guid>>();
+            AggregateRootFactory = OperationScope.Get<IAggregateRootFactory>();
+        }
+
         protected override void SetUp()
         {
             var containerBuilder = new ContainerBuilder();
@@ -63,12 +78,13 @@ namespace InexRef.EventSourcing.Persistence.Tests
             containerBuilder.RegisterType<CounterAggregateRoot>();
             containerBuilder.RegisterType<NonDisposingCounterAggregateRoot>();
 
-            var container = containerBuilder.Build();
+            _container = containerBuilder.Build();
 
-            Subject = container.Resolve<IAggregateRepository<CounterAggregateRoot, Guid>>();
-            AggregateRootFactory = container.Resolve<IAggregateRootFactory>();
+            CreateNewScope();
             AggregateId = CreateAggregateId();
         }
+
+        protected IOperationScope OperationScope { get; set; }
 
         protected Guid CreateAggregateId()
         {
@@ -79,6 +95,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
 
         protected override void Cleanup()
         {
+            _container.Dispose();
             Subject.Delete(AggregateId);
             ReloadedCounterAggregateRoot?.Dispose();
         }

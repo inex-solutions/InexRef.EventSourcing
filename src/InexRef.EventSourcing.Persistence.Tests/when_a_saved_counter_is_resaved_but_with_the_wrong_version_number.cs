@@ -19,7 +19,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Persistence.Common;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using InexRef.EventSourcing.Tests.Domain;
@@ -34,14 +33,14 @@ namespace InexRef.EventSourcing.Persistence.Tests
         protected override void Given()
         {
             ReloadedCounterAggregateRoot = AggregateRootFactory.Create<NonDisposingCounterAggregateRoot>();
-            ReloadedCounterAggregateRoot.Initialise(MessageMetadata.CreateDefault(), AggregateId);
+            ReloadedCounterAggregateRoot.Initialise(AggregateId);
 
-            ReloadedCounterAggregateRoot.Increment(MessageMetadata.CreateDefault());
+            ReloadedCounterAggregateRoot.Increment();
 
             // intermediate save should cause a concurrency error when we save below
             Subject.Save(ReloadedCounterAggregateRoot);
 
-            ReloadedCounterAggregateRoot.Increment(MessageMetadata.CreateDefault());
+            ReloadedCounterAggregateRoot.Increment();
         }
 
         protected override void When() => CaughtException = Catch.Exception (() => Subject.Save(ReloadedCounterAggregateRoot));

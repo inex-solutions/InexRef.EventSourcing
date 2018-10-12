@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\InexRef.EventSourcing.Common\InexRef.EventSourcing.Common.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Tests.Account.Contract.Public\InexRef.EventSourcing.Tests.Account.Messages.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Tests.Account.Domain\InexRef.EventSourcing.Tests.Account.Domain.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Tests.Account.ReadModels\InexRef.EventSourcing.Tests.Account.ReadModels.csproj" />

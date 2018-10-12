@@ -20,25 +20,32 @@
 #endregion
 
 using System;
-using InexRef.EventSourcing.Contracts.Messages;
+using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Domain;
 
 namespace InexRef.EventSourcing.Tests.Domain
 {
     public class CounterAggregateRoot : AggregateRoot<Guid>
     {
+        protected IOperationContext OperationContext { get; }
+
         public override string Name => "Counter";
 
         public int CurrentValue { get; private set; }
 
-        public void Initialise(MessageMetadata messageMetadata, Guid id)
+        public CounterAggregateRoot(IOperationContext operationContext)
         {
-            Apply(new CounterInitialisedEvent(messageMetadata, id));
+            OperationContext = operationContext;
         }
 
-        public void Increment(MessageMetadata messageMetadata)
+        public void Initialise(Guid id)
         {
-            Apply(new CounterIncrementedEvent(messageMetadata, Id));
+            Apply(new CounterInitialisedEvent(OperationContext.CreateNewMessageMetadata(), id));
+        }
+
+        public void Increment()
+        {
+            Apply(new CounterIncrementedEvent(OperationContext.CreateNewMessageMetadata(), Id));
         }
 
         public void HandleEvent(CounterInitialisedEvent @event, bool isNew)
@@ -51,7 +58,7 @@ namespace InexRef.EventSourcing.Tests.Domain
             CurrentValue++;
             if (CurrentValue % 2 == 0)
             {
-                Apply(new CounterValueDivisibleByTwoEvent(@event.MessageMetadata, Id, CurrentValue));
+                Apply(new CounterValueDivisibleByTwoEvent(OperationContext.CreateNewMessageMetadata(), Id, CurrentValue));
             }
         }
     }

@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using InexRef.EventSourcing.Common.Scoping;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Contracts.Persistence;
@@ -28,24 +29,30 @@ using InexRef.EventSourcing.Tests.Account.Messages;
 
 namespace InexRef.EventSourcing.Tests.Account.DomainHost
 {
+
+
     public class AccountDomainHandlers : IHandle<AddAmountCommand>, IHandle<ResetBalanceCommand>
     {
-        private readonly INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string> _naturalKeyDrivenRepository;
+        private IOperationScopeManager OperationScopeManager { get; }
 
-        public AccountDomainHandlers(INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string> naturalKeyDrivenRepository)
+        public AccountDomainHandlers(IOperationScopeManager operationScopeManager)
         {
-            _naturalKeyDrivenRepository = naturalKeyDrivenRepository;
+            OperationScopeManager = operationScopeManager;
         }
 
         public void Handle(AddAmountCommand command)
         {
             try
             {
-                var item = _naturalKeyDrivenRepository.GetOrCreateNewByNaturalKey(
-                    naturalKey: command.Id,
-                    onCreateNew: newItem => newItem.InitialiseAccount(MessageMetadata.CreateFromMessage(command),  newItem.Id, command.Id));
-                item.AddAmount(MessageMetadata.CreateFromMessage(command), command.Amount);
-                _naturalKeyDrivenRepository.Save(item);
+                using (var operationScope = OperationScopeManager.CreateScopeFromMessage(command))
+                {
+                    var naturalKeyDrivenRepository = operationScope.Get< INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string> >();
+                    var item = naturalKeyDrivenRepository.GetOrCreateNewByNaturalKey(
+                        naturalKey: command.Id,
+                        onCreateNew: newItem => newItem.InitialiseAccount(MessageMetadata.CreateFromMessage(command), newItem.Id, command.Id));
+                    item.AddAmount(MessageMetadata.CreateFromMessage(command), command.Amount);
+                    naturalKeyDrivenRepository.Save(item);
+                }
             }
             catch
             {
@@ -58,11 +65,15 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
         {
             try
             {
-                var item = _naturalKeyDrivenRepository.GetOrCreateNewByNaturalKey(
-                    naturalKey: command.Id,
-                    onCreateNew: newItem => newItem.InitialiseAccount(MessageMetadata.CreateFromMessage(command), newItem.Id, command.Id));
-                item.ResetBalance(MessageMetadata.CreateFromMessage(command));
-                _naturalKeyDrivenRepository.Save(item);
+                using (var operationScope = OperationScopeManager.CreateScopeFromMessage(command))
+                {
+                    var naturalKeyDrivenRepository = operationScope.Get<INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string>>();
+                    var item = naturalKeyDrivenRepository.GetOrCreateNewByNaturalKey(
+                        naturalKey: command.Id,
+                        onCreateNew: newItem => newItem.InitialiseAccount(MessageMetadata.CreateFromMessage(command), newItem.Id, command.Id));
+                    item.ResetBalance(MessageMetadata.CreateFromMessage(command));
+                    naturalKeyDrivenRepository.Save(item);
+                }
             }
             catch
             {

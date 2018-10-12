@@ -19,21 +19,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using Autofac;
-using InexRef.EventSourcing.Contracts.Bus;
 
-namespace InexRef.EventSourcing.Tests.Domain
+namespace InexRef.EventSourcing.Common.Scoping
 {
-    public class CounterDomainHostModule : Module
+    public class AutofacOperationScopeManager : IOperationScopeManager
     {
-        protected override void Load(ContainerBuilder containerBuilder)
-        {
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+        private readonly ILifetimeScope _lifetimeScope;
 
-            containerBuilder
-                .RegisterType<CounterDomainTestHandlers>()
-                .As<IHandle<InitialiseCounterCommand>>()
-                .As<IHandle<IncrementCounterCommand>>();
+        public AutofacOperationScopeManager(ILifetimeScope lifetimeScope)
+        {
+            _lifetimeScope = lifetimeScope;
+        }
+
+        public IOperationScope CreateScope(string operationCorrelationId, DateTime operationStartDateTime)
+        {
+            var childContainerScope = _lifetimeScope.BeginLifetimeScope();
+            var operationScope = childContainerScope.Resolve<IOperationScopeInternal>();
+            operationScope.InitialiseScope(operationCorrelationId, operationStartDateTime);
+            return operationScope;
         }
     }
 }

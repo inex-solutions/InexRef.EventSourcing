@@ -23,6 +23,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using InexRef.EventSourcing.Common;
+using InexRef.EventSourcing.Common.Scoping;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Persistence;
@@ -38,12 +40,15 @@ namespace InexRef.EventSourcing.Tests.Common
         where TAggregate : IAggregateRoot<Guid>, IAggregateRootInternal<Guid>
     {
         private readonly IDictionary<string, string> _testFixtureOptions;
+        private IContainer _container;
 
         protected string NaturalId { get; private set; }
 
         protected INaturalKeyDrivenAggregateRepository<TAggregate, Guid, string> Repository { get; private set; }
 
         protected IdGenerator IdGenerator { get; private set; }
+
+        protected IOperationScope OperationScope { get; private set; }
 
         protected IntegrationTestBase(string testFixtureOptions)
         {
@@ -65,14 +70,25 @@ namespace InexRef.EventSourcing.Tests.Common
 
             RegisterWithContainerBuilder(containerBuilder);
 
-            var container = containerBuilder.Build();
+            _container = containerBuilder.Build();
 
-            ResolveFromContainer(container);
+            CreateNewScope();
 
-            Subject = container.Resolve<IBus>();
-            Repository = container.Resolve<INaturalKeyDrivenAggregateRepository<TAggregate, Guid, string>>();
+             NaturalId = IdGenerator.CreateAggregateId();
+        }
 
-            NaturalId = IdGenerator.CreateAggregateId();
+        protected void CreateNewScope()
+        {
+            OperationScope?.Dispose();
+
+            OperationScope = _container
+                .Resolve<IOperationScopeManager>()
+                .CreateScope(Guid.NewGuid().ToString(), _container.Resolve<IDateTimeProvider>().GetUtcNow());
+
+            ResolveFromContainer(_container);
+
+            Subject = _container.Resolve<IBus>();
+            Repository = _container.Resolve<INaturalKeyDrivenAggregateRepository<TAggregate, Guid, string>>();
         }
 
         protected virtual void RegisterWithContainerBuilder(ContainerBuilder containerBuilder)
@@ -85,6 +101,7 @@ namespace InexRef.EventSourcing.Tests.Common
         protected override void Cleanup()
         {
             Repository.DeleteByNaturalKey(NaturalId);
+            _container.Dispose();
         }
     }
 }

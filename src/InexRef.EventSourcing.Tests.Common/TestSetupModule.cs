@@ -21,6 +21,7 @@
 
 using System.IO;
 using Autofac;
+using InexRef.EventSourcing.Common;
 using InexRef.EventSourcing.Persistence.SqlServer.Persistence;
 using Microsoft.Extensions.Configuration;
 
@@ -38,6 +39,11 @@ namespace InexRef.EventSourcing.Tests.Common
             var sqlConfig = new SqlEventStoreConfiguration();
             config.GetSection("SqlEventStore").Bind(sqlConfig);
             builder.RegisterInstance(sqlConfig).As<SqlEventStoreConfiguration>();
+
+            builder
+                .RegisterType<DeterministicallyIncreasingDateTimeProvider>()
+                .As<IDateTimeProvider>()
+                .SingleInstance();
         }
     }
 }

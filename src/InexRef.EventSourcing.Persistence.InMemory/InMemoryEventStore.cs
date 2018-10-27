@@ -42,7 +42,8 @@ namespace InexRef.EventSourcing.Persistence.InMemory
                 addValue: eventsToStore,
                 updateValueFactory: (id, enumerable) =>
                 {
-                    var version = enumerable.LastOrDefault()?.Version ?? 0;
+                    var persistedEvents = enumerable.ToList();
+                    var version = persistedEvents.LastOrDefault()?.Version ?? 0;
                     if (version != expectedVersion)
                     {
                         throw new EventStoreConcurrencyException($"Concurrency error saving aggregate {id} (expected version {expectedVersion}, actual {version})");
@@ -50,14 +51,13 @@ namespace InexRef.EventSourcing.Persistence.InMemory
 
                     var eventsToStoreList = eventsToStore.ToList();
 
-                    return enumerable.Concat(eventsToStoreList);
+                    return persistedEvents.Concat(eventsToStoreList);
                 });
         }
 
         public void DeleteEvents(TId id, Type aggregateType)
         {
-            IEnumerable<StoredEvent<TId>> events;
-            _storedEvents.TryRemove(id, out events);
+            _storedEvents.TryRemove(id, out IEnumerable<StoredEvent<TId>>  events);
         }
 
         public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, Type aggregateType, bool throwIfNotFound)

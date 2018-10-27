@@ -28,7 +28,7 @@ namespace InexRef.EventSourcing.Tests.Common
     public class DeterministicallyIncreasingDateTimeProvider : IDateTimeProvider
     {
         private readonly Lazy<DateTime> _lazyDateTime = new Lazy<DateTime>(() => DateTime.UtcNow);
-        private int _numCalls = 0;
+        private int _numCalls;
 
         public DateTime GetUtcNow()
         {

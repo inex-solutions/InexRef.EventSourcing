@@ -35,7 +35,7 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
         public static AccountId Parse(string accountId)
             => new AccountId(accountId);
 
-        public static AccountId Null { get; } = AccountId.Parse("");
+        public static AccountId Null { get; } = Parse("");
 
         public override string ToString() => _accountId;
 

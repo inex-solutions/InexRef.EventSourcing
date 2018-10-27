@@ -59,6 +59,7 @@ namespace InexRef.EventSourcing.Tests
 
         [Then]
         public void comparing_to_itself_returns_true()
+            // ReSharper disable once EqualExpressionComparison
             => Value1.Equals(Value1).ShouldBeTrue();
 
         [Then]
@@ -79,6 +80,7 @@ namespace InexRef.EventSourcing.Tests
 
         [Then]
         public void comparing_to_a_different_but_identical_instance_with_null_as_one_field_value_returns_true()
+            // ReSharper disable once EqualExpressionComparison
             => MonetaryAmount.Create(1.00M, null).Equals(MonetaryAmount.Create(1.00M, null)).ShouldBeTrue();
     }
 
@@ -86,6 +88,7 @@ namespace InexRef.EventSourcing.Tests
     {
         protected override void When() =>
             CaughtException = Catch.Exception(
+                // ReSharper disable once EqualExpressionComparison
                 () => EqualsResult = ValueObjectWithEnumerable.Create(1, 2, 3).Equals(ValueObjectWithEnumerable.Create(1, 2, 3)));
 
         [Then]

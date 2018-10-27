@@ -44,8 +44,7 @@ namespace InexRef.EventSourcing.Persistence.InMemory
 
         public void Delete(TNaturalKey naturalKey)
         {
-            TInternalId removedItem;
-            _keyMap.TryRemove(naturalKey, out removedItem);
+            _keyMap.TryRemove(naturalKey, out TInternalId removedItem);
         }
     }
 }

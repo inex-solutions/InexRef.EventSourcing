@@ -35,7 +35,7 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
         public static Balance FromDecimal(decimal balance)
             => new Balance(balance);
 
-        public static Balance Zero { get; } = Balance.FromDecimal(0);
+        public static Balance Zero { get; } = FromDecimal(0);
 
         public Balance AddDecimal(decimal amountToAdd)
             => new Balance(_balanceAmount + amountToAdd);

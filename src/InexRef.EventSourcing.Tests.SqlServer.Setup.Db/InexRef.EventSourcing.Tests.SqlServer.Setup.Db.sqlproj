@@ -79,5 +79,6 @@
     <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.LOCAL.SA.publish.xml" />
     <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.238.SA.publish.xml" />
     <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.192.168.6.10.SA.publish.xml" />
+    <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.192.168.126.15.SA.publish.xml" />
   </ItemGroup>
 </Project>

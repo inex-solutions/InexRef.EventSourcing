@@ -18,9 +18,12 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
+
+using System.Collections.Generic;
+
 namespace InexRef.EventSourcing.Contracts.Persistence
 {
-    public interface INaturalKeyToAggregateIdMap<in TNaturalKey, out TInternalId, TAggregate>
+    public interface INaturalKeyToAggregateIdMap<TNaturalKey, out TInternalId, TAggregate>
     {
         TInternalId this[TNaturalKey naturalKey] { get; }
 
@@ -29,5 +32,7 @@ namespace InexRef.EventSourcing.Contracts.Persistence
         TInternalId GetOrCreateNew(TNaturalKey naturalKey);
 
         void Delete(TNaturalKey naturalKey);
+
+        IEnumerable<TNaturalKey> GetAllKeys();
     }
 }

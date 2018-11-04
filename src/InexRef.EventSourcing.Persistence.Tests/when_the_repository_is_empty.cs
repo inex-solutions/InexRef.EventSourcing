@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,21 +19,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Collections.Generic;
-using System.Linq;
-using InexRef.EventSourcing.Tests.Account.Domain;
-using Microsoft.AspNetCore.Mvc;
+using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using Shouldly;
 
-namespace InexRef.EventSourcing.Tests.Account.Application.Web.Host.Controllers
+namespace InexRef.EventSourcing.Persistence.Tests
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    public class when_the_repository_is_empty : NaturalKeyDrivenRepositoryTestBase
     {
-        [HttpGet]
-        public IEnumerable<AccountId> Get()
-        {
-            return Enumerable.Empty<AccountId>();
-        }
+        public when_the_repository_is_empty(string testFixtureOptions) : base(testFixtureOptions) { }
+
+        protected override void Given() {}
+
+        protected override void When() { }
+
+        [Then]
+        public void GetAllKeys_returns_an_empty_collection() => Subject.GetAllKeys().ShouldBeEmpty();
     }
 }

@@ -149,5 +149,25 @@ VALUES (@naturalKey, @aggregateID)"
                 command.ExecuteNonQuery();
             }
         }
+
+        public IEnumerable<TNaturalKey> GetAllKeys()
+        {
+            using (var connection = new SqlConnection(_sqlEventStoreConfiguration.DbConnectionString))
+            {
+                var sql = @"SELECT [NaturalKey] FROM [NaturalKeyToAggregateIdMap-{aggName}]"
+                    .Replace("{aggName}", AggregateRootUtils.GetAggregateRootName<TAggregate>());
+
+                var command = new SqlCommand(sql, connection);
+                connection.Open();
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        yield return (TNaturalKey) reader[0];
+                    }
+                }
+            }
+        }
     }
 }

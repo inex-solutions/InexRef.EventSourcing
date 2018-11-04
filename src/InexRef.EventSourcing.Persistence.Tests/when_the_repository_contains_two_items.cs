@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,21 +19,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Collections.Generic;
-using System.Linq;
-using InexRef.EventSourcing.Tests.Account.Domain;
-using Microsoft.AspNetCore.Mvc;
+using System;
+using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 
-namespace InexRef.EventSourcing.Tests.Account.Application.Web.Host.Controllers
+namespace InexRef.EventSourcing.Persistence.Tests
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    public class when_the_repository_contains_two_items : NaturalKeyDrivenRepositoryTestBase
     {
-        [HttpGet]
-        public IEnumerable<AccountId> Get()
+        public when_the_repository_contains_two_items(string testFixtureOptions) : base(testFixtureOptions) { }
+
+        protected override void Given()
         {
-            return Enumerable.Empty<AccountId>();
+            CreatedIds.Add(Guid.NewGuid().ToString());
+            CreatedIds.Add(Guid.NewGuid().ToString());
+
+            Subject.CreateNewByNaturalKey(CreatedIds[0], root => { });
+            Subject.CreateNewByNaturalKey(CreatedIds[1], root => { });
         }
+
+        protected override void When() { }
+
+        [Then]
+        public void GetAllKeys_returns_an_empty_collection() => Subject.GetAllKeys().ShouldContainOnly(CreatedIds);
     }
 }

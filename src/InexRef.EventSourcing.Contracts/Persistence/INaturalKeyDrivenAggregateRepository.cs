@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 
 namespace InexRef.EventSourcing.Contracts.Persistence
 {
@@ -33,5 +34,6 @@ namespace InexRef.EventSourcing.Contracts.Persistence
         TAggregate CreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew);
         TAggregate GetOrCreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew);
         void Save(TAggregate aggregate);
+        IEnumerable<TNaturalKey> GetAllKeys();
     }
 }

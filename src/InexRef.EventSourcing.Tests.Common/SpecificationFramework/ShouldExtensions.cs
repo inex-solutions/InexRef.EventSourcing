@@ -36,5 +36,44 @@ namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
                     string.Join("\n ", itemList));
             }
         }
+
+        public static void ShouldContainOnly<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
+        {
+            var originalActualList = actual.ToList();
+            var originalExpectedList = expected.ToList();
+
+            var actualList = actual.ToList();
+            var expectedList = expected.ToList();
+
+            var unexpected = new List<T>();
+
+            foreach (var actualItem in actualList)
+            {
+                if (!expectedList.Remove(actualItem))
+                {
+                    unexpected.Add(actualItem);
+                }
+            }
+
+            if (expectedList.Count > 0 || unexpected.Count > 0)
+            {
+                var msg =
+                    $"Expected list to contain: {originalExpectedList.ToBulletList()}\nbut contained: {originalActualList.ToBulletList()}\nMissing: {expectedList.ToBulletList()}\nUnexpected: {unexpected.ToBulletList()}";
+
+                throw new SpecificationException(msg);
+            }
+        }
+
+        public static string ToBulletList<T>(this IEnumerable<T> list)
+        {
+            var bulletList = string.Join("\n - ", list);
+
+            if (bulletList.Length > 0)
+            {
+                bulletList = "\n - " + bulletList;
+            }
+
+            return bulletList;
+        }
     }
 }

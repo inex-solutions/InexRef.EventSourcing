@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Persistence;
 
@@ -61,6 +62,11 @@ namespace InexRef.EventSourcing.Persistence.Common
         public void Save(TAggregate aggregate)
         {
             _internalRepository.Save(aggregate);
+        }
+
+        public IEnumerable<TNaturalKey> GetAllKeys()
+        {
+            return _naturalKeyToAggregateIdMap.GetAllKeys();
         }
 
         public void DeleteByNaturalKey(TNaturalKey key)

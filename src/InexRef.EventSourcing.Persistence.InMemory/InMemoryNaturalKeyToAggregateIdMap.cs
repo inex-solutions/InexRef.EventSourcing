@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using InexRef.EventSourcing.Contracts.Persistence;
 
 namespace InexRef.EventSourcing.Persistence.InMemory
@@ -58,6 +59,11 @@ namespace InexRef.EventSourcing.Persistence.InMemory
         public void Delete(TNaturalKey naturalKey)
         {
             _keyMap.TryRemove(naturalKey, out TInternalId removedItem);
+        }
+
+        public IEnumerable<TNaturalKey> GetAllKeys()
+        {
+            return _keyMap.Keys;
         }
     }
 }

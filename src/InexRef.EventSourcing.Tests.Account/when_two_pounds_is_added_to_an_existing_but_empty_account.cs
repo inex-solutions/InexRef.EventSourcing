@@ -44,19 +44,4 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
         [Then]
         public void the_account_balance_on_the_read_model_is_two_pounds() => BalanceReadModel[NaturalId].ShouldBe(2.00M);
     }
-
-    public class when_an_account_is_first_initialised : AccountDomainTestBase
-    {
-        public when_an_account_is_first_initialised(string testFixtureOptions) : base(testFixtureOptions) { }
-
-        protected override void Given() { }
-
-        protected override void When() => Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
-
-        [Then]
-        public void the_account_balance_is_zero() => Repository.GetByNaturalKey(NaturalId).Balance.ShouldBe(Balance.FromDecimal(0.0M));
-
-        [Then]
-        public void the_account_balance_on_the_read_model_is_zero() => BalanceReadModel[NaturalId].ShouldBe(0.00M);
-    }
 }

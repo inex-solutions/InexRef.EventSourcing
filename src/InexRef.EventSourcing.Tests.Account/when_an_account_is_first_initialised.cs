@@ -19,21 +19,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Collections.Generic;
-using System.Linq;
+using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Account.Domain;
-using Microsoft.AspNetCore.Mvc;
+using InexRef.EventSourcing.Tests.Account.Messages;
+using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using Shouldly;
 
-namespace InexRef.EventSourcing.Tests.Account.Application.Web.Host.Controllers
+namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    public class when_an_account_is_first_initialised : AccountDomainTestBase
     {
-        [HttpGet]
-        public IEnumerable<AccountId> Get()
-        {
-            return Enumerable.Empty<AccountId>();
-        }
+        public when_an_account_is_first_initialised(string testFixtureOptions) : base(testFixtureOptions) { }
+
+        protected override void Given() { }
+
+        protected override void When() => Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
+
+        [Then]
+        public void the_account_balance_is_zero() => Repository.GetByNaturalKey(NaturalId).Balance.ShouldBe(Balance.FromDecimal(0.0M));
+
+        [Then]
+        public void the_account_balance_on_the_read_model_is_zero() => BalanceReadModel[NaturalId].ShouldBe(0.00M);
     }
 }

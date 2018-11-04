@@ -25,18 +25,19 @@ using InexRef.EventSourcing.Tests.Account.Messages;
 
 namespace InexRef.EventSourcing.Tests.Account.ReadModels
 {
-    public class BalanceReadModel : IHandle<BalanceUpdatedEvent>
+    public class BalanceReadModel : IHandle<AccountInitialisedEvent>, IHandle<BalanceUpdatedEvent>
     {
-        private readonly ConcurrentDictionary<string, BalanceEntry> _balances = new ConcurrentDictionary<string, BalanceEntry>();
+        private readonly ConcurrentDictionary<string, BalanceEntry> _balances =
+            new ConcurrentDictionary<string, BalanceEntry>();
+
+        public void Handle(AccountInitialisedEvent @event)
+        {
+            _balances.TryAdd(@event.AccountId, new BalanceEntry {Version = @event.Version, Balance = 0});
+        }
 
         public void Handle(BalanceUpdatedEvent @event)
         {
-            _balances.AddOrUpdate(
-                key: @event.AccountId,
-                addValue: new BalanceEntry { Version = @event.Version, Balance = @event.Balance },
-                updateValueFactory: (id, entry) => @event.Version < entry.Version
-                    ? entry
-                    : new BalanceEntry { Version = @event.Version, Balance = @event.Balance });
+            _balances[@event.AccountId] = new BalanceEntry {Version = @event.Version, Balance = @event.Balance};
         }
 
         public decimal this[string id] => _balances[id].Balance;

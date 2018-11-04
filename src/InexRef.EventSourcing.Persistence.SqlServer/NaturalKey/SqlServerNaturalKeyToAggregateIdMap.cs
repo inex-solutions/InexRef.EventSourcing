@@ -68,6 +68,28 @@ namespace InexRef.EventSourcing.Persistence.SqlServer.NaturalKey
             }
         }
 
+        public TInternalId CreateNew(TNaturalKey naturalKey)
+        {
+            using (var connection = new SqlConnection(_sqlEventStoreConfiguration.DbConnectionString))
+            {
+                connection.Open();
+                var sql = @"
+INSERT INTO [dbo].[NaturalKeyToAggregateIdMap-{aggName}] (NaturalKey, AggregateId)
+VALUES (@naturalKey, @aggregateID)"
+                    .Replace("{aggName}", AggregateRootUtils.GetAggregateRootName<TAggregate>());
+
+                var id = _aggregateIdCreator.Create();
+
+                var command = new SqlCommand(sql, connection);
+                command.Parameters.Add("@naturalKey", SqlDbTypeUtils.GetSqlDbType<TNaturalKey>()).Value = naturalKey;
+                command.Parameters.Add("@aggregateID", SqlDbTypeUtils.GetSqlDbType<TInternalId>()).Value = id;
+
+                command.ExecuteNonQuery();
+
+                return id;
+            }
+        }
+
         public TInternalId GetOrCreateNew(TNaturalKey naturalKey)
         {
             using (var connection = new SqlConnection(_sqlEventStoreConfiguration.DbConnectionString))

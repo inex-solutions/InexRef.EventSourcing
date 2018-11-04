@@ -26,6 +26,7 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
     public class AddAmountCommand : ICommand<string>
     {
         public MessageMetadata MessageMetadata { get; }
+
         public string Id { get; }
 
         public decimal Amount { get; }

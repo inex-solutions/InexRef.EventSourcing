@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using System.Collections.Concurrent;
 using InexRef.EventSourcing.Contracts.Persistence;
 
@@ -35,6 +36,18 @@ namespace InexRef.EventSourcing.Persistence.InMemory
         public InMemoryNaturalKeyToAggregateIdMap(IAggregateIdCreator<TInternalId> aggregateIdCreator)
         {
             _aggregateIdCreator = aggregateIdCreator;
+        }
+
+        public TInternalId CreateNew(TNaturalKey naturalKey)
+        {
+            var internalId = _aggregateIdCreator.Create();
+
+            if (!_keyMap.TryAdd(naturalKey, internalId))
+            {
+                throw new InvalidOperationException($"Key already exists: {naturalKey}");
+            }
+
+            return internalId;
         }
 
         public TInternalId GetOrCreateNew(TNaturalKey naturalKey)

@@ -35,6 +35,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 
         protected override void Given()
         {
+            Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
             Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, 2.00M));
             Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, 2.00M));
         }

@@ -52,6 +52,12 @@ namespace InexRef.EventSourcing.Persistence.Common
             return _internalRepository.GetOrCreateNew(id, onCreateNew);
         }
 
+        public TAggregate CreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew)
+        {
+            TInternalId id = _naturalKeyToAggregateIdMap.GetOrCreateNew(naturalKey);
+            return _internalRepository.GetOrCreateNew(id, onCreateNew);
+        }
+
         public void Save(TAggregate aggregate)
         {
             _internalRepository.Save(aggregate);

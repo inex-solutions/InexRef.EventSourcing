@@ -51,7 +51,7 @@ namespace InexRef.EventSourcing.Utils.Dynamic
                 {
                     result = _wrappedObjectType.InvokeMember(
                         binder.Name,
-                        BindingFlags.InvokeMethod,
+                        BindingFlags.InvokeMethod | BindingFlags.DoNotWrapExceptions,
                         null,
                         _wrappedObject,
                         args);

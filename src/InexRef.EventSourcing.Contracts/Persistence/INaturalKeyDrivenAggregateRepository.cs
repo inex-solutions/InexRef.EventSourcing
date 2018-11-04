@@ -30,6 +30,7 @@ namespace InexRef.EventSourcing.Contracts.Persistence
     {
         void DeleteByNaturalKey(TNaturalKey key);
         TAggregate GetByNaturalKey(TNaturalKey id);
+        TAggregate CreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew);
         TAggregate GetOrCreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew);
         void Save(TAggregate aggregate);
     }

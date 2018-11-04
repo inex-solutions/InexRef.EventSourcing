@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Collections.Generic;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Account.Domain;
 using InexRef.EventSourcing.Tests.Account.Messages;
@@ -33,21 +34,11 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 
         protected override void Given() { }
 
-        protected override void When() => Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, 2.00M));
+        protected override void When() 
+            => CaughtException = Catch.Exception(() => Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, 2.00M)));
 
         [Then]
-        public void a_new_account_is_created_with_a_balance_of_two_pounds() 
-            => Repository.GetByNaturalKey(NaturalId).Balance.ShouldBe(Balance.FromDecimal(2.0M));
-
-        [Then]
-        public void the_account_balance_on_the_read_model_is_two_pounds() => BalanceReadModel[NaturalId].ShouldBe(2.00M);
-
-        [Then]
-        public void the_aggregate_is_at_least_two_being_the_initial_version_plus_one_add_action() 
-            => Repository.GetByNaturalKey(NaturalId).Version.ShouldBeGreaterThanOrEqualTo(2);
-
-        [Then]
-        public void the_version_on_the_read_model_is_at_least_two_being_the_initial_version_plus_one_add_action() 
-            => BalanceReadModel.GetVersion(NaturalId).ShouldBeGreaterThanOrEqualTo(2);
+        public void a_KeyNotFoundException_is_thrown()
+            => CaughtException.ShouldBeOfType<KeyNotFoundException>();
     }
 }

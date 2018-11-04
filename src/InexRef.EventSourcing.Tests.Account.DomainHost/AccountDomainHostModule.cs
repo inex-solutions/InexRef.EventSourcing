@@ -34,10 +34,12 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
                 .RegisterType<BalanceReadModel>()
                 .As<BalanceReadModel>()
                 .As<IHandle<BalanceUpdatedEvent>>()
+                .As<IHandle<AccountInitialisedEvent>>()
                 .SingleInstance();
 
             containerBuilder
                 .RegisterType<AccountDomainHandlers>()
+                .As<IHandle<CreateAccountCommand>>()
                 .As<IHandle<AddAmountCommand>>()
                 .As<IHandle<ResetBalanceCommand>>();
         }

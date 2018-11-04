@@ -24,6 +24,8 @@ namespace InexRef.EventSourcing.Contracts.Persistence
     {
         TInternalId this[TNaturalKey naturalKey] { get; }
 
+        TInternalId CreateNew(TNaturalKey naturalKey);
+
         TInternalId GetOrCreateNew(TNaturalKey naturalKey);
 
         void Delete(TNaturalKey naturalKey);

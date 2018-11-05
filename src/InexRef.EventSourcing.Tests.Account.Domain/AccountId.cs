@@ -19,11 +19,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using InexRef.EventSourcing.Domain;
 
 namespace InexRef.EventSourcing.Tests.Account.Domain
 {
-    public class AccountId : ValueObject<AccountId>
+    public class AccountId : ValueObject<AccountId>, IComparable<AccountId>
     {
         private readonly string _accountId;
 
@@ -40,5 +41,12 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
         public override string ToString() => _accountId;
 
         public static implicit operator string(AccountId accountId) => accountId._accountId;
+
+        public int CompareTo(AccountId other)
+        {
+            if (ReferenceEquals(this, other)) return 0;
+            if (ReferenceEquals(null, other)) return 1;
+            return string.Compare(_accountId, other._accountId, StringComparison.Ordinal);
+        }
     }
 }

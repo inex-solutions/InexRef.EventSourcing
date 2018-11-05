@@ -25,12 +25,12 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
 {
     public class Balance : ValueObject<Balance>
     {
-        private readonly decimal _balanceAmount;
-
         private Balance(decimal balanceAmount)
         {
-            _balanceAmount = balanceAmount;
+            Value = balanceAmount;
         }
+
+        public decimal Value { get; }
 
         public static Balance FromDecimal(decimal balance)
             => new Balance(balance);
@@ -38,8 +38,8 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
         public static Balance Zero { get; } = FromDecimal(0);
 
         public Balance AddDecimal(decimal amountToAdd)
-            => new Balance(_balanceAmount + amountToAdd);
+            => new Balance(Value + amountToAdd);
 
-        public decimal ToDecimal() => _balanceAmount;
+        public decimal ToDecimal() => Value;
     }
 }

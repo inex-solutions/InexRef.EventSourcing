@@ -19,9 +19,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using InexRef.EventSourcing.Contracts.Bus;
+using InexRef.EventSourcing.Contracts.Messages;
+using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Tests.Account.Domain;
+using InexRef.EventSourcing.Tests.Account.Messages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InexRef.EventSourcing.Tests.Account.Application.Web.Host.Controllers
@@ -30,10 +35,45 @@ namespace InexRef.EventSourcing.Tests.Account.Application.Web.Host.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<AccountId> Get()
+        private readonly INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string> _repository;
+        private readonly IBus _bus;
+
+        public AccountController(
+            INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string> repository,
+            IBus bus)
         {
-            return Enumerable.Empty<AccountId>();
+            _repository = repository;
+            _bus = bus;
+        }
+
+        [HttpGet("GetKeys")]
+        public IEnumerable<string> GetKeys()
+        {
+            return _repository.GetAllKeys();
+        }
+
+        [HttpGet("Get")]
+        public AccountAggregateRoot Get(string id)
+        {
+            return _repository.GetByNaturalKey(id);
+        }
+
+        [HttpPost("Create")]
+        public void Create(string id)
+        {
+            _bus.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), id));
+        }
+
+        [HttpPost("AddAmount")]
+        public void AddAmount(string id, decimal amount)
+        {
+            _bus.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), id, amount));
+        }
+
+        [HttpPost("ResetBalance")]
+        public void ResetBalance(string id)
+        {
+            _bus.Send(new ResetBalanceCommand(MessageMetadata.CreateDefault(), id));
         }
     }
 }

@@ -20,6 +20,7 @@
 #endregion
 
 using Autofac;
+using InexRef.EventSourcing.Persistence.InMemory;
 using InexRef.EventSourcing.Tests.Account.Domain;
 using InexRef.EventSourcing.Tests.Account.DomainHost;
 using Microsoft.AspNetCore.Builder;
@@ -57,6 +58,8 @@ namespace InexRef.EventSourcing.Tests.Account.Application.Web.Host
             containerBuilder.RegisterModule<AccountDomainHostModule>();
             containerBuilder.RegisterType<Calculator>().As<ICalculator>();
             containerBuilder.RegisterType<AccountAggregateRoot>();
+            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            containerBuilder.RegisterModule<EventSourcingInMemoryPersistenceModule>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

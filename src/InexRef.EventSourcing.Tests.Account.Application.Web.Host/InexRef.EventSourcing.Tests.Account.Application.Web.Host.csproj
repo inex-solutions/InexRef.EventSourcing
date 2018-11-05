@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\InexRef.EventSourcing.Persistence.InMemory\InexRef.EventSourcing.Persistence.InMemory.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Tests.Account.DomainHost\InexRef.EventSourcing.Tests.Account.DomainHost.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Tests.Account.Domain\InexRef.EventSourcing.Tests.Account.Domain.csproj" />
   </ItemGroup>

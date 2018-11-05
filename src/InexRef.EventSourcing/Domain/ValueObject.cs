@@ -27,8 +27,13 @@ using System.Reflection;
 
 namespace InexRef.EventSourcing.Domain
 {
-    public abstract class ValueObject<T>
+    public abstract class ValueObject<T> : IEquatable<T>
     {
+        public virtual bool Equals(T other)
+        {
+            return Equals((object) other);
+        }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(this, obj)) return true;
@@ -97,7 +102,7 @@ namespace InexRef.EventSourcing.Domain
         {
             get
             {
-                var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public).Select(ValueObjectMember.FromFieldInfo);
+                var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Select(ValueObjectMember.FromFieldInfo);
                 var properties = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(ValueObjectMember.FromPropertyInfo);
 
                 return fields.Concat(properties);

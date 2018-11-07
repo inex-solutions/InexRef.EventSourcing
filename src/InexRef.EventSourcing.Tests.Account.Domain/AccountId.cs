@@ -20,14 +20,17 @@
 #endregion
 
 using System;
-using InexRef.EventSourcing.Domain;
+using InexRef.EventSourcing.Contracts;
+using Newtonsoft.Json;
 
 namespace InexRef.EventSourcing.Tests.Account.Domain
 {
-    public class AccountId : ValueObject<AccountId>, IComparable<AccountId>
+    [JsonConverter(typeof(AccountIdJsonConverter))]
+    public class AccountId : IIdentifier<AccountId>
     {
         private readonly string _accountId;
 
+        [JsonConstructor]
         private AccountId(string accountId)
         {
             _accountId = accountId;
@@ -42,11 +45,58 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
 
         public static implicit operator string(AccountId accountId) => accountId._accountId;
 
+        #region Json Serialization
+        public class AccountIdJsonConverter : JsonConverter<AccountId>
+        {
+            public override void WriteJson(JsonWriter writer, AccountId value, JsonSerializer serializer)
+                => writer.WriteValue(value);
+
+            public override AccountId ReadJson(JsonReader reader, Type objectType, AccountId existingValue,
+                bool hasExistingValue,
+                JsonSerializer serializer)
+                => AccountId.Parse(reader.ReadAsString());
+        }
+
+        #endregion
+
+        #region Equality / Comparers
+        public bool Equals(AccountId other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return string.Equals(_accountId, other._accountId);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((AccountId) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (_accountId != null ? _accountId.GetHashCode() : 0);
+        }
+
+        public static bool operator ==(AccountId left, AccountId right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(AccountId left, AccountId right)
+        {
+            return !Equals(left, right);
+        }
+
         public int CompareTo(AccountId other)
         {
             if (ReferenceEquals(this, other)) return 0;
             if (ReferenceEquals(null, other)) return 1;
             return string.Compare(_accountId, other._accountId, StringComparison.Ordinal);
         }
+
+        #endregion
     }
 }

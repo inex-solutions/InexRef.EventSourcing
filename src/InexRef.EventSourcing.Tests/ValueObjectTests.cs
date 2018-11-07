@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Domain;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;

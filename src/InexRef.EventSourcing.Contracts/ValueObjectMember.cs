@@ -22,7 +22,7 @@
 using System;
 using System.Reflection;
 
-namespace InexRef.EventSourcing.Domain
+namespace InexRef.EventSourcing.Contracts
 {
     public class ValueObjectMember
     {

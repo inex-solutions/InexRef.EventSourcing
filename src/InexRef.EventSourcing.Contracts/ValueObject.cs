@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace InexRef.EventSourcing.Domain
+namespace InexRef.EventSourcing.Contracts
 {
     public abstract class ValueObject<T> : IEquatable<T>
     {

@@ -46,7 +46,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
             {
                 using (var operationScope = OperationScopeManager.CreateScopeFromMessage(command))
                 {
-                    var naturalKeyDrivenRepository = operationScope.Get<INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string>>();
+                    var naturalKeyDrivenRepository = operationScope.Get<INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId>>();
                     var item = naturalKeyDrivenRepository.CreateNewByNaturalKey(
                         naturalKey: command.Id,
                         onCreateNew: newItem => newItem.InitialiseAccount(MessageMetadata.CreateFromMessage(command), newItem.Id, command.Id));
@@ -66,7 +66,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
             {
                 using (var operationScope = OperationScopeManager.CreateScopeFromMessage(command))
                 {
-                    var naturalKeyDrivenRepository = operationScope.Get< INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string> >();
+                    var naturalKeyDrivenRepository = operationScope.Get< INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId> >();
                     var item = naturalKeyDrivenRepository.GetByNaturalKey(command.Id);
                     item.AddAmount(MessageMetadata.CreateFromMessage(command), command.Amount);
                     naturalKeyDrivenRepository.Save(item);
@@ -85,7 +85,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
             {
                 using (var operationScope = OperationScopeManager.CreateScopeFromMessage(command))
                 {
-                    var naturalKeyDrivenRepository = operationScope.Get<INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, string>>();
+                    var naturalKeyDrivenRepository = operationScope.Get<INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId>>();
                     var item = naturalKeyDrivenRepository.GetByNaturalKey(command.Id);
                     item.ResetBalance(MessageMetadata.CreateFromMessage(command));
                     naturalKeyDrivenRepository.Save(item);

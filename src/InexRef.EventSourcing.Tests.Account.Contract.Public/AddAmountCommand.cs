@@ -23,15 +23,15 @@ using InexRef.EventSourcing.Contracts.Messages;
 
 namespace InexRef.EventSourcing.Tests.Account.Messages
 {
-    public class AddAmountCommand : ICommand<string>
+    public class AddAmountCommand : ICommand<AccountId>
     {
         public MessageMetadata MessageMetadata { get; }
 
-        public string Id { get; }
+        public AccountId Id { get; }
 
         public decimal Amount { get; }
 
-        public AddAmountCommand(MessageMetadata messageMetadata, string id, decimal amount)
+        public AddAmountCommand(MessageMetadata messageMetadata, AccountId id, decimal amount)
         {
             MessageMetadata = messageMetadata;
             Id = id;

@@ -26,9 +26,9 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
 {
     public class AccountInitialisedEvent : Event<Guid>
     {
-        public string AccountId { get; }
+        public AccountId AccountId { get; }
 
-        public AccountInitialisedEvent(MessageMetadata messageMetadata, Guid id, string accountId) : base(messageMetadata, id)
+        public AccountInitialisedEvent(MessageMetadata messageMetadata, Guid id, AccountId accountId) : base(messageMetadata, id)
         {
             AccountId = accountId;
         }

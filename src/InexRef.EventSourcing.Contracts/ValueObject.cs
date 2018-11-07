@@ -24,16 +24,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace InexRef.EventSourcing.Contracts
 {
-    public abstract class ValueObject<T> : IEquatable<T>
+    public abstract class ValueObject<T>
     {
-        public virtual bool Equals(T other)
-        {
-            return Equals((object) other);
-        }
-
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(this, obj)) return true;

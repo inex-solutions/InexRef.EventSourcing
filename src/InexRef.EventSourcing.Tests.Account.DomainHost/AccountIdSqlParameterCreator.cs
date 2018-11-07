@@ -19,27 +19,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using InexRef.EventSourcing.Contracts.Messages;
+using System.Data;
+using System.Data.SqlClient;
+using InexRef.EventSourcing.Persistence.SqlServer.Utils;
+using InexRef.EventSourcing.Tests.Account.Messages;
 
-namespace InexRef.EventSourcing.Tests.Account.Messages
+namespace InexRef.EventSourcing.Tests.Account.DomainHost
 {
-    public class BalanceUpdatedEvent : Event<Guid>
+    public class AccountIdSqlParameterCreator : ISqlParameterCreator<AccountId>
     {
-        public decimal Balance { get; }
-
-        public AccountId AccountId { get; }
-
-        public BalanceUpdatedEvent(MessageMetadata messageMetadata, Guid aggregateId, AccountId accountId, decimal balance) 
-            : base(messageMetadata, aggregateId)
-        {
-            Balance = balance;
-            AccountId = accountId;
-        }
-
-        public override string ToString()
-        {
-            return $"BalanceUpdatedEvent: MessageMetadata={MessageMetadata}, AccountId={AccountId} Balance={Balance}, Version={Version} (AggregateId={Id})";
-        }
+        public SqlParameter Create(string name, AccountId value)
+            => new SqlParameter(name, SqlDbType.NVarChar)
+            {
+                Value = (string)value
+            };
     }
 }

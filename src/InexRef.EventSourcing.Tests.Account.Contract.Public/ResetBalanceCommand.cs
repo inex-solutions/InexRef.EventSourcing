@@ -23,13 +23,13 @@ using InexRef.EventSourcing.Contracts.Messages;
 
 namespace InexRef.EventSourcing.Tests.Account.Messages
 {
-    public class ResetBalanceCommand : ICommand<string>
+    public class ResetBalanceCommand : ICommand<AccountId>
     {
         public MessageMetadata MessageMetadata { get; }
 
-        public string Id { get; }
+        public AccountId Id { get; }
 
-        public ResetBalanceCommand(MessageMetadata messageMetadata, string id)
+        public ResetBalanceCommand(MessageMetadata messageMetadata, AccountId id)
         {
             MessageMetadata = messageMetadata;
             Id = id;

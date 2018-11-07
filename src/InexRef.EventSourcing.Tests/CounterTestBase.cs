@@ -26,10 +26,11 @@ using NUnit.Framework;
 
 namespace InexRef.EventSourcing.Tests
 {
-    public class CounterTestBase : IntegrationTestBase<CounterAggregateRoot>
+    public class CounterTestBase : IntegrationTestBase<CounterAggregateRoot, string>
     {
         public CounterTestBase(string testFixtureOptions) : base(testFixtureOptions)
         {
+            NaturalId = new IdGenerator("my-root").CreateAggregateId();
         }
 
 

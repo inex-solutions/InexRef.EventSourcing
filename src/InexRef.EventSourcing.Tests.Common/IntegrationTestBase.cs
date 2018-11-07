@@ -36,17 +36,16 @@ namespace InexRef.EventSourcing.Tests.Common
 {
     [TestFixture("EventStorePersistence=InMemory", Category = "DomainOnly")]
     [TestFixture("EventStorePersistence=SqlServer", Category = "DomainHosting")]
-    public abstract class IntegrationTestBase <TAggregate>: SpecificationBase<IBus> 
+    public abstract class IntegrationTestBase <TAggregate, TNaturalKey>: SpecificationBase<IBus> 
         where TAggregate : IAggregateRoot<Guid>, IAggregateRootInternal<Guid>
+        where TNaturalKey : IEquatable<TNaturalKey>, IComparable<TNaturalKey>
     {
         private readonly IDictionary<string, string> _testFixtureOptions;
         private IContainer _container;
 
-        protected string NaturalId { get; private set; }
+        protected TNaturalKey NaturalId { get; set; }
 
-        protected INaturalKeyDrivenAggregateRepository<TAggregate, Guid, string> Repository { get; private set; }
-
-        protected IdGenerator IdGenerator { get; private set; }
+        protected INaturalKeyDrivenAggregateRepository<TAggregate, Guid, TNaturalKey> Repository { get; private set; }
 
         protected IOperationScope OperationScope { get; private set; }
 
@@ -59,8 +58,6 @@ namespace InexRef.EventSourcing.Tests.Common
 
         protected override void SetUp()
         {
-            IdGenerator = new IdGenerator("my-root");
-
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
             containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
@@ -73,8 +70,6 @@ namespace InexRef.EventSourcing.Tests.Common
             _container = containerBuilder.Build();
 
             CreateNewScope();
-
-             NaturalId = IdGenerator.CreateAggregateId();
         }
 
         protected void CreateNewScope()
@@ -88,7 +83,7 @@ namespace InexRef.EventSourcing.Tests.Common
             ResolveFromContainer(_container);
 
             Subject = _container.Resolve<IBus>();
-            Repository = _container.Resolve<INaturalKeyDrivenAggregateRepository<TAggregate, Guid, string>>();
+            Repository = _container.Resolve<INaturalKeyDrivenAggregateRepository<TAggregate, Guid, TNaturalKey>>();
         }
 
         protected virtual void RegisterWithContainerBuilder(ContainerBuilder containerBuilder)

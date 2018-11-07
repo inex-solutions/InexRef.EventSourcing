@@ -23,14 +23,14 @@ using InexRef.EventSourcing.Contracts.Messages;
 
 namespace InexRef.EventSourcing.Tests.Account.Messages
 {
-    public class CreateAccountCommand : ICommand<string>
+    public class CreateAccountCommand : ICommand<AccountId>
     {
         public MessageMetadata MessageMetadata { get; }
 
-        public string Id { get; }
+        public AccountId Id { get; }
 
 
-        public CreateAccountCommand(MessageMetadata messageMetadata, string id)
+        public CreateAccountCommand(MessageMetadata messageMetadata, AccountId id)
         {
             MessageMetadata = messageMetadata;
             Id = id;

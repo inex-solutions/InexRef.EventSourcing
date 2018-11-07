@@ -27,8 +27,8 @@ namespace InexRef.EventSourcing.Tests.Account.ReadModels
 {
     public class BalanceReadModel : IHandle<AccountInitialisedEvent>, IHandle<BalanceUpdatedEvent>
     {
-        private readonly ConcurrentDictionary<string, BalanceEntry> _balances =
-            new ConcurrentDictionary<string, BalanceEntry>();
+        private readonly ConcurrentDictionary<AccountId, BalanceEntry> _balances =
+            new ConcurrentDictionary<AccountId, BalanceEntry>();
 
         public void Handle(AccountInitialisedEvent @event)
         {
@@ -40,9 +40,9 @@ namespace InexRef.EventSourcing.Tests.Account.ReadModels
             _balances[@event.AccountId] = new BalanceEntry {Version = @event.Version, Balance = @event.Balance};
         }
 
-        public decimal this[string id] => _balances[id].Balance;
+        public decimal this[AccountId id] => _balances[id].Balance;
 
-        public int GetVersion(string id) => _balances[id].Version;
+        public int GetVersion(AccountId id) => _balances[id].Version;
 
         private class BalanceEntry
         {

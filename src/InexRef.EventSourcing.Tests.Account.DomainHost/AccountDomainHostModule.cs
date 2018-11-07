@@ -21,6 +21,7 @@
 
 using Autofac;
 using InexRef.EventSourcing.Contracts.Bus;
+using InexRef.EventSourcing.Persistence.SqlServer.Utils;
 using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Account.ReadModels;
 
@@ -42,6 +43,8 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
                 .As<IHandle<CreateAccountCommand>>()
                 .As<IHandle<AddAmountCommand>>()
                 .As<IHandle<ResetBalanceCommand>>();
+
+            containerBuilder.RegisterType<AccountIdSqlParameterCreator>().As<ISqlParameterCreator<AccountId>>();
         }
     }
 }

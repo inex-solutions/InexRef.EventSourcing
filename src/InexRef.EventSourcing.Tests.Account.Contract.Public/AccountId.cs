@@ -23,9 +23,9 @@ using System;
 using InexRef.EventSourcing.Contracts;
 using Newtonsoft.Json;
 
-namespace InexRef.EventSourcing.Tests.Account.Domain
+namespace InexRef.EventSourcing.Tests.Account.Messages
 {
-    [JsonConverter(typeof(AccountIdJsonConverter))]
+    [JsonConverter(typeof(AccountId.AccountIdJsonConverter))]
     public class AccountId : IIdentifier<AccountId>
     {
         private readonly string _accountId;
@@ -36,16 +36,16 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
             _accountId = accountId;
         }
 
-        public static AccountId Parse(string accountId)
-            => new AccountId(accountId);
+        public static explicit operator AccountId(string idValue) => AccountId.Parse(idValue);
 
-        public static AccountId Null { get; } = Parse("");
-
-        public override string ToString() => _accountId;
+        public static AccountId Parse(string idValue) => new AccountId(idValue);
 
         public static implicit operator string(AccountId accountId) => accountId._accountId;
 
+        public static AccountId Null => new AccountId(string.Empty);
+
         #region Json Serialization
+
         public class AccountIdJsonConverter : JsonConverter<AccountId>
         {
             public override void WriteJson(JsonWriter writer, AccountId value, JsonSerializer serializer)
@@ -54,12 +54,13 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
             public override AccountId ReadJson(JsonReader reader, Type objectType, AccountId existingValue,
                 bool hasExistingValue,
                 JsonSerializer serializer)
-                => AccountId.Parse(reader.ReadAsString());
+                => AccountId.Parse((string)reader.Value);
         }
 
         #endregion
 
         #region Equality / Comparers
+
         public bool Equals(AccountId other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -67,11 +68,15 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
             return string.Equals(_accountId, other._accountId);
         }
 
+
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != this.GetType())
+                return false;
+
             return Equals((AccountId) obj);
         }
 

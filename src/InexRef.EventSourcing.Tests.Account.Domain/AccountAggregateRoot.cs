@@ -43,7 +43,7 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
 
         public Balance Balance { get; private set; }
 
-        public void InitialiseAccount(MessageMetadata messageMetadata, Guid id, string accountId)
+        public void InitialiseAccount(MessageMetadata messageMetadata, Guid id, AccountId accountId)
         {
             Apply(new AccountInitialisedEvent(messageMetadata, id, accountId));
         }
@@ -61,7 +61,7 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
         public void HandleEvent(AccountInitialisedEvent @event, bool isNew)
         {
             Id = @event.Id;
-            AccountId = AccountId.Parse(@event.AccountId);
+            AccountId = @event.AccountId;
         }
 
         public void HandleEvent(AmountAddedEvent @event, bool isNew)

@@ -60,19 +60,19 @@ namespace InexRef.EventSourcing.Tests.Account.Application.Web.Host.Controllers
         [HttpPost("Create")]
         public void Create(string id)
         {
-            _bus.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), id));
+            _bus.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), AccountId.Parse(id)));
         }
 
         [HttpPost("AddAmount")]
         public void AddAmount(string id, decimal amount)
         {
-            _bus.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), id, amount));
+            _bus.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), AccountId.Parse(id), amount));
         }
 
         [HttpPost("ResetBalance")]
         public void ResetBalance(string id)
         {
-            _bus.Send(new ResetBalanceCommand(MessageMetadata.CreateDefault(), id));
+            _bus.Send(new ResetBalanceCommand(MessageMetadata.CreateDefault(), AccountId.Parse(id)));
         }
     }
 }

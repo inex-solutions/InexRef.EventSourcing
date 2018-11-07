@@ -19,18 +19,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using Autofac;
 using InexRef.EventSourcing.Tests.Account.Domain;
+using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Account.ReadModels;
 using InexRef.EventSourcing.Tests.Common;
 using NUnit.Framework;
 
 namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
-    public class AccountDomainTestBase : IntegrationTestBase<AccountAggregateRoot>
+    public class AccountDomainTestBase : IntegrationTestBase<AccountAggregateRoot, AccountId>
     {
         public AccountDomainTestBase(string testFixtureOptions) : base(testFixtureOptions)
         {
+            NaturalId = AccountId.Parse(Guid.NewGuid().ToString());
         }
 
         protected BalanceReadModel BalanceReadModel { get; private set; }

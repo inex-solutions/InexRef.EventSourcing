@@ -24,8 +24,9 @@ using System.Collections.Generic;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Contracts.Persistence;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Messages;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Tests.Account.Domain;
-using InexRef.EventSourcing.Tests.Account.Messages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InexRef.EventSourcing.Tests.Account.Application.Web.Host.Controllers

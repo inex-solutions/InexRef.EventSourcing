@@ -23,7 +23,7 @@ using System;
 using InexRef.EventSourcing.Contracts;
 using Newtonsoft.Json;
 
-namespace InexRef.EventSourcing.Tests.Account.Messages
+namespace InexRef.EventSourcing.Tests.Account.Contract.Public.Types
 {
     [JsonConverter(typeof(AccountId.AccountIdJsonConverter))]
     public class AccountId : IIdentifier<AccountId>

@@ -19,7 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using InexRef.EventSourcing.Tests.Account.Messages;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
 
 namespace InexRef.EventSourcing.Tests.Account.Domain
 {

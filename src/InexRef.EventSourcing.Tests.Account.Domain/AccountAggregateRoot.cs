@@ -22,7 +22,8 @@
 using System;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Domain;
-using InexRef.EventSourcing.Tests.Account.Messages;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Messages;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
 
 namespace InexRef.EventSourcing.Tests.Account.Domain
 {

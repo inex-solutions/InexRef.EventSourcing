@@ -21,7 +21,8 @@
 
 using System.Collections.Generic;
 using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Tests.Account.Messages;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Messages;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
 

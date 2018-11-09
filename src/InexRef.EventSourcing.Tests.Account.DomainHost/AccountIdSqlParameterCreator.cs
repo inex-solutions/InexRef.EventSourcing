@@ -22,7 +22,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using InexRef.EventSourcing.Persistence.SqlServer.Utils;
-using InexRef.EventSourcing.Tests.Account.Messages;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
 
 namespace InexRef.EventSourcing.Tests.Account.DomainHost
 {

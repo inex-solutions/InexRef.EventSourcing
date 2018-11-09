@@ -21,8 +21,8 @@
 
 using System;
 using Autofac;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Tests.Account.Domain;
-using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Account.ReadModels;
 using InexRef.EventSourcing.Tests.Common;
 using NUnit.Framework;

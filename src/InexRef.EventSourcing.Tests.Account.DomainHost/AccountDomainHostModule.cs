@@ -22,7 +22,8 @@
 using Autofac;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Persistence.SqlServer.Utils;
-using InexRef.EventSourcing.Tests.Account.Messages;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Messages;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Tests.Account.ReadModels;
 
 namespace InexRef.EventSourcing.Tests.Account.DomainHost

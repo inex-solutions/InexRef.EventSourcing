@@ -19,27 +19,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using InexRef.EventSourcing.Contracts.Messages;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
 
-namespace InexRef.EventSourcing.Tests.Account.Messages
+namespace InexRef.EventSourcing.Tests.Account.Contract.Public.Messages
 {
-    public class BalanceUpdatedEvent : Event<Guid>
+    public class ResetBalanceCommand : ICommand<AccountId>
     {
-        public Balance Balance { get; }
+        public MessageMetadata MessageMetadata { get; }
 
-        public AccountId AccountId { get; }
+        public AccountId Id { get; }
 
-        public BalanceUpdatedEvent(MessageMetadata messageMetadata, Guid aggregateId, AccountId accountId, Balance balance) 
-            : base(messageMetadata, aggregateId)
+        public ResetBalanceCommand(MessageMetadata messageMetadata, AccountId id)
         {
-            Balance = balance;
-            AccountId = accountId;
+            MessageMetadata = messageMetadata;
+            Id = id;
         }
 
         public override string ToString()
         {
-            return $"BalanceUpdatedEvent: MessageMetadata={MessageMetadata}, AccountId={AccountId} Balance={Balance}, Version={Version} (AggregateId={Id})";
+            return $"ResetBalanceCommand: messageMetadata={MessageMetadata}, id={Id}";
         }
     }
 }

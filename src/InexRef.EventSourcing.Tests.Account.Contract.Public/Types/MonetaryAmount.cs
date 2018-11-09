@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,21 +19,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using InexRef.EventSourcing.Contracts.Messages;
+using InexRef.EventSourcing.Contracts;
+using Newtonsoft.Json;
 
-namespace InexRef.EventSourcing.Tests.Account.Messages
+namespace InexRef.EventSourcing.Tests.Account.Contract.Public.Types
 {
-    public class BalanceResetEvent : Event<Guid>
+    public class MonetaryAmount : ValueObject<MonetaryAmount>
     {
-        public BalanceResetEvent(MessageMetadata messageMetadata, Guid id) : base(messageMetadata, id)
+        [JsonConstructor]
+        private MonetaryAmount(decimal amount)
         {
+            Amount = amount;
         }
 
-        public override string ToString()
-        {
-            return $"BalanceResetEvent: MessageMetadata={MessageMetadata}, Id={Id}, Version={Version}";
+        public decimal Amount { get; }
 
-        }
+        public static MonetaryAmount Create(decimal amount)
+            => new MonetaryAmount(amount);
     }
 }

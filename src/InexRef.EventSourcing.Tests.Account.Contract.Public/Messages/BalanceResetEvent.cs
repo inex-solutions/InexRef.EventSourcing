@@ -19,29 +19,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using InexRef.EventSourcing.Contracts;
-using Newtonsoft.Json;
+using System;
+using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Tests.Account.Messages
+namespace InexRef.EventSourcing.Tests.Account.Contract.Public.Messages
 {
-    public class Balance : ValueObject<Balance>
+    public class BalanceResetEvent : Event<Guid>
     {
-        [JsonConstructor]
-        private Balance(decimal balanceAmount)
+        public BalanceResetEvent(MessageMetadata messageMetadata, Guid id) : base(messageMetadata, id)
         {
-            Value = balanceAmount;
         }
 
-        public decimal Value { get; }
+        public override string ToString()
+        {
+            return $"BalanceResetEvent: MessageMetadata={MessageMetadata}, Id={Id}, Version={Version}";
 
-        public static Balance FromDecimal(decimal balance)
-            => new Balance(balance);
-
-        public static Balance Zero { get; } = FromDecimal(0);
-
-        public Balance AddDecimal(decimal amountToAdd)
-            => new Balance(Value + amountToAdd);
-
-        public decimal ToDecimal() => Value;
+        }
     }
 }

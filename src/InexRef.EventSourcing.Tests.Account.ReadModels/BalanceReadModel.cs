@@ -21,7 +21,8 @@
 
 using System.Collections.Concurrent;
 using InexRef.EventSourcing.Contracts.Bus;
-using InexRef.EventSourcing.Tests.Account.Messages;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Messages;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
 
 namespace InexRef.EventSourcing.Tests.Account.ReadModels
 {

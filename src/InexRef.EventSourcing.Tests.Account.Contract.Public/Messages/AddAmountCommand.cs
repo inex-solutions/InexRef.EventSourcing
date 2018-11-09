@@ -20,8 +20,9 @@
 #endregion
 
 using InexRef.EventSourcing.Contracts.Messages;
+using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
 
-namespace InexRef.EventSourcing.Tests.Account.Messages
+namespace InexRef.EventSourcing.Tests.Account.Contract.Public.Messages
 {
     public class AddAmountCommand : ICommand<AccountId>
     {

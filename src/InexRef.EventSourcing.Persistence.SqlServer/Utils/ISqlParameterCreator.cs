@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,36 +19,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Data;
+using System.Data.SqlClient;
 
 namespace InexRef.EventSourcing.Persistence.SqlServer.Utils
 {
-    public static class SqlDbTypeUtils
+    public interface ISqlParameterCreator<in TSourceType>
     {
-        public static SqlDbType GetSqlDbType<T>()
-        {
-            if (typeof(T) == typeof(int))
-            {
-                return SqlDbType.Int;
-            }
-
-            if (typeof(T) == typeof(long))
-            {
-                return SqlDbType.BigInt;
-            }
-
-            if (typeof(T) == typeof(string))
-            {
-                return SqlDbType.NVarChar;
-            }
-
-            if (typeof(T) == typeof(Guid))
-            {
-                return SqlDbType.UniqueIdentifier;
-            }
-
-            throw new NotSupportedException($"Type {typeof(T).Name} is not supported");
-        }
+        SqlParameter Create(string name, TSourceType value);
     }
 }

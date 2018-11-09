@@ -20,7 +20,6 @@
 #endregion
 
 using InexRef.EventSourcing.Contracts;
-using InexRef.EventSourcing.Domain;
 
 namespace InexRef.EventSourcing.Tests.Account.Domain
 {

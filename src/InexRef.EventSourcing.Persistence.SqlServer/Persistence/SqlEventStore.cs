@@ -34,11 +34,15 @@ namespace InexRef.EventSourcing.Persistence.SqlServer.Persistence
     {
         private readonly SqlEventStoreConfiguration _sqlEventStoreConfiguration;
         private readonly ISqlEventStoreJsonSerializer _serializer;
+        private readonly ISqlParameterCreator<TId> _idParameterCreator;
 
-        public SqlEventStore(SqlEventStoreConfiguration sqlEventStoreConfiguration, ISqlEventStoreJsonSerializer serializer)
+        public SqlEventStore(SqlEventStoreConfiguration sqlEventStoreConfiguration, 
+            ISqlEventStoreJsonSerializer serializer, 
+            ISqlParameterCreator<TId> idParameterCreator)
         {
             _sqlEventStoreConfiguration = sqlEventStoreConfiguration;
             _serializer = serializer;
+            _idParameterCreator = idParameterCreator;
         }
 
         public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, Type aggregateType, bool throwIfNotFound)
@@ -53,7 +57,7 @@ SELECT [EventDateTime], [SourceCorrelationId], [Payload] FROM [dbo].[EventStore-
 
                 using (var command = new SqlCommand(sql, connection))
                 {
-                    command.Parameters.Add("@aggregateId", SqlDbTypeUtils.GetSqlDbType<TId>()).Value = aggregateId;
+                    command.Parameters.Add(_idParameterCreator.Create("@aggregateID", aggregateId));
 
                     using (var reader = command.ExecuteReader())
                     {
@@ -105,7 +109,7 @@ SELECT [EventDateTime], [SourceCorrelationId], [Payload] FROM [dbo].[EventStore-
                     command.Connection = connection;
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandText = "dbo.usp_Insert{aggName}Events".Replace("{aggName}", AggregateRootUtils.GetAggregateRootName(aggregateType));
-                    command.Parameters.Add("@aggregateId", SqlDbTypeUtils.GetSqlDbType<TId>()).Value = id;
+                    command.Parameters.Add(_idParameterCreator.Create("@aggregateID", id));
                     command.Parameters.Add("@expectedVersion", SqlDbType.BigInt).Value = expectedVersion;
 
                     var tableParameter = new SqlParameter();
@@ -137,7 +141,7 @@ SELECT [EventDateTime], [SourceCorrelationId], [Payload] FROM [dbo].[EventStore-
 
                 using (var command = new SqlCommand(getLatestVersionSql, connection))
                 {
-                    command.Parameters.Add("@aggregateId", SqlDbTypeUtils.GetSqlDbType<TId>()).Value = id;
+                    command.Parameters.Add(_idParameterCreator.Create("@aggregateID", id));
                     command.ExecuteNonQuery();
                 }
             }

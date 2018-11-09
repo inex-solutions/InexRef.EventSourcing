@@ -33,13 +33,19 @@ namespace InexRef.EventSourcing.Persistence.SqlServer.NaturalKey
     {
         private readonly SqlEventStoreConfiguration _sqlEventStoreConfiguration;
         private readonly IAggregateIdCreator<TInternalId> _aggregateIdCreator;
+        private readonly ISqlParameterCreator<TNaturalKey> _naturalKeyParameterCreator;
+        private readonly ISqlParameterCreator<TInternalId> _internalKeyParameterCreator;
 
         public SqlServerNaturalKeyToAggregateIdMap(
             SqlEventStoreConfiguration sqlEventStoreConfiguration,
-            IAggregateIdCreator<TInternalId> aggregateIdCreator)
+            IAggregateIdCreator<TInternalId> aggregateIdCreator,
+            ISqlParameterCreator<TNaturalKey> naturalKeyParameterCreator,
+            ISqlParameterCreator<TInternalId> internalKeyParameterCreator)
         {
             _sqlEventStoreConfiguration = sqlEventStoreConfiguration;
             _aggregateIdCreator = aggregateIdCreator;
+            _naturalKeyParameterCreator = naturalKeyParameterCreator;
+            _internalKeyParameterCreator = internalKeyParameterCreator;
         }
 
         public TInternalId this[TNaturalKey naturalKey]
@@ -52,7 +58,7 @@ namespace InexRef.EventSourcing.Persistence.SqlServer.NaturalKey
                         .Replace("{aggName}", AggregateRootUtils.GetAggregateRootName< TAggregate>());
 
                     var command = new SqlCommand(sql, connection);
-                    command.Parameters.Add("@naturalKey", SqlDbTypeUtils.GetSqlDbType<TNaturalKey>()).Value = naturalKey;
+                    command.Parameters.Add(_naturalKeyParameterCreator.Create("@naturalKey", naturalKey));
 
                     connection.Open();
 
@@ -81,8 +87,8 @@ VALUES (@naturalKey, @aggregateID)"
                 var id = _aggregateIdCreator.Create();
 
                 var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@naturalKey", SqlDbTypeUtils.GetSqlDbType<TNaturalKey>()).Value = naturalKey;
-                command.Parameters.Add("@aggregateID", SqlDbTypeUtils.GetSqlDbType<TInternalId>()).Value = id;
+                command.Parameters.Add(_naturalKeyParameterCreator.Create("@naturalKey", naturalKey));
+                command.Parameters.Add(_internalKeyParameterCreator.Create("@aggregateID", id));
 
                 command.ExecuteNonQuery();
 
@@ -101,7 +107,7 @@ VALUES (@naturalKey, @aggregateID)"
                         .Replace("{aggName}", AggregateRootUtils.GetAggregateRootName<TAggregate>());
 
                     var command = new SqlCommand(sql, connection, transaction);
-                    command.Parameters.Add("@naturalKey", SqlDbTypeUtils.GetSqlDbType<TNaturalKey>()).Value = naturalKey;
+                    command.Parameters.Add(_naturalKeyParameterCreator.Create("@naturalKey", naturalKey));
 
                     object result = command.ExecuteScalar();
 
@@ -121,8 +127,8 @@ VALUES (@naturalKey, @aggregateID)"
                         id = _aggregateIdCreator.Create();
 
                         command = new SqlCommand(sql, connection, transaction);
-                        command.Parameters.Add("@naturalKey", SqlDbTypeUtils.GetSqlDbType<TNaturalKey>()).Value = naturalKey;
-                        command.Parameters.Add("@aggregateID", SqlDbTypeUtils.GetSqlDbType<TInternalId>()).Value = id;
+                        command.Parameters.Add(_naturalKeyParameterCreator.Create("@naturalKey", naturalKey));
+                        command.Parameters.Add(_internalKeyParameterCreator.Create("@aggregateID", id));
 
                         command.ExecuteNonQuery();
                     }
@@ -142,7 +148,7 @@ VALUES (@naturalKey, @aggregateID)"
                     .Replace("{aggName}", AggregateRootUtils.GetAggregateRootName<TAggregate>());
 
                 var command = new SqlCommand(sql, connection);
-                command.Parameters.Add("@naturalKey", SqlDbTypeUtils.GetSqlDbType<TNaturalKey>()).Value = naturalKey;
+                command.Parameters.Add(_naturalKeyParameterCreator.Create("@naturalKey", naturalKey));
 
                 connection.Open();
 

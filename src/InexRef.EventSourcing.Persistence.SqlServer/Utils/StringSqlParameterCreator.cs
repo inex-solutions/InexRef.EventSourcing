@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,24 +19,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using Autofac;
-using InexRef.EventSourcing.Contracts.Persistence;
-using InexRef.EventSourcing.Persistence.SqlServer.NaturalKey;
-using InexRef.EventSourcing.Persistence.SqlServer.Persistence;
-using InexRef.EventSourcing.Persistence.SqlServer.Utils;
+using System.Data;
+using System.Data.SqlClient;
 
-namespace InexRef.EventSourcing.Persistence.SqlServer
+namespace InexRef.EventSourcing.Persistence.SqlServer.Utils
 {
-    public class EventSourcingSqlServerPersistenceModule : Module
+    public class StringSqlParameterCreator : ISqlParameterCreator<string>
     {
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<SqlEventStoreJsonSerializer>().As<ISqlEventStoreJsonSerializer>();
-            builder.RegisterGeneric(typeof(SqlEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
-            builder.RegisterGeneric(typeof(SqlServerNaturalKeyToAggregateIdMap<,,>)).As(typeof(INaturalKeyToAggregateIdMap<,,>)).SingleInstance();
-            builder.RegisterType<StringSqlParameterCreator>().As<ISqlParameterCreator<string>>();
-            builder.RegisterType<GuidSqlParameterCreator>().As<ISqlParameterCreator<Guid>>();
-        }
+        public SqlParameter Create(string name, string value)
+            => new SqlParameter(name, SqlDbType.NVarChar)
+            {
+                Value = value
+            };
     }
 }

@@ -20,6 +20,7 @@
 #endregion
 
 using InexRef.EventSourcing.Contracts.Messages;
+using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
 
@@ -27,9 +28,9 @@ namespace InexRef.EventSourcing.Tests.Account.Domain.Tests
 {
     public class when_I_add_one_pound_to_an_account_containing_one_pound : AggregateRootTestBase<AccountAggregateRoot>
     {
-        protected override void Given() => Subject.AddAmount(MessageMetadata.CreateDefault(),  1.00M);
+        protected override void Given() => Subject.AddAmount(MessageMetadata.CreateDefault(), MonetaryAmount.Create(1.00M));
 
-        protected override void When() => Subject.AddAmount(MessageMetadata.CreateDefault(), 1.00M);
+        protected override void When() => Subject.AddAmount(MessageMetadata.CreateDefault(), MonetaryAmount.Create(1.00M));
 
         [Then]
         public void the_balance_is_two_pounds() => Subject.Balance.ShouldBe(Balance.FromDecimal(2.0M));

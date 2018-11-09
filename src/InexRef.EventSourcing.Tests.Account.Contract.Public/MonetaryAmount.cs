@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -20,26 +20,21 @@
 #endregion
 
 using InexRef.EventSourcing.Contracts;
+using Newtonsoft.Json;
 
-namespace InexRef.EventSourcing.Tests.Account.Domain
+namespace InexRef.EventSourcing.Tests.Account.Messages
 {
-    public class Balance : ValueObject<Balance>
+    public class MonetaryAmount : ValueObject<MonetaryAmount>
     {
-        private Balance(decimal balanceAmount)
+        [JsonConstructor]
+        private MonetaryAmount(decimal amount)
         {
-            Value = balanceAmount;
+            Amount = amount;
         }
 
-        public decimal Value { get; }
+        public decimal Amount { get; }
 
-        public static Balance FromDecimal(decimal balance)
-            => new Balance(balance);
-
-        public static Balance Zero { get; } = FromDecimal(0);
-
-        public Balance AddDecimal(decimal amountToAdd)
-            => new Balance(Value + amountToAdd);
-
-        public decimal ToDecimal() => Value;
+        public static MonetaryAmount Create(decimal amount)
+            => new MonetaryAmount(amount);
     }
 }

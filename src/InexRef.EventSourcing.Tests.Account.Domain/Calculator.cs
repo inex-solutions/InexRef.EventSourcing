@@ -18,13 +18,16 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
+
+using InexRef.EventSourcing.Tests.Account.Messages;
+
 namespace InexRef.EventSourcing.Tests.Account.Domain
 {
     public class Calculator : ICalculator
     {
-        public Balance AddToBalance(Balance x, decimal y)
+        public Balance AddToBalance(Balance x, MonetaryAmount y)
         {
-            return x.AddDecimal(y);
+            return x.AddDecimal(y.Amount);
         }
     }
 }

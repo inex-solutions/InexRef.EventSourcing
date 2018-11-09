@@ -20,6 +20,7 @@
 #endregion
 
 using InexRef.EventSourcing.Contracts.Messages;
+using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
 
@@ -27,7 +28,7 @@ namespace InexRef.EventSourcing.Tests.Account.Domain.Tests
 {
     public class when_I_reset_an_account_containing_one_pound : AggregateRootTestBase<AccountAggregateRoot>
     {
-        protected override void Given() => Subject.AddAmount(MessageMetadata.CreateDefault(), 1.00M);
+        protected override void Given() => Subject.AddAmount(MessageMetadata.CreateDefault(), MonetaryAmount.Create(1.00M));
 
         protected override void When() => Subject.ResetBalance(MessageMetadata.CreateDefault());
 

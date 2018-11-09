@@ -20,7 +20,6 @@
 #endregion
 
 using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Tests.Account.Domain;
 using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
@@ -34,10 +33,10 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
         protected override void Given()
         {
             Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
-            Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, 2.00M));
+            Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
         }
 
-        protected override void When() => Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, 3.00M));
+        protected override void When() => Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(3.00M)));
 
         [Then]
         public void the_account_balance_is_five_pounds() 

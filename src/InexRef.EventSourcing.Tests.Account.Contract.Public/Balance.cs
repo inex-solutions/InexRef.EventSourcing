@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,12 +19,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Data.SqlClient;
+using InexRef.EventSourcing.Contracts;
+using Newtonsoft.Json;
 
-namespace InexRef.EventSourcing.Persistence.SqlServer.Utils
+namespace InexRef.EventSourcing.Tests.Account.Messages
 {
-    public interface ISqlParameterCreator<in TSourceType>
+    public class Balance : ValueObject<Balance>
     {
-        SqlParameter Create(string name, TSourceType value);
+        [JsonConstructor]
+        private Balance(decimal balanceAmount)
+        {
+            Value = balanceAmount;
+        }
+
+        public decimal Value { get; }
+
+        public static Balance FromDecimal(decimal balance)
+            => new Balance(balance);
+
+        public static Balance Zero { get; } = FromDecimal(0);
+
+        public Balance AddDecimal(decimal amountToAdd)
+            => new Balance(Value + amountToAdd);
+
+        public decimal ToDecimal() => Value;
     }
 }

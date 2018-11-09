@@ -26,11 +26,11 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
 {
     public class BalanceUpdatedEvent : Event<Guid>
     {
-        public decimal Balance { get; }
+        public Balance Balance { get; }
 
         public AccountId AccountId { get; }
 
-        public BalanceUpdatedEvent(MessageMetadata messageMetadata, Guid aggregateId, AccountId accountId, decimal balance) 
+        public BalanceUpdatedEvent(MessageMetadata messageMetadata, Guid aggregateId, AccountId accountId, Balance balance) 
             : base(messageMetadata, aggregateId)
         {
             Balance = balance;

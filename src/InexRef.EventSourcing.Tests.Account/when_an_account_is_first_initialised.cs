@@ -20,7 +20,6 @@
 #endregion
 
 using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Tests.Account.Domain;
 using InexRef.EventSourcing.Tests.Account.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;

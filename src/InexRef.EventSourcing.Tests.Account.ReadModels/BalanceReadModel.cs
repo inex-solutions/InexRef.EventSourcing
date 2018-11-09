@@ -37,7 +37,7 @@ namespace InexRef.EventSourcing.Tests.Account.ReadModels
 
         public void Handle(BalanceUpdatedEvent @event)
         {
-            _balances[@event.AccountId] = new BalanceEntry {Version = @event.Version, Balance = @event.Balance};
+            _balances[@event.AccountId] = new BalanceEntry {Version = @event.Version, Balance = @event.Balance.Value};
         }
 
         public decimal this[AccountId id] => _balances[id].Balance;

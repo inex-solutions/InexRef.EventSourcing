@@ -34,7 +34,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
         protected override void Given() { }
 
         protected override void When() 
-            => CaughtException = Catch.Exception(() => Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, 2.00M)));
+            => CaughtException = Catch.Exception(() => Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M))));
 
         [Then]
         public void a_KeyNotFoundException_is_thrown()

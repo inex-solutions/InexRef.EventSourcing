@@ -26,9 +26,9 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
 {
     public class AmountAddedEvent : Event<Guid>
     {
-        public decimal Amount { get; }
+        public MonetaryAmount Amount { get; }
 
-        public AmountAddedEvent(MessageMetadata messageMetadata, Guid id, decimal amount) : base(messageMetadata, id)
+        public AmountAddedEvent(MessageMetadata messageMetadata, Guid id, MonetaryAmount amount) : base(messageMetadata, id)
         {
             Amount = amount;
         }

@@ -44,21 +44,6 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
 
         public static AccountId Null => new AccountId(string.Empty);
 
-        #region Json Serialization
-
-        public class AccountIdJsonConverter : JsonConverter<AccountId>
-        {
-            public override void WriteJson(JsonWriter writer, AccountId value, JsonSerializer serializer)
-                => writer.WriteValue(value);
-
-            public override AccountId ReadJson(JsonReader reader, Type objectType, AccountId existingValue,
-                bool hasExistingValue,
-                JsonSerializer serializer)
-                => AccountId.Parse((string)reader.Value);
-        }
-
-        #endregion
-
         #region Equality / Comparers
 
         public bool Equals(AccountId other)
@@ -100,6 +85,21 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
             if (ReferenceEquals(this, other)) return 0;
             if (ReferenceEquals(null, other)) return 1;
             return string.Compare(_accountId, other._accountId, StringComparison.Ordinal);
+        }
+
+        #endregion
+
+        #region Json Serialization
+
+        private class AccountIdJsonConverter : JsonConverter<AccountId>
+        {
+            public override void WriteJson(JsonWriter writer, AccountId value, JsonSerializer serializer)
+                => writer.WriteValue(value);
+
+            public override AccountId ReadJson(JsonReader reader, Type objectType, AccountId existingValue,
+                bool hasExistingValue,
+                JsonSerializer serializer)
+                => AccountId.Parse((string)reader.Value);
         }
 
         #endregion

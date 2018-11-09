@@ -48,7 +48,7 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
             Apply(new AccountInitialisedEvent(messageMetadata, id, accountId));
         }
 
-        public void AddAmount(MessageMetadata messageMetadata, decimal amount)
+        public void AddAmount(MessageMetadata messageMetadata, MonetaryAmount amount)
         {
             Apply(new AmountAddedEvent(messageMetadata, Id, amount));
         }
@@ -67,13 +67,13 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
         public void HandleEvent(AmountAddedEvent @event, bool isNew)
         {
             Balance = _calculator.AddToBalance(Balance, @event.Amount);
-            Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event),  Id, AccountId, Balance.ToDecimal()), isNew);
+            Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event),  Id, AccountId, Balance), isNew);
         }
 
         public void HandleEvent(BalanceResetEvent @event, bool isNew)
         {
             Balance = Balance.Zero;
-            Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event), Id, AccountId, Balance.ToDecimal()), isNew);
+            Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event), Id, AccountId, Balance), isNew);
         }
     }
 }

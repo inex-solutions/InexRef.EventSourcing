@@ -29,9 +29,9 @@ namespace InexRef.EventSourcing.Tests.Account.Messages
 
         public AccountId Id { get; }
 
-        public decimal Amount { get; }
+        public MonetaryAmount Amount { get; }
 
-        public AddAmountCommand(MessageMetadata messageMetadata, AccountId id, decimal amount)
+        public AddAmountCommand(MessageMetadata messageMetadata, AccountId id, MonetaryAmount amount)
         {
             MessageMetadata = messageMetadata;
             Id = id;

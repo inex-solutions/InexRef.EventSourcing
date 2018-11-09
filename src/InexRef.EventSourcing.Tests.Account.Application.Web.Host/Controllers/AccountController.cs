@@ -66,7 +66,7 @@ namespace InexRef.EventSourcing.Tests.Account.Application.Web.Host.Controllers
         [HttpPost("AddAmount")]
         public void AddAmount(string id, decimal amount)
         {
-            _bus.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), AccountId.Parse(id), amount));
+            _bus.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), AccountId.Parse(id), MonetaryAmount.Create(amount)));
         }
 
         [HttpPost("ResetBalance")]

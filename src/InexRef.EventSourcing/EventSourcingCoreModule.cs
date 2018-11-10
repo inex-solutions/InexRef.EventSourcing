@@ -50,6 +50,7 @@ namespace InexRef.EventSourcing
                     return new OperationContext(operationScope);
                 })
                 .As<IOperationContext>()
+                .As<IOperationContextInternal>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterModule<AutofacOperationScopeModule>();

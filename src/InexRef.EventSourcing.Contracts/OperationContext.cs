@@ -25,7 +25,7 @@ using InexRef.EventSourcing.Contracts.Messages;
 
 namespace InexRef.EventSourcing.Contracts
 {
-    public class OperationContext : IOperationContext
+    public class OperationContext : IOperationContext, IOperationContextInternal
     {
         private readonly IOperationScope _operationScope;
         private readonly IDateTimeProvider _dateTimeProvider;
@@ -35,6 +35,7 @@ namespace InexRef.EventSourcing.Contracts
             _operationScope = operationScope;
             SourceMessageMetadata = MessageMetadata.Create(_operationScope.OperationCorrelationId, _operationScope.OperationStartDateTime);
             _dateTimeProvider = _operationScope.Get<IDateTimeProvider>();
+            IsLoading = false;
         }
 
         public MessageMetadata SourceMessageMetadata { get; }
@@ -42,6 +43,13 @@ namespace InexRef.EventSourcing.Contracts
         public MessageMetadata CreateNewMessageMetadata()
         {
             return MessageMetadata.Create(_operationScope.OperationCorrelationId, _dateTimeProvider.GetUtcNow());
+        }
+
+        public bool IsLoading { get; private set; }
+
+        void IOperationContextInternal.SetIsLoading(bool isLoading)
+        {
+            IsLoading = isLoading;
         }
     }
 }

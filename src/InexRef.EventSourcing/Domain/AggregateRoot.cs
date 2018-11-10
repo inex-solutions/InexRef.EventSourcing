@@ -33,35 +33,36 @@ namespace InexRef.EventSourcing.Domain
 
         private readonly List<IEvent<TId>> _uncommittedEvents = new List<IEvent<TId>>();
 
+        protected AggregateRoot(IOperationContext operationContext)
+        {
+            OperationContext = operationContext;
+        }
+
+        public IOperationContext OperationContext { get; }
+
         public TId Id { get; protected set; }
 
         public int Version { get; protected set; }
 
         public abstract string Name { get; }
 
+        private void HandleEvent(IEvent<TId> @event)
+        {
+            ThrowIfDisposed();
+            this.DynamicallyInvokeMethod(OnMissingMethod.Ignore()).HandleEvent(@event);
+        }
+
         protected void Apply(IEvent<TId> @event)
         {
             ThrowIfDisposed();
-            Apply(@event, true);
-        }
-
-        private void HandleEvent(IEvent<TId> @event, bool isNew)
-        {
-            ThrowIfDisposed();
-            this.DynamicallyInvokeMethod(OnMissingMethod.Ignore()).HandleEvent(@event, isNew);
-        }
-
-        protected void Apply(IEvent<TId> @event, bool isNew)
-        {
-            ThrowIfDisposed();
-            HandleEvent(@event, isNew);
+            HandleEvent(@event);
 
             if (@event.Version > Version)
             {
                 Version = @event.Version;
             }
 
-            if (isNew)
+            if (!OperationContext.IsLoading)
             {
                 _uncommittedEvents.Add(@event);
             }
@@ -73,7 +74,7 @@ namespace InexRef.EventSourcing.Domain
             Id = id;
             foreach (var @event in eventHistory)
             {
-                Apply(@event, false);
+                Apply(@event);
             }
         }
 

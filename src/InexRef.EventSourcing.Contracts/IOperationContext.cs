@@ -28,5 +28,7 @@ namespace InexRef.EventSourcing.Contracts
         MessageMetadata SourceMessageMetadata { get; }
 
         MessageMetadata CreateNewMessageMetadata();
+
+        bool IsLoading { get; }
     }
 }

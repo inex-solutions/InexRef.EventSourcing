@@ -36,15 +36,18 @@ namespace InexRef.EventSourcing.Persistence.Common
         private readonly IAggregateRootFactory _aggregateRootFactory;
         private readonly IEventStore<TId> _eventStore;
         private readonly IBus _bus;
+        private readonly IOperationContextInternal _context;
 
         public AggregateRepository(
             IAggregateRootFactory aggregateRootFactory,
             IEventStore<TId> eventStore, 
-            IBus bus)
+            IBus bus,
+            IOperationContextInternal context)
         {
             _aggregateRootFactory = aggregateRootFactory;
             _eventStore = eventStore;
             _bus = bus;
+            _context = context;
         }
 
         public void Save(TAggregate aggregate)
@@ -73,7 +76,11 @@ namespace InexRef.EventSourcing.Persistence.Common
         {
             IAggregateRootInternal<TId> aggregate = _aggregateRootFactory.Create<TAggregate>();
             var events = _eventStore.LoadEvents(id, typeof(TAggregate), throwIfNotFound: true).ToList();
+
+            _context.SetIsLoading(true);
             aggregate.Load(id, events);
+            _context.SetIsLoading(false);
+
             return (TAggregate)aggregate;
         }
 
@@ -82,7 +89,9 @@ namespace InexRef.EventSourcing.Persistence.Common
             var aggregate = _aggregateRootFactory.Create<TAggregate>();
             IList<IEvent<TId>> events = _eventStore.LoadEvents(id, typeof(TAggregate), throwIfNotFound: false).ToList();
 
+            _context.SetIsLoading(true);
             aggregate.Load(id, events);
+            _context.SetIsLoading(false);
 
             if (!events.Any())
             {

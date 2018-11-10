@@ -27,15 +27,12 @@ namespace InexRef.EventSourcing.Tests.Domain
 {
     public class CounterAggregateRoot : AggregateRoot<Guid>
     {
-        protected IOperationContext OperationContext { get; }
-
         public override string Name => "Counter";
 
         public int CurrentValue { get; private set; }
 
-        public CounterAggregateRoot(IOperationContext operationContext)
+        public CounterAggregateRoot(IOperationContext operationContext) : base(operationContext)
         {
-            OperationContext = operationContext;
         }
 
         public void Initialise(Guid id)
@@ -48,12 +45,12 @@ namespace InexRef.EventSourcing.Tests.Domain
             Apply(new CounterIncrementedEvent(OperationContext.CreateNewMessageMetadata(), Id));
         }
 
-        public void HandleEvent(CounterInitialisedEvent @event, bool isNew)
+        public void HandleEvent(CounterInitialisedEvent @event)
         {
             Id = @event.Id;
         }
 
-        public void HandleEvent(CounterIncrementedEvent @event, bool isNew)
+        public void HandleEvent(CounterIncrementedEvent @event)
         {
             CurrentValue++;
             if (CurrentValue % 2 == 0)

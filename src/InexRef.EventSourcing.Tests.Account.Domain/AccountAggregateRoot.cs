@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Domain;
 using InexRef.EventSourcing.Tests.Account.Contract.Public.Messages;
@@ -31,7 +32,7 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
     {
         private readonly ICalculator _calculator;
 
-        public AccountAggregateRoot(ICalculator calculator)
+        public AccountAggregateRoot(IOperationContext operationContext, ICalculator calculator) : base (operationContext)
         {
             _calculator = calculator;
             Balance = Balance.Zero;
@@ -59,22 +60,22 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
             Apply(new BalanceResetEvent(messageMetadata, Id));
         }
 
-        public void HandleEvent(AccountInitialisedEvent @event, bool isNew)
+        public void HandleEvent(AccountInitialisedEvent @event)
         {
             Id = @event.Id;
             AccountId = @event.AccountId;
         }
 
-        public void HandleEvent(AmountAddedEvent @event, bool isNew)
+        public void HandleEvent(AmountAddedEvent @event)
         {
             Balance = _calculator.AddToBalance(Balance, @event.Amount);
-            Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event),  Id, AccountId, Balance), isNew);
+            Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event),  Id, AccountId, Balance));
         }
 
-        public void HandleEvent(BalanceResetEvent @event, bool isNew)
+        public void HandleEvent(BalanceResetEvent @event)
         {
             Balance = Balance.Zero;
-            Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event), Id, AccountId, Balance), isNew);
+            Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event), Id, AccountId, Balance));
         }
     }
 }

@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Utils.Dynamic;
 
 namespace InexRef.EventSourcing.Domain
 {
@@ -33,12 +32,16 @@ namespace InexRef.EventSourcing.Domain
 
         private readonly List<IEvent<TId>> _uncommittedEvents = new List<IEvent<TId>>();
 
-        protected AggregateRoot(IOperationContext operationContext)
+        protected AggregateRoot(
+            IOperationContext operationContext)
         {
             OperationContext = operationContext;
+            EventHandlerInvoker = new EventHandlerInvoker<TId>();
         }
 
         public IOperationContext OperationContext { get; }
+
+        private EventHandlerInvoker<TId> EventHandlerInvoker { get; }
 
         public TId Id { get; protected set; }
 
@@ -46,10 +49,16 @@ namespace InexRef.EventSourcing.Domain
 
         public abstract string Name { get; }
 
+        protected void RegisterEventHandler<TEvent>(Action<TEvent> eventHandler)
+            where TEvent : IEvent<TId>
+        {
+            EventHandlerInvoker.RegisterEventHandler(eventHandler);
+        }
+
         private void HandleEvent(IEvent<TId> @event)
         {
             ThrowIfDisposed();
-            this.DynamicallyInvokeMethod(OnMissingMethod.Ignore()).HandleEvent(@event);
+            EventHandlerInvoker.Invoke(@event);
         }
 
         protected void Apply(IEvent<TId> @event)

@@ -33,6 +33,8 @@ namespace InexRef.EventSourcing.Tests.Domain
 
         public CounterAggregateRoot(IOperationContext operationContext) : base(operationContext)
         {
+            RegisterEventHandler<CounterInitialisedEvent>(HandleEvent);
+            RegisterEventHandler<CounterIncrementedEvent>(HandleEvent);
         }
 
         public void Initialise(Guid id)

@@ -37,6 +37,10 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
             _calculator = calculator;
             Balance = Balance.Zero;
             AccountId = AccountId.Null;
+
+            RegisterEventHandler<AccountInitialisedEvent>(HandleEvent);
+            RegisterEventHandler<AmountAddedEvent>(HandleEvent);
+            RegisterEventHandler<BalanceResetEvent>(HandleEvent);
         }
 
         public AccountId AccountId { get; private set; }

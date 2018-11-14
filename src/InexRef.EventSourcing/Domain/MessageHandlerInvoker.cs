@@ -27,20 +27,30 @@ namespace InexRef.EventSourcing.Domain
 {
     public class MessageHandlerInvoker
     {
-        private readonly Dictionary<Type, IInvokableMessageHandlerAction> _messageHandlers 
-            = new Dictionary<Type, IInvokableMessageHandlerAction>();
+        private readonly Dictionary<Type, List<IInvokableMessageHandlerAction>> _messageHandlers 
+            = new Dictionary<Type, List<IInvokableMessageHandlerAction>>();
 
         public void RegisterMessageHandler<TMessage>(Action<TMessage> messageHandler)
             where TMessage : IMessage
         {
-            _messageHandlers.Add(typeof(TMessage), new InvokableMessageHandlerAction<TMessage>(messageHandler));
+            
+            if (!_messageHandlers.TryGetValue(typeof(TMessage), out List<IInvokableMessageHandlerAction> handlersForMessageType))
+            {
+                handlersForMessageType = new List<IInvokableMessageHandlerAction>();
+                _messageHandlers.Add(typeof(TMessage), handlersForMessageType);
+            }
+
+            handlersForMessageType.Add(new InvokableMessageHandlerAction<TMessage>(messageHandler));
         }
 
         public void Invoke(IMessage message)
         {
-            if (_messageHandlers.TryGetValue(message.GetType(), out IInvokableMessageHandlerAction handlerInvoker))
+            if (_messageHandlers.TryGetValue(message.GetType(), out List <IInvokableMessageHandlerAction> handlersForMessageType))
             {
-                handlerInvoker.Invoke(message);
+                foreach (var handlerInvoker in handlersForMessageType)
+                {
+                    handlerInvoker.Invoke(message);
+                }
             }
         }
 

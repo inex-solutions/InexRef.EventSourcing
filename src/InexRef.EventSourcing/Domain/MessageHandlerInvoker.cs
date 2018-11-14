@@ -14,7 +14,7 @@
 // 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
 // BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// NONINFRINGEMENT. IN NO Message SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
@@ -25,43 +25,42 @@ using InexRef.EventSourcing.Contracts.Messages;
 
 namespace InexRef.EventSourcing.Domain
 {
-    public class EventHandlerInvoker<TEventId> where TEventId : IEquatable<TEventId>, IComparable<TEventId>
+    public class MessageHandlerInvoker
     {
-        private readonly Dictionary<Type, IInvokableEventHandlerAction<TEventId>> _eventHandlers 
-            = new Dictionary<Type, IInvokableEventHandlerAction<TEventId>>();
+        private readonly Dictionary<Type, IInvokableMessageHandlerAction> _messageHandlers 
+            = new Dictionary<Type, IInvokableMessageHandlerAction>();
 
-        public void RegisterEventHandler<TEvent>(Action<TEvent> eventHandler)
-            where TEvent : IEvent<TEventId>
+        public void RegisterMessageHandler<TMessage>(Action<TMessage> messageHandler)
+            where TMessage : IMessage
         {
-            _eventHandlers.Add(typeof(TEvent), new InvokableEventHandlerAction<TEvent, TEventId>(eventHandler));
+            _messageHandlers.Add(typeof(TMessage), new InvokableMessageHandlerAction<TMessage>(messageHandler));
         }
 
-        public void Invoke(IEvent<TEventId> @event)
+        public void Invoke(IMessage message)
         {
-            if (_eventHandlers.TryGetValue(@event.GetType(), out IInvokableEventHandlerAction<TEventId> handlerInvoker))
+            if (_messageHandlers.TryGetValue(message.GetType(), out IInvokableMessageHandlerAction handlerInvoker))
             {
-                handlerInvoker.Invoke(@event);
+                handlerInvoker.Invoke(message);
             }
         }
 
-        private interface IInvokableEventHandlerAction<in TId> where TId : IEquatable<TId>, IComparable<TId>
+        private interface IInvokableMessageHandlerAction
         {
-            void Invoke(IEvent<TId> @event);
+            void Invoke(IMessage message);
         }
 
-        private class InvokableEventHandlerAction<TEvent, TId> : IInvokableEventHandlerAction<TId>
-            where TId : IEquatable<TId>, IComparable<TId>
+        private class InvokableMessageHandlerAction<TMessage> : IInvokableMessageHandlerAction
         {
-            private readonly Action<TEvent> _handler;
+            private readonly Action<TMessage> _handler;
 
-            public InvokableEventHandlerAction(Action<TEvent> handler)
+            public InvokableMessageHandlerAction(Action<TMessage> handler)
             {
                 _handler = handler;
             }
 
-            public void Invoke(IEvent<TId> @event)
+            public void Invoke(IMessage message)
             {
-                _handler((TEvent)@event);
+                _handler((TMessage)message);
             }
         }
     }

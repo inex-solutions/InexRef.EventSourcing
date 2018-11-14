@@ -36,12 +36,12 @@ namespace InexRef.EventSourcing.Domain
             IOperationContext operationContext)
         {
             OperationContext = operationContext;
-            EventHandlerInvoker = new EventHandlerInvoker<TId>();
+            MessageHandlerInvoker = new MessageHandlerInvoker();
         }
 
         public IOperationContext OperationContext { get; }
 
-        private EventHandlerInvoker<TId> EventHandlerInvoker { get; }
+        private MessageHandlerInvoker MessageHandlerInvoker { get; }
 
         public TId Id { get; protected set; }
 
@@ -52,13 +52,13 @@ namespace InexRef.EventSourcing.Domain
         protected void RegisterEventHandler<TEvent>(Action<TEvent> eventHandler)
             where TEvent : IEvent<TId>
         {
-            EventHandlerInvoker.RegisterEventHandler(eventHandler);
+            MessageHandlerInvoker.RegisterMessageHandler(eventHandler);
         }
 
         private void HandleEvent(IEvent<TId> @event)
         {
             ThrowIfDisposed();
-            EventHandlerInvoker.Invoke(@event);
+            MessageHandlerInvoker.Invoke(@event);
         }
 
         protected void Apply(IEvent<TId> @event)

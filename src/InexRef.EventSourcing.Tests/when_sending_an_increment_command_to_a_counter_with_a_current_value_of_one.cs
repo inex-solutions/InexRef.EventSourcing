@@ -19,7 +19,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using System.Collections.Generic;
 using Autofac;
 using InexRef.EventSourcing.Contracts.Bus;
@@ -38,20 +37,6 @@ namespace InexRef.EventSourcing.Tests
 
         private MessageMetadata MetadataOnFinalIncrementCommand { get; set; }
 
-        private class CounterValueDivisibleByTwoEventHandler : IHandle<CounterValueDivisibleByTwoEvent>
-        {
-            private readonly Action<CounterValueDivisibleByTwoEvent> _onEventReceived;
-
-            public CounterValueDivisibleByTwoEventHandler(Action<CounterValueDivisibleByTwoEvent> onEventReceived)
-            {
-                _onEventReceived = onEventReceived;
-            }
-
-            public void Handle(CounterValueDivisibleByTwoEvent message)
-            {
-                _onEventReceived(message);
-            }
-        }
 
         protected override void RegisterWithContainerBuilder(ContainerBuilder containerBuilder)
         {

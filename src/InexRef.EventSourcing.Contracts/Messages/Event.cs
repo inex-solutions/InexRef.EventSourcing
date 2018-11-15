@@ -34,7 +34,7 @@ namespace InexRef.EventSourcing.Contracts.Messages
 
         public TId Id { get; }
 
-        public int Version { get; set; }
+        public int Version { get; private set; }
 
         public MessageMetadata MessageMetadata { get; }
 

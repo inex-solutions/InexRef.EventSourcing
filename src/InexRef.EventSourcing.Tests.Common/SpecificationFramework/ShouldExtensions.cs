@@ -42,8 +42,8 @@ namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
             var originalActualList = actual.ToList();
             var originalExpectedList = expected.ToList();
 
-            var actualList = actual.ToList();
-            var expectedList = expected.ToList();
+            var actualList = originalActualList.ToList();
+            var expectedList = originalExpectedList.ToList();
 
             var unexpected = new List<T>();
 

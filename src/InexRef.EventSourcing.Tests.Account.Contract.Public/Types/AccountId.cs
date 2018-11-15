@@ -25,7 +25,7 @@ using Newtonsoft.Json;
 
 namespace InexRef.EventSourcing.Tests.Account.Contract.Public.Types
 {
-    [JsonConverter(typeof(AccountId.AccountIdJsonConverter))]
+    [JsonConverter(typeof(AccountIdJsonConverter))]
     public class AccountId : IIdentifier<AccountId>
     {
         private readonly string _accountId;
@@ -36,7 +36,7 @@ namespace InexRef.EventSourcing.Tests.Account.Contract.Public.Types
             _accountId = accountId;
         }
 
-        public static explicit operator AccountId(string idValue) => AccountId.Parse(idValue);
+        public static explicit operator AccountId(string idValue) => Parse(idValue);
 
         public static AccountId Parse(string idValue) => new AccountId(idValue);
 
@@ -59,7 +59,7 @@ namespace InexRef.EventSourcing.Tests.Account.Contract.Public.Types
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType())
+            if (obj.GetType() != GetType())
                 return false;
 
             return Equals((AccountId) obj);
@@ -99,7 +99,7 @@ namespace InexRef.EventSourcing.Tests.Account.Contract.Public.Types
             public override AccountId ReadJson(JsonReader reader, Type objectType, AccountId existingValue,
                 bool hasExistingValue,
                 JsonSerializer serializer)
-                => AccountId.Parse((string)reader.Value);
+                => Parse((string)reader.Value);
         }
 
         #endregion

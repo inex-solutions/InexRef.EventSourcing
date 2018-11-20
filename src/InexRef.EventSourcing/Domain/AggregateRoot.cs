@@ -39,7 +39,7 @@ namespace InexRef.EventSourcing.Domain
             MessageHandlerInvoker = new MessageHandlerInvoker();
         }
 
-        public IOperationContext OperationContext { get; }
+        protected IOperationContext OperationContext { get; }
 
         private MessageHandlerInvoker MessageHandlerInvoker { get; }
 

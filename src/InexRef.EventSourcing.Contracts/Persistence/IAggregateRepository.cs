@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Threading.Tasks;
 
 namespace InexRef.EventSourcing.Contracts.Persistence
 {
@@ -27,12 +28,12 @@ namespace InexRef.EventSourcing.Contracts.Persistence
         where TAggregate : IAggregateRoot<TId>
         where TId : IEquatable<TId>, IComparable<TId>
     {
-        void Save(TAggregate aggregate);
+        Task Save(TAggregate aggregate);
 
-        TAggregate Get(TId id);
+        Task<TAggregate> Get(TId id);
 
-        TAggregate GetOrCreateNew(TId id, Action<TAggregate> onCreateNew);
+        Task<TAggregate> GetOrCreateNew(TId id, Action<TAggregate> onCreateNew);
 
-        void Delete(TId id);
+        Task Delete(TId id);
     }
 }

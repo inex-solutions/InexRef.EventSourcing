@@ -34,7 +34,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
         public when_two_pounds_is_added_to_a_non_existent_account(string testFixtureOptions) : base(testFixtureOptions) { }
 
         protected override async Task When() 
-            => CaughtException = await Catch.Exception(() 
+            => CaughtException = await Catch.AsyncException(() 
                 => Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M))));
 
         [Then]

@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
 
@@ -28,11 +29,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
     {
         public when_GetOrCreateNew_is_called_for_a_non_existent_aggregate(string testFixtureOptions) : base(testFixtureOptions) { }
 
-        protected override void Given()
-        {
-        }
-
-        protected override void When() => ReloadedCounterAggregateRoot = Subject.GetOrCreateNew(AggregateId, null);
+        protected override async Task When() => ReloadedCounterAggregateRoot = await Subject.GetOrCreateNew(AggregateId, null);
 
         [Then]
         public void no_exception_is_thrown_and_a_new_aggregate_is_returned() => ReloadedCounterAggregateRoot

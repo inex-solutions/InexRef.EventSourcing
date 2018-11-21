@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Messages;
 
@@ -77,13 +78,13 @@ namespace InexRef.EventSourcing.Domain
             }
         }
 
-        void IAggregateRootInternal<TId>.Load(TId id, IEnumerable<IEvent<TId>> eventHistory)
+        async Task IAggregateRootInternal<TId>.Load(TId id, IEnumerable<IEvent<TId>> eventHistory)
         {
             ThrowIfDisposed();
             Id = id;
             foreach (var @event in eventHistory)
             {
-                Apply(@event);
+                Apply(@event); //RJL
             }
         }
 

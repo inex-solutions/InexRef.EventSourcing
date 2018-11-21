@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Persistence;
 
@@ -42,26 +43,26 @@ namespace InexRef.EventSourcing.Persistence.Common
             _naturalKeyToAggregateIdMap = naturalKeyToAggregateIdMap;
         }
 
-        public TAggregate GetByNaturalKey(TNaturalKey id)
+        public async Task<TAggregate> GetByNaturalKey(TNaturalKey id)
         {
-            return _internalRepository.Get(_naturalKeyToAggregateIdMap[id]);
+            return await _internalRepository.Get(await _naturalKeyToAggregateIdMap[id]);
         }
 
-        public TAggregate GetOrCreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew)
+        public async Task<TAggregate> GetOrCreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew)
         {
-            TInternalId id = _naturalKeyToAggregateIdMap.GetOrCreateNew(naturalKey);
-            return _internalRepository.GetOrCreateNew(id, onCreateNew);
+            TInternalId id = await _naturalKeyToAggregateIdMap.GetOrCreateNew(naturalKey);
+            return await _internalRepository.GetOrCreateNew(id, onCreateNew);
         }
 
-        public TAggregate CreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew)
+        public async Task<TAggregate> CreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew)
         {
-            TInternalId id = _naturalKeyToAggregateIdMap.GetOrCreateNew(naturalKey);
-            return _internalRepository.GetOrCreateNew(id, onCreateNew);
+            TInternalId id = await _naturalKeyToAggregateIdMap.GetOrCreateNew(naturalKey);
+            return await _internalRepository.GetOrCreateNew(id, onCreateNew);
         }
 
-        public void Save(TAggregate aggregate)
+        public async Task Save(TAggregate aggregate)
         {
-            _internalRepository.Save(aggregate);
+            await _internalRepository.Save(aggregate);
         }
 
         public IEnumerable<TNaturalKey> GetAllKeys()
@@ -69,10 +70,10 @@ namespace InexRef.EventSourcing.Persistence.Common
             return _naturalKeyToAggregateIdMap.GetAllKeys();
         }
 
-        public void DeleteByNaturalKey(TNaturalKey key)
+        public async Task DeleteByNaturalKey(TNaturalKey key)
         {
-            _internalRepository.Delete(_naturalKeyToAggregateIdMap[key]);
-            _naturalKeyToAggregateIdMap.Delete(key);
+            await _internalRepository.Delete(await _naturalKeyToAggregateIdMap[key]);
+            await _naturalKeyToAggregateIdMap.Delete(key);
         }
     }
 }

@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Messages;
@@ -50,7 +51,7 @@ namespace InexRef.EventSourcing.Persistence.Common
             _context = context;
         }
 
-        public void Save(TAggregate aggregate)
+        public async Task Save(TAggregate aggregate)
         {
             IAggregateRootInternal<TId> internalAggregate = aggregate;
 
@@ -65,32 +66,32 @@ namespace InexRef.EventSourcing.Persistence.Common
 
             foreach (var eventToStore in events)
             {
-                _bus.PublishEvent(eventToStore);
+                await _bus.PublishEvent(eventToStore);
             }
 
             _eventStore.SaveEvents(aggregate.Id, typeof(TAggregate), events, version, aggregate.Version);
             internalAggregate.Dispose();
         }
 
-        public TAggregate Get(TId id)
+        public async Task<TAggregate> Get(TId id)
         {
             IAggregateRootInternal<TId> aggregate = _aggregateRootFactory.Create<TAggregate>();
-            var events = _eventStore.LoadEvents(id, typeof(TAggregate), throwIfNotFound: true).ToList();
+            var events = _eventStore.LoadEvents(id, typeof(TAggregate), throwIfNotFound: true);
 
             _context.SetIsLoading(true);
-            aggregate.Load(id, events);
+            await aggregate.Load(id, events);
             _context.SetIsLoading(false);
 
             return (TAggregate)aggregate;
         }
 
-        public TAggregate GetOrCreateNew(TId id, Action<TAggregate> onCreateNew)
+        public async Task<TAggregate> GetOrCreateNew(TId id, Action<TAggregate> onCreateNew)
         {
             var aggregate = _aggregateRootFactory.Create<TAggregate>();
-            IList<IEvent<TId>> events = _eventStore.LoadEvents(id, typeof(TAggregate), throwIfNotFound: false).ToList();
+            IList<IEvent<TId>> events = (_eventStore.LoadEvents(id, typeof(TAggregate), throwIfNotFound: false)).ToList();
 
             _context.SetIsLoading(true);
-            aggregate.Load(id, events);
+            await aggregate.Load(id, events);
             _context.SetIsLoading(false);
 
             if (!events.Any())
@@ -101,9 +102,10 @@ namespace InexRef.EventSourcing.Persistence.Common
             return aggregate;
         }
 
-        public void Delete(TId id)
+        public async Task Delete(TId id)
         {
             _eventStore.DeleteEvents(id, typeof(TAggregate));
+            await Task.CompletedTask;
         }
     }
 }

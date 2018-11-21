@@ -22,6 +22,8 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Persistence;
 
 namespace InexRef.EventSourcing.Persistence.InMemory
@@ -32,14 +34,14 @@ namespace InexRef.EventSourcing.Persistence.InMemory
         private readonly IAggregateIdCreator<TInternalId> _aggregateIdCreator;
         private readonly ConcurrentDictionary<TNaturalKey, TInternalId> _keyMap = new ConcurrentDictionary<TNaturalKey, TInternalId>();
 
-        public TInternalId this[TNaturalKey naturalKey] => _keyMap[naturalKey];
+        public Task<TInternalId> this[TNaturalKey naturalKey] => Task.FromResult(_keyMap[naturalKey]);
 
         public InMemoryNaturalKeyToAggregateIdMap(IAggregateIdCreator<TInternalId> aggregateIdCreator)
         {
             _aggregateIdCreator = aggregateIdCreator;
         }
 
-        public TInternalId CreateNew(TNaturalKey naturalKey)
+        public Task<TInternalId> CreateNew(TNaturalKey naturalKey)
         {
             var internalId = _aggregateIdCreator.Create();
 
@@ -48,22 +50,22 @@ namespace InexRef.EventSourcing.Persistence.InMemory
                 throw new InvalidOperationException($"Key already exists: {naturalKey}");
             }
 
-            return internalId;
+            return Task.FromResult(internalId);
         }
 
-        public TInternalId GetOrCreateNew(TNaturalKey naturalKey)
+        public Task<TInternalId> GetOrCreateNew(TNaturalKey naturalKey)
         {
-            return _keyMap.GetOrAdd(key: naturalKey, valueFactory: key => _aggregateIdCreator.Create());
+            return Task.FromResult(_keyMap.GetOrAdd(key: naturalKey, valueFactory: key => _aggregateIdCreator.Create()));
         }
 
-        public void Delete(TNaturalKey naturalKey)
+        public Task Delete(TNaturalKey naturalKey)
         {
-            _keyMap.TryRemove(naturalKey, out TInternalId removedItem);
+            return Task.FromResult(_keyMap.TryRemove(naturalKey, out TInternalId removedItem));
         }
 
         public IEnumerable<TNaturalKey> GetAllKeys()
         {
-            return _keyMap.Keys;
+            return _keyMap.Keys.AsEnumerable();
         }
     }
 }

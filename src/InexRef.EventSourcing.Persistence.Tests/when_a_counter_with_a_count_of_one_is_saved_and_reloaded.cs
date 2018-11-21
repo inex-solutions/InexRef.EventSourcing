@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using InexRef.EventSourcing.Tests.Domain;
 using Shouldly;
@@ -29,16 +30,16 @@ namespace InexRef.EventSourcing.Persistence.Tests
     {
         public when_a_counter_with_a_count_of_one_is_saved_and_reloaded(string testFixtureOptions) : base(testFixtureOptions) { }
 
-        protected override void Given()
+        protected override async Task Given()
         {
             var aggregate = AggregateRootFactory.Create<CounterAggregateRoot>();
             aggregate.Initialise(AggregateId);
             aggregate.Increment();
-            Subject.Save(aggregate);
+            await Subject.Save(aggregate);
             CreateNewScope();
         }
 
-        protected override void When() => ReloadedCounterAggregateRoot = Subject.Get(AggregateId);
+        protected override async Task When() => ReloadedCounterAggregateRoot = await Subject.Get(AggregateId);
 
         [Then]
         public void the_reloaded_counter_should_have_a_value_of_one() => ReloadedCounterAggregateRoot.CurrentValue.ShouldBe(1);

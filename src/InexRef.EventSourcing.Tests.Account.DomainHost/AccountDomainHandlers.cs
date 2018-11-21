@@ -49,11 +49,10 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
                 using (var operationScope = OperationScopeManager.CreateScopeFromMessage(command))
                 {
                     var naturalKeyDrivenRepository = operationScope.Get<INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId>>();
-                    var item = naturalKeyDrivenRepository.CreateNewByNaturalKey(
+                    var item = await naturalKeyDrivenRepository.CreateNewByNaturalKey(
                         naturalKey: command.Id,
                         onCreateNew: newItem => newItem.InitialiseAccount(MessageMetadata.CreateFromMessage(command), newItem.Id, command.Id));
-                    naturalKeyDrivenRepository.Save(item);
-                    await Task.CompletedTask;
+                    await naturalKeyDrivenRepository.Save(item);
                 }
             }
             catch
@@ -70,10 +69,9 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
                 using (var operationScope = OperationScopeManager.CreateScopeFromMessage(command))
                 {
                     var naturalKeyDrivenRepository = operationScope.Get< INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId> >();
-                    var item = naturalKeyDrivenRepository.GetByNaturalKey(command.Id);
+                    var item = await naturalKeyDrivenRepository.GetByNaturalKey(command.Id);
                     item.AddAmount(MessageMetadata.CreateFromMessage(command), command.Amount);
-                    naturalKeyDrivenRepository.Save(item);
-                    await Task.CompletedTask;
+                    await naturalKeyDrivenRepository.Save(item);
                 }
             }
             catch
@@ -90,10 +88,9 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
                 using (var operationScope = OperationScopeManager.CreateScopeFromMessage(command))
                 {
                     var naturalKeyDrivenRepository = operationScope.Get<INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId>>();
-                    var item = naturalKeyDrivenRepository.GetByNaturalKey(command.Id);
+                    var item = await naturalKeyDrivenRepository.GetByNaturalKey(command.Id);
                     item.ResetBalance(MessageMetadata.CreateFromMessage(command));
-                    naturalKeyDrivenRepository.Save(item);
-                    await Task.CompletedTask;
+                    await naturalKeyDrivenRepository.Save(item);
                 }
             }
             catch

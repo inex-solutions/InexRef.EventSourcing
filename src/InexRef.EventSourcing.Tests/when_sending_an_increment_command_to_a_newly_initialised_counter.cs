@@ -39,7 +39,7 @@ namespace InexRef.EventSourcing.Tests
         protected override async Task When() => await Subject.Send(new IncrementCounterCommand (MessageMetadata.CreateDefault(), NaturalId));
 
         [Then]
-        public void the_counter_value_is_one()
-            => Repository.GetByNaturalKey(NaturalId).CurrentValue.ShouldBe(1);
+        public async Task the_counter_value_is_one()
+            => (await Repository.GetByNaturalKey(NaturalId)).CurrentValue.ShouldBe(1);
     }
 }

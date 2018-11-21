@@ -20,18 +20,19 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace InexRef.EventSourcing.Contracts.Persistence
 {
-    public interface INaturalKeyToAggregateIdMap<TNaturalKey, out TInternalId, TAggregate>
+    public interface INaturalKeyToAggregateIdMap<TNaturalKey, TInternalId, TAggregate>
     {
-        TInternalId this[TNaturalKey naturalKey] { get; }
+        Task<TInternalId> this[TNaturalKey naturalKey] { get; }
 
-        TInternalId CreateNew(TNaturalKey naturalKey);
+        Task<TInternalId> CreateNew(TNaturalKey naturalKey);
 
-        TInternalId GetOrCreateNew(TNaturalKey naturalKey);
+        Task<TInternalId> GetOrCreateNew(TNaturalKey naturalKey);
 
-        void Delete(TNaturalKey naturalKey);
+        Task Delete(TNaturalKey naturalKey);
 
         IEnumerable<TNaturalKey> GetAllKeys();
     }

@@ -44,11 +44,14 @@ namespace InexRef.EventSourcing.Bus
             var handlers = (IEnumerable)_componentContext.Resolve(listOfEventHandlerTypes);
 
             List<Task> tasks = new List<Task>();
+
             foreach (dynamic handler in handlers)
             {
                 tasks.Add(handler.Handle((dynamic)@event));
             }
+
             Task.WaitAll(tasks.ToArray());
+            await Task.CompletedTask;
         }
 
         public async Task Send(ICommand command)

@@ -34,11 +34,11 @@ namespace InexRef.EventSourcing.Tests
         protected override async Task When() => await Subject.Send(new InitialiseCounterCommand(MessageMetadata.CreateDefault(), NaturalId));
 
         [Then]
-        public void the_counter_is_created()
-            => Repository.GetByNaturalKey(NaturalId).ShouldNotBeNull();
+        public async Task the_counter_is_created()
+            => (await Repository.GetByNaturalKey(NaturalId)).ShouldNotBeNull();
 
         [Then]
-        public void the_counter_value_is_zero()
-            => Repository.GetByNaturalKey(NaturalId).CurrentValue.ShouldBe(0);
+        public async Task the_counter_value_is_zero()
+            => (await Repository.GetByNaturalKey(NaturalId)).CurrentValue.ShouldBe(0);
     }
 }

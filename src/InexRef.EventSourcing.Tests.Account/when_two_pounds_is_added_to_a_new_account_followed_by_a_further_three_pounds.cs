@@ -41,12 +41,12 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
         protected override async Task When() => await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(3.00M)));
 
         [Then]
-        public void the_account_balance_is_five_pounds() 
-            => Repository.GetByNaturalKey(NaturalId).Balance.ShouldBe(Balance.FromDecimal(5.0M));
+        public async Task the_account_balance_is_five_pounds() 
+            => (await Repository.GetByNaturalKey(NaturalId)).Balance.ShouldBe(Balance.FromDecimal(5.0M));
 
         [Then]
-        public void the_aggregate_version_is_at_least_3_being_the_previous_version_plus_the_add_amount_action() 
-            => Repository.GetByNaturalKey(NaturalId).Version.ShouldBeGreaterThanOrEqualTo(3);
+        public async Task the_aggregate_version_is_at_least_3_being_the_previous_version_plus_the_add_amount_action() 
+            => (await Repository.GetByNaturalKey(NaturalId)).Version.ShouldBeGreaterThanOrEqualTo(3);
 
         [Then]
         public void the_account_balance_on_the_read_model_is_five_pounds() => BalanceReadModel[NaturalId].ShouldBe(5.00M);

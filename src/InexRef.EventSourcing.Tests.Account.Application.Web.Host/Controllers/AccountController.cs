@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Contracts.Persistence;
@@ -53,27 +54,27 @@ namespace InexRef.EventSourcing.Tests.Account.Application.Web.Host.Controllers
         }
 
         [HttpGet("Get")]
-        public AccountAggregateRoot Get(string id)
+        public async Task<AccountAggregateRoot> Get(string id)
         {
-            return _repository.GetByNaturalKey(id);
+            return await _repository.GetByNaturalKey(id);
         }
 
         [HttpPost("Create")]
-        public void Create(string id)
+        public async Task Create(string id)
         {
-            _bus.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), AccountId.Parse(id)));
+            await _bus.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), AccountId.Parse(id)));
         }
 
         [HttpPost("AddAmount")]
-        public void AddAmount(string id, decimal amount)
+        public async Task AddAmount(string id, decimal amount)
         {
-            _bus.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), AccountId.Parse(id), MonetaryAmount.Create(amount)));
+            await _bus.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), AccountId.Parse(id), MonetaryAmount.Create(amount)));
         }
 
         [HttpPost("ResetBalance")]
-        public void ResetBalance(string id)
+        public async Task ResetBalance(string id)
         {
-            _bus.Send(new ResetBalanceCommand(MessageMetadata.CreateDefault(), AccountId.Parse(id)));
+            await _bus.Send(new ResetBalanceCommand(MessageMetadata.CreateDefault(), AccountId.Parse(id)));
         }
     }
 }

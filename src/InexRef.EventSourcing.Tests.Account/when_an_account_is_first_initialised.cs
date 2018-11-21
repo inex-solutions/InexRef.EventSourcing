@@ -35,7 +35,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
         protected override async Task When() => await Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
 
         [Then]
-        public void the_account_balance_is_zero() => Repository.GetByNaturalKey(NaturalId).Balance.ShouldBe(Balance.FromDecimal(0.0M));
+        public async Task the_account_balance_is_zero() => (await Repository.GetByNaturalKey(NaturalId)).Balance.ShouldBe(Balance.FromDecimal(0.0M));
 
         [Then]
         public void the_account_balance_on_the_read_model_is_zero() => BalanceReadModel[NaturalId].ShouldBe(0.00M);

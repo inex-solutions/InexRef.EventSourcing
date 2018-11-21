@@ -41,14 +41,14 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
         protected override async Task When() => await Subject.Send(new ResetBalanceCommand(MessageMetadata.CreateDefault(), NaturalId));
 
         [Then]
-        public void the_account_balance_is_zero() => Repository.GetByNaturalKey(NaturalId).Balance.ShouldBe(Balance.FromDecimal(0.0M));
+        public async Task the_account_balance_is_zero() => (await Repository.GetByNaturalKey(NaturalId)).Balance.ShouldBe(Balance.FromDecimal(0.0M));
 
         [Then]
         public void the_account_balance_on_the_read_model_is_zero() => BalanceReadModel[NaturalId].ShouldBe(0.00M);
 
         [Then]
-        public void the_reloaded_aggregate_version_is_at_least_3_being_the_previous_version_plus_the_reset_action() 
-            => Repository.GetByNaturalKey(NaturalId).Version.ShouldBeGreaterThanOrEqualTo(3);
+        public async Task the_reloaded_aggregate_version_is_at_least_3_being_the_previous_version_plus_the_reset_action() 
+            => (await Repository.GetByNaturalKey(NaturalId)).Version.ShouldBeGreaterThanOrEqualTo(3);
 
         [Then]
         public void the_version_on_the_read_model_subscribed_to_external_events_is_at_least_3_being_the_previous_version_plus_the_reset_action() 

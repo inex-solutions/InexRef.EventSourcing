@@ -62,8 +62,8 @@ namespace InexRef.EventSourcing.Tests
         protected override async Task When() => await Subject.Send(new IncrementCounterCommand(MetadataOnFinalIncrementCommand, NaturalId));
 
         [Then]
-        public void the_counter_value_is_two()
-            => Repository.GetByNaturalKey(NaturalId).CurrentValue.ShouldBe(2);
+        public async Task the_counter_value_is_two()
+            => (await Repository.GetByNaturalKey(NaturalId)).CurrentValue.ShouldBe(2);
 
         [Then]
         public void a_single_divisible_by_two_event_was_sent()

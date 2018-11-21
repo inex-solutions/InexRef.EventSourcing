@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace InexRef.EventSourcing.Contracts.Persistence
 {
@@ -29,11 +30,11 @@ namespace InexRef.EventSourcing.Contracts.Persistence
         where TInternalId : IEquatable<TInternalId>, IComparable<TInternalId>
         where TNaturalKey : IEquatable<TNaturalKey>, IComparable<TNaturalKey>
     {
-        void DeleteByNaturalKey(TNaturalKey key);
-        TAggregate GetByNaturalKey(TNaturalKey id);
-        TAggregate CreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew);
-        TAggregate GetOrCreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew);
-        void Save(TAggregate aggregate);
+        Task DeleteByNaturalKey(TNaturalKey key);
+        Task<TAggregate> GetByNaturalKey(TNaturalKey id);
+        Task<TAggregate> CreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew);
+        Task<TAggregate> GetOrCreateNewByNaturalKey(TNaturalKey naturalKey, Action<TAggregate> onCreateNew);
+        Task Save(TAggregate aggregate);
         IEnumerable<TNaturalKey> GetAllKeys();
     }
 }

@@ -42,7 +42,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
             await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
         }
 
-        protected override async Task When() => Aggregate = Repository.GetByNaturalKey(NaturalId); //RJL
+        protected override async Task When() => Aggregate = await Repository.GetByNaturalKey(NaturalId);
 
         [Then]
         public void the_reloaded_aggregate_has_a_balance_of_four_pounds() => Aggregate.Balance.ShouldBe(Balance.FromDecimal(4.0M));

@@ -22,6 +22,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Persistence.Common;
 using InexRef.EventSourcing.Persistence.SqlServer.Persistence;
@@ -48,33 +49,33 @@ namespace InexRef.EventSourcing.Persistence.SqlServer.NaturalKey
             _internalKeyParameterCreator = internalKeyParameterCreator;
         }
 
-        public TInternalId this[TNaturalKey naturalKey]
+        public Task<TInternalId> this[TNaturalKey naturalKey] => Get(naturalKey);
+
+        private async Task<TInternalId> Get(TNaturalKey naturalKey)
         {
-            get
+            using (var connection = new SqlConnection(_sqlEventStoreConfiguration.DbConnectionString))
             {
-                using (var connection = new SqlConnection(_sqlEventStoreConfiguration.DbConnectionString))
+                var sql =
+                    @"SELECT [AggregateId] FROM [NaturalKeyToAggregateIdMap-{aggName}] WHERE [NaturalKey] = @naturalKey"
+                        .Replace("{aggName}", AggregateRootUtils.GetAggregateRootName<TAggregate>());
+
+                var command = new SqlCommand(sql, connection);
+                command.Parameters.Add(_naturalKeyParameterCreator.Create("@naturalKey", naturalKey));
+
+                connection.Open();
+
+                var result = await command.ExecuteScalarAsync();
+
+                if (result == null)
                 {
-                    var sql = @"SELECT [AggregateId] FROM [NaturalKeyToAggregateIdMap-{aggName}] WHERE [NaturalKey] = @naturalKey"
-                        .Replace("{aggName}", AggregateRootUtils.GetAggregateRootName< TAggregate>());
-
-                    var command = new SqlCommand(sql, connection);
-                    command.Parameters.Add(_naturalKeyParameterCreator.Create("@naturalKey", naturalKey));
-
-                    connection.Open();
-
-                    var result = command.ExecuteScalar();
-
-                    if (result == null)
-                    {
-                        throw new KeyNotFoundException($"No entry was found for natural key {naturalKey}");
-                    }
-
-                    return (TInternalId) result;
+                    throw new KeyNotFoundException($"No entry was found for natural key {naturalKey}");
                 }
+
+                return (TInternalId) result;
             }
         }
 
-        public TInternalId CreateNew(TNaturalKey naturalKey)
+        public async Task<TInternalId> CreateNew(TNaturalKey naturalKey)
         {
             using (var connection = new SqlConnection(_sqlEventStoreConfiguration.DbConnectionString))
             {
@@ -90,13 +91,13 @@ VALUES (@naturalKey, @aggregateID)"
                 command.Parameters.Add(_naturalKeyParameterCreator.Create("@naturalKey", naturalKey));
                 command.Parameters.Add(_internalKeyParameterCreator.Create("@aggregateID", id));
 
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
 
                 return id;
             }
         }
 
-        public TInternalId GetOrCreateNew(TNaturalKey naturalKey)
+        public async Task<TInternalId> GetOrCreateNew(TNaturalKey naturalKey)
         {
             using (var connection = new SqlConnection(_sqlEventStoreConfiguration.DbConnectionString))
             {
@@ -109,7 +110,7 @@ VALUES (@naturalKey, @aggregateID)"
                     var command = new SqlCommand(sql, connection, transaction);
                     command.Parameters.Add(_naturalKeyParameterCreator.Create("@naturalKey", naturalKey));
 
-                    object result = command.ExecuteScalar();
+                    object result = await command.ExecuteScalarAsync();
 
                     TInternalId id;
 
@@ -130,7 +131,7 @@ VALUES (@naturalKey, @aggregateID)"
                         command.Parameters.Add(_naturalKeyParameterCreator.Create("@naturalKey", naturalKey));
                         command.Parameters.Add(_internalKeyParameterCreator.Create("@aggregateID", id));
 
-                        command.ExecuteNonQuery();
+                        await command.ExecuteNonQueryAsync();
                     }
 
                     transaction.Commit();
@@ -140,7 +141,7 @@ VALUES (@naturalKey, @aggregateID)"
             }
         }
 
-        public void Delete(TNaturalKey naturalKey)
+        public async Task Delete(TNaturalKey naturalKey)
         {
             using (var connection = new SqlConnection(_sqlEventStoreConfiguration.DbConnectionString))
             {
@@ -152,7 +153,7 @@ VALUES (@naturalKey, @aggregateID)"
 
                 connection.Open();
 
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
 

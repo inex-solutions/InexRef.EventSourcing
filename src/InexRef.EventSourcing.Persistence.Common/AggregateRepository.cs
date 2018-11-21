@@ -105,7 +105,6 @@ namespace InexRef.EventSourcing.Persistence.Common
         public async Task Delete(TId id)
         {
             await _eventStore.DeleteEvents(id, typeof(TAggregate));
-            await Task.CompletedTask;
         }
     }
 }

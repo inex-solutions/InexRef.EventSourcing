@@ -34,7 +34,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
         protected override async Task Given()
         {
             Aggregate = AggregateRootFactory.Create<CounterAggregateRoot>();
-            Aggregate.Initialise(AggregateId);
+            await Aggregate.Initialise(AggregateId);
             await Subject.Save(Aggregate);
         }
 

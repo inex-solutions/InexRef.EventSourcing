@@ -34,14 +34,14 @@ namespace InexRef.EventSourcing.Persistence.Tests
         protected override async Task Given()
         {
             ReloadedCounterAggregateRoot = AggregateRootFactory.Create<NonDisposingCounterAggregateRoot>();
-            ReloadedCounterAggregateRoot.Initialise(AggregateId);
+            await ReloadedCounterAggregateRoot.Initialise(AggregateId);
 
-            ReloadedCounterAggregateRoot.Increment();
+            await ReloadedCounterAggregateRoot.Increment();
 
             // intermediate save should cause a concurrency error when we save below
             await Subject.Save(ReloadedCounterAggregateRoot);
 
-            ReloadedCounterAggregateRoot.Increment();
+            await ReloadedCounterAggregateRoot.Increment();
         }
 
         protected override async Task When() => CaughtException = await Catch.AsyncException (async () => await Subject.Save(ReloadedCounterAggregateRoot));

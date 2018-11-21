@@ -33,12 +33,12 @@ namespace InexRef.EventSourcing.Persistence.Tests
         protected override async Task Given()
         {
             var aggregate = AggregateRootFactory.Create<CounterAggregateRoot>();
-            aggregate.Initialise(AggregateId);
-            aggregate.Increment();
+            await aggregate.Initialise(AggregateId);
+            await aggregate.Increment();
             await Subject.Save(aggregate);
 
-            ReloadedCounterAggregateRoot = Subject.Get(AggregateId).Result;
-            ReloadedCounterAggregateRoot.Increment();
+            ReloadedCounterAggregateRoot = await Subject.Get(AggregateId);
+            await ReloadedCounterAggregateRoot.Increment();
             await Subject.Save(ReloadedCounterAggregateRoot);
             CreateNewScope();
         }

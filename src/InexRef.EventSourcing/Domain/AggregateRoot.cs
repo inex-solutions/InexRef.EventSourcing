@@ -84,7 +84,7 @@ namespace InexRef.EventSourcing.Domain
             Id = id;
             foreach (var @event in eventHistory)
             {
-                await Apply(@event); //RJL
+                await Apply(@event);
             }
         }
 

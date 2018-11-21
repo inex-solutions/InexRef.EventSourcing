@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Common.Scoping;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Messages;
@@ -36,7 +37,7 @@ namespace InexRef.EventSourcing.Tests.Domain
             OperationScopeManager = operationScopeManager;
         }
 
-        public void Handle(InitialiseCounterCommand command)
+        public async Task Handle(InitialiseCounterCommand command)
         {
             try
             {
@@ -56,7 +57,7 @@ namespace InexRef.EventSourcing.Tests.Domain
             }
         }
 
-        public void Handle(IncrementCounterCommand command)
+        public async Task Handle(IncrementCounterCommand command)
         {
             try
             {

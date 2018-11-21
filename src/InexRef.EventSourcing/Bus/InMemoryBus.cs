@@ -21,6 +21,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Messages;
@@ -36,22 +37,25 @@ namespace InexRef.EventSourcing.Bus
             _componentContext = componentContext;
         }
 
-        public void PublishEvent(IEvent @event)
+        public async Task PublishEvent(IEvent @event)
         {
             var eventHandlerType = typeof(IHandle<>).MakeGenericType(@event.GetType());
             var listOfEventHandlerTypes = typeof(IEnumerable<>).MakeGenericType(eventHandlerType);
             var handlers = (IEnumerable)_componentContext.Resolve(listOfEventHandlerTypes);
+
+            List<Task> tasks = new List<Task>();
             foreach (dynamic handler in handlers)
             {
-                handler.Handle((dynamic)@event);
+                tasks.Add(handler.Handle((dynamic)@event));
             }
+            Task.WaitAll(tasks.ToArray());
         }
 
-        public void Send(ICommand command)
+        public async Task Send(ICommand command)
         {
             var commandHandlerType = typeof(IHandle<>).MakeGenericType(command.GetType());
             dynamic handler = _componentContext.Resolve(commandHandlerType);
-            handler.Handle((dynamic)command);
+            await handler.Handle((dynamic)command);
         }
     }
 }

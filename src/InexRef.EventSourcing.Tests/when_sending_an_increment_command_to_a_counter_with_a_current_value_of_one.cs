@@ -20,6 +20,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Messages;
@@ -41,20 +42,24 @@ namespace InexRef.EventSourcing.Tests
         protected override void RegisterWithContainerBuilder(ContainerBuilder containerBuilder)
         {
             base.RegisterWithContainerBuilder(containerBuilder);
-            var handler = new CounterValueDivisibleByTwoEventHandler(evt => _counterValueDivisibleByTwoEvents.Add(evt));
+            var handler = new CounterValueDivisibleByTwoEventHandler(evt =>
+            {
+                _counterValueDivisibleByTwoEvents.Add(evt);
+                return Task.CompletedTask;
+            });
 
             containerBuilder.RegisterInstance(handler).As<IHandle<CounterValueDivisibleByTwoEvent>>();
         }
 
-        protected override void Given()
+        protected override async Task Given()
         {
-            Subject.Send(new InitialiseCounterCommand(MessageMetadata.CreateDefault(), NaturalId));
-            Subject.Send(new IncrementCounterCommand(MessageMetadata.CreateDefault(), NaturalId));
+            await Subject.Send(new InitialiseCounterCommand(MessageMetadata.CreateDefault(), NaturalId));
+            await Subject.Send(new IncrementCounterCommand(MessageMetadata.CreateDefault(), NaturalId));
 
             MetadataOnFinalIncrementCommand = MessageMetadata.CreateDefault();
         }
 
-        protected override void When() => Subject.Send(new IncrementCounterCommand(MetadataOnFinalIncrementCommand, NaturalId));
+        protected override async Task When() => await Subject.Send(new IncrementCounterCommand(MetadataOnFinalIncrementCommand, NaturalId));
 
         [Then]
         public void the_counter_value_is_two()

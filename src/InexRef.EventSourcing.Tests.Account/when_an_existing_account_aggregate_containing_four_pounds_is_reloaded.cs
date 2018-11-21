@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Account.Contract.Public.Messages;
 using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
@@ -34,14 +35,14 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 
         public when_an_existing_account_aggregate_containing_four_pounds_is_reloaded(string testFixtureOptions) : base(testFixtureOptions) { }
 
-        protected override void Given()
+        protected override async Task Given()
         {
-            Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
-            Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
-            Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
+            await Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
+            await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
+            await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
         }
 
-        protected override void When() => Aggregate = Repository.GetByNaturalKey(NaturalId);
+        protected override async Task When() => Aggregate = Repository.GetByNaturalKey(NaturalId); //RJL
 
         [Then]
         public void the_reloaded_aggregate_has_a_balance_of_four_pounds() => Aggregate.Balance.ShouldBe(Balance.FromDecimal(4.0M));

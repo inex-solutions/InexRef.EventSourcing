@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Common.Scoping;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Messages;
@@ -41,7 +42,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
             OperationScopeManager = operationScopeManager;
         }
 
-        public void Handle(CreateAccountCommand command)
+        public async Task Handle(CreateAccountCommand command)
         {
             try
             {
@@ -52,6 +53,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
                         naturalKey: command.Id,
                         onCreateNew: newItem => newItem.InitialiseAccount(MessageMetadata.CreateFromMessage(command), newItem.Id, command.Id));
                     naturalKeyDrivenRepository.Save(item);
+                    await Task.CompletedTask;
                 }
             }
             catch
@@ -61,7 +63,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
             }
         }
 
-        public void Handle(AddAmountCommand command)
+        public async Task Handle(AddAmountCommand command)
         {
             try
             {
@@ -71,6 +73,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
                     var item = naturalKeyDrivenRepository.GetByNaturalKey(command.Id);
                     item.AddAmount(MessageMetadata.CreateFromMessage(command), command.Amount);
                     naturalKeyDrivenRepository.Save(item);
+                    await Task.CompletedTask;
                 }
             }
             catch
@@ -80,7 +83,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
             }
         }
 
-        public void Handle(ResetBalanceCommand command)
+        public async Task Handle(ResetBalanceCommand command)
         {
             try
             {
@@ -90,6 +93,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost
                     var item = naturalKeyDrivenRepository.GetByNaturalKey(command.Id);
                     item.ResetBalance(MessageMetadata.CreateFromMessage(command));
                     naturalKeyDrivenRepository.Save(item);
+                    await Task.CompletedTask;
                 }
             }
             catch

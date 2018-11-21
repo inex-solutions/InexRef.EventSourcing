@@ -20,6 +20,7 @@
 #endregion
 
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Tests.Account.Contract.Public.Messages;
 using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
@@ -31,14 +32,16 @@ namespace InexRef.EventSourcing.Tests.Account.ReadModels
         private readonly ConcurrentDictionary<AccountId, BalanceEntry> _balances =
             new ConcurrentDictionary<AccountId, BalanceEntry>();
 
-        public void Handle(AccountInitialisedEvent @event)
+        public async Task Handle(AccountInitialisedEvent @event)
         {
             _balances.TryAdd(@event.AccountId, new BalanceEntry {Version = @event.Version, Balance = 0});
+            await Task.CompletedTask;
         }
 
-        public void Handle(BalanceUpdatedEvent @event)
+        public async Task Handle(BalanceUpdatedEvent @event)
         {
             _balances[@event.AccountId] = new BalanceEntry {Version = @event.Version, Balance = @event.Balance.Value};
+            await Task.CompletedTask;
         }
 
         public decimal this[AccountId id] => _balances[id].Balance;

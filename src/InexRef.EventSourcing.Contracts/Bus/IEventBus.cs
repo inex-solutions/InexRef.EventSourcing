@@ -19,12 +19,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Messages;
 
 namespace InexRef.EventSourcing.Contracts.Bus
 {
     public interface IEventBus
     {
-        void PublishEvent(IEvent @event);
+        Task PublishEvent(IEvent @event);
     }
 }

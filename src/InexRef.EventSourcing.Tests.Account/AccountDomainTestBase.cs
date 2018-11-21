@@ -29,9 +29,9 @@ using NUnit.Framework;
 
 namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
-    public class AccountDomainTestBase : IntegrationTestBase<AccountAggregateRoot, AccountId>
+    public abstract class AccountDomainTestBase : IntegrationTestBase<AccountAggregateRoot, AccountId>
     {
-        public AccountDomainTestBase(string testFixtureOptions) : base(testFixtureOptions)
+        protected AccountDomainTestBase(string testFixtureOptions) : base(testFixtureOptions)
         {
             NaturalId = AccountId.Parse(Guid.NewGuid().ToString());
         }

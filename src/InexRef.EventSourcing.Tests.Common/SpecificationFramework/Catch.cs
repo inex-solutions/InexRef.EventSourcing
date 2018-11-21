@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Threading.Tasks;
 
 namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
 {
@@ -30,6 +31,19 @@ namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
             try
             {
                 action();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+
+        public static async Task<Exception> Exception(Func<Task> action)
+        {
+            try
+            {
+                await action();
                 return null;
             }
             catch (Exception ex)

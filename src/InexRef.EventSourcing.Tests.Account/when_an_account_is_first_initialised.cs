@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Account.Contract.Public.Messages;
 using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
@@ -31,9 +32,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
     {
         public when_an_account_is_first_initialised(string testFixtureOptions) : base(testFixtureOptions) { }
 
-        protected override void Given() { }
-
-        protected override void When() => Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
+        protected override async Task When() => await Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
 
         [Then]
         public void the_account_balance_is_zero() => Repository.GetByNaturalKey(NaturalId).Balance.ShouldBe(Balance.FromDecimal(0.0M));

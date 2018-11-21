@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
@@ -27,6 +28,8 @@ namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
     [TestFixture]
     public abstract class SpecificationBaseAsync
     {
+        protected Exception CaughtException { get; set; }
+
         [OneTimeSetUp]
         public async Task Init()
         {
@@ -39,9 +42,9 @@ namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
         {
         }
 
-        protected abstract Task When();
+        protected virtual async Task When() => await Task.CompletedTask;
 
-        protected abstract Task Given();
+        protected virtual async Task Given() => await Task.CompletedTask;
 
         [OneTimeTearDown]
         public void TearDown()
@@ -51,6 +54,18 @@ namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
 
         protected virtual void Cleanup()
         {
+        }
+    }
+
+    public abstract class SpecificationBaseAsync<TSubject> : SpecificationBaseAsync
+    {
+        protected TSubject Subject { get; set; }
+
+        protected override void Cleanup()
+        {
+            base.Cleanup();
+            var disposable = Subject as IDisposable;
+            disposable?.Dispose();
         }
     }
 }

@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using InexRef.EventSourcing.Tests.Domain;
@@ -30,7 +31,7 @@ namespace InexRef.EventSourcing.Tests
     {
         public when_sending_a_initialise_counter_command(string testFixtureOptions) : base(testFixtureOptions) { }
 
-        protected override void When() => Subject.Send(new InitialiseCounterCommand(MessageMetadata.CreateDefault(), NaturalId));
+        protected override async Task When() => await Subject.Send(new InitialiseCounterCommand(MessageMetadata.CreateDefault(), NaturalId));
 
         [Then]
         public void the_counter_is_created()

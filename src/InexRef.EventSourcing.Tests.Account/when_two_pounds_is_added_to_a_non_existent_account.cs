@@ -20,6 +20,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Account.Contract.Public.Messages;
 using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
@@ -32,10 +33,9 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
     {
         public when_two_pounds_is_added_to_a_non_existent_account(string testFixtureOptions) : base(testFixtureOptions) { }
 
-        protected override void Given() { }
-
-        protected override void When() 
-            => CaughtException = Catch.Exception(() => Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M))));
+        protected override async Task When() 
+            => CaughtException = await Catch.Exception(() 
+                => Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M))));
 
         [Then]
         public void a_KeyNotFoundException_is_thrown()

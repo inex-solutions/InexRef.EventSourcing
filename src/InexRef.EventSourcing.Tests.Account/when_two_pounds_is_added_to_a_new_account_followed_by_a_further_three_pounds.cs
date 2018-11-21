@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Account.Contract.Public.Messages;
 using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
@@ -31,13 +32,13 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
     {
         public when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds(string testFixtureOptions) : base(testFixtureOptions) { }
 
-        protected override void Given()
+        protected override async Task Given()
         {
-            Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
-            Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
+            await Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
+            await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
         }
 
-        protected override void When() => Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(3.00M)));
+        protected override async Task When() => await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(3.00M)));
 
         [Then]
         public void the_account_balance_is_five_pounds() 

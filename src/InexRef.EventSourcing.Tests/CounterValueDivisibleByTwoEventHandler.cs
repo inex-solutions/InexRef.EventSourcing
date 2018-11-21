@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Tests.Domain;
 
@@ -27,16 +28,16 @@ namespace InexRef.EventSourcing.Tests
 {
     public class CounterValueDivisibleByTwoEventHandler : IHandle<CounterValueDivisibleByTwoEvent>
     {
-        private readonly Action<CounterValueDivisibleByTwoEvent> _onEventReceived;
+        private readonly Func<CounterValueDivisibleByTwoEvent, Task> _onEventReceived;
 
-        public CounterValueDivisibleByTwoEventHandler(Action<CounterValueDivisibleByTwoEvent> onEventReceived)
+        public CounterValueDivisibleByTwoEventHandler(Func<CounterValueDivisibleByTwoEvent, Task> onEventReceived)
         {
             _onEventReceived = onEventReceived;
         }
 
-        public void Handle(CounterValueDivisibleByTwoEvent message)
+        public async Task Handle(CounterValueDivisibleByTwoEvent message)
         {
-            _onEventReceived(message);
+            await _onEventReceived(message);
         }
     }
 }

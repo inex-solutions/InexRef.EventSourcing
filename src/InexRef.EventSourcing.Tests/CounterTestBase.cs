@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Threading.Tasks;
 using Autofac;
 using InexRef.EventSourcing.Tests.Common;
 using InexRef.EventSourcing.Tests.Domain;
@@ -26,13 +27,12 @@ using NUnit.Framework;
 
 namespace InexRef.EventSourcing.Tests
 {
-    public class CounterTestBase : IntegrationTestBase<CounterAggregateRoot, string>
+    public abstract class CounterTestBase : IntegrationTestBase<CounterAggregateRoot, string>
     {
-        public CounterTestBase(string testFixtureOptions) : base(testFixtureOptions)
+        protected CounterTestBase(string testFixtureOptions) : base(testFixtureOptions)
         {
             NaturalId = new IdGenerator("my-root").CreateAggregateId();
         }
-
 
         protected override void RegisterWithContainerBuilder(ContainerBuilder containerBuilder)
         {

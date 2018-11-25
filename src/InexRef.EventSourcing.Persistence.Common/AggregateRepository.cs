@@ -69,7 +69,7 @@ namespace InexRef.EventSourcing.Persistence.Common
                 await _bus.PublishEvent(eventToStore);
             }
 
-            _eventStore.SaveEvents(aggregate.Id, typeof(TAggregate), events, version, aggregate.Version);
+            await _eventStore.SaveEvents(aggregate.Id, typeof(TAggregate), events, version, aggregate.Version);
             internalAggregate.Dispose();
         }
 
@@ -104,7 +104,7 @@ namespace InexRef.EventSourcing.Persistence.Common
 
         public async Task Delete(TId id)
         {
-            _eventStore.DeleteEvents(id, typeof(TAggregate));
+            await _eventStore.DeleteEvents(id, typeof(TAggregate));
             await Task.CompletedTask;
         }
     }

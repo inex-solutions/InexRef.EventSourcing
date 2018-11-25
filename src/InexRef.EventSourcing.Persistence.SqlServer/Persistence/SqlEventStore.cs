@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Persistence.Common;
@@ -81,7 +82,7 @@ SELECT [EventDateTime], [SourceCorrelationId], [Payload] FROM [dbo].[EventStore-
             }
         }
 
-        public void SaveEvents(TId id, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion, int expectedVersion)
+        public async Task SaveEvents(TId id, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion, int expectedVersion)
         {
             var dataTable = new DataTable();
             dataTable.Columns.Add("AggregateId", typeof(TId));
@@ -102,7 +103,7 @@ SELECT [EventDateTime], [SourceCorrelationId], [Payload] FROM [dbo].[EventStore-
 
             using (var connection = new SqlConnection(_sqlEventStoreConfiguration.DbConnectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
 
                 using (var command = new SqlCommand())
                 {
@@ -121,7 +122,7 @@ SELECT [EventDateTime], [SourceCorrelationId], [Payload] FROM [dbo].[EventStore-
 
                     try
                     {
-                        command.ExecuteNonQuery();
+                        await command.ExecuteNonQueryAsync();
                     }
                     catch (SqlException ex) when (ex.Number == 51000)
                     {
@@ -131,18 +132,18 @@ SELECT [EventDateTime], [SourceCorrelationId], [Payload] FROM [dbo].[EventStore-
             }
         }
 
-        public void DeleteEvents(TId id, Type aggregateType)
+        public async Task DeleteEvents(TId id, Type aggregateType)
         {
             using (var connection = new SqlConnection(_sqlEventStoreConfiguration.DbConnectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
 
                 var getLatestVersionSql = @"DELETE FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggregateId".Replace("{aggName}", AggregateRootUtils.GetAggregateRootName(aggregateType));
 
                 using (var command = new SqlCommand(getLatestVersionSql, connection))
                 {
                     command.Parameters.Add(_idParameterCreator.Create("@aggregateID", id));
-                    command.ExecuteNonQuery();
+                    await command.ExecuteNonQueryAsync();
                 }
             }
         }

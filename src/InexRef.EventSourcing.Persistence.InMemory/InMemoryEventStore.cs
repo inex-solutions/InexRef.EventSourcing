@@ -23,6 +23,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Persistence.Common;
@@ -33,7 +34,7 @@ namespace InexRef.EventSourcing.Persistence.InMemory
     {
         private readonly ConcurrentDictionary<TId, IEnumerable<StoredEvent<TId>>> _storedEvents = new ConcurrentDictionary<TId, IEnumerable<StoredEvent<TId>>>();
 
-        public void SaveEvents(TId aggregateId, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion, int expectedVersion)
+        public async Task SaveEvents(TId aggregateId, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion, int expectedVersion)
         {
             IEnumerable<StoredEvent<TId>> eventsToStore = events.Select(@event => new StoredEvent<TId>(@event.Version, @event)).ToList();
 
@@ -53,11 +54,14 @@ namespace InexRef.EventSourcing.Persistence.InMemory
 
                     return persistedEvents.Concat(eventsToStoreList);
                 });
+
+            await Task.CompletedTask;
         }
 
-        public void DeleteEvents(TId id, Type aggregateType)
+        public async Task DeleteEvents(TId id, Type aggregateType)
         {
             _storedEvents.TryRemove(id, out IEnumerable<StoredEvent<TId>>  events);
+            await Task.CompletedTask;
         }
 
         public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, Type aggregateType, bool throwIfNotFound)

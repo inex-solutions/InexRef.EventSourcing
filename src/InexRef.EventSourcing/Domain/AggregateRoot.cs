@@ -50,22 +50,22 @@ namespace InexRef.EventSourcing.Domain
 
         public abstract string Name { get; }
 
-        protected void RegisterEventHandler<TEvent>(Action<TEvent> eventHandler)
+        protected void RegisterEventHandler<TEvent>(Func<TEvent, Task> eventHandler)
             where TEvent : IEvent<TId>
         {
             MessageHandlerInvoker.RegisterMessageHandler(eventHandler);
         }
 
-        private void HandleEvent(IEvent<TId> @event)
+        private async Task HandleEvent(IEvent<TId> @event)
         {
             ThrowIfDisposed();
-            MessageHandlerInvoker.Invoke(@event);
+            await MessageHandlerInvoker.Invoke(@event);
         }
 
-        protected void Apply(IEvent<TId> @event)
+        protected async Task Apply(IEvent<TId> @event)
         {
             ThrowIfDisposed();
-            HandleEvent(@event);
+            await HandleEvent(@event);
 
             if (@event.Version > Version)
             {
@@ -84,7 +84,7 @@ namespace InexRef.EventSourcing.Domain
             Id = id;
             foreach (var @event in eventHistory)
             {
-                Apply(@event); //RJL
+                await Apply(@event); //RJL
             }
         }
 

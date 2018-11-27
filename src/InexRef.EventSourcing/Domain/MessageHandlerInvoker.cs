@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Messages;
 
 namespace InexRef.EventSourcing.Domain
@@ -30,7 +31,7 @@ namespace InexRef.EventSourcing.Domain
         private readonly Dictionary<Type, List<IInvokableMessageHandlerAction>> _messageHandlers 
             = new Dictionary<Type, List<IInvokableMessageHandlerAction>>();
 
-        public void RegisterMessageHandler<TMessage>(Action<TMessage> messageHandler)
+        public void RegisterMessageHandler<TMessage>(Func<TMessage, Task> messageHandler)
             where TMessage : IMessage
         {
             
@@ -43,34 +44,34 @@ namespace InexRef.EventSourcing.Domain
             handlersForMessageType.Add(new InvokableMessageHandlerAction<TMessage>(messageHandler));
         }
 
-        public void Invoke(IMessage message)
+        public async Task Invoke(IMessage message)
         {
             if (_messageHandlers.TryGetValue(message.GetType(), out List <IInvokableMessageHandlerAction> handlersForMessageType))
             {
                 foreach (var handlerInvoker in handlersForMessageType)
                 {
-                    handlerInvoker.Invoke(message);
+                    await handlerInvoker.Invoke(message);
                 }
             }
         }
 
         private interface IInvokableMessageHandlerAction
         {
-            void Invoke(IMessage message);
+            Task Invoke(IMessage message);
         }
 
         private class InvokableMessageHandlerAction<TMessage> : IInvokableMessageHandlerAction
         {
-            private readonly Action<TMessage> _handler;
+            private readonly Func<TMessage, Task> _handler;
 
-            public InvokableMessageHandlerAction(Action<TMessage> handler)
+            public InvokableMessageHandlerAction(Func<TMessage, Task> handler)
             {
                 _handler = handler;
             }
 
-            public void Invoke(IMessage message)
+            public async Task Invoke(IMessage message)
             {
-                _handler((TMessage)message);
+                await _handler((TMessage)message);
             }
         }
     }

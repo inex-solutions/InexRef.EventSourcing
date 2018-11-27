@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Domain;
 
@@ -37,27 +38,28 @@ namespace InexRef.EventSourcing.Tests.Domain
             RegisterEventHandler<CounterIncrementedEvent>(HandleEvent);
         }
 
-        public void Initialise(Guid id)
+        public async Task Initialise(Guid id)
         {
-            Apply(new CounterInitialisedEvent(OperationContext.CreateNewMessageMetadata(), id));
+            await Apply(new CounterInitialisedEvent(OperationContext.CreateNewMessageMetadata(), id));
         }
 
-        public void Increment()
+        public async Task Increment()
         {
-            Apply(new CounterIncrementedEvent(OperationContext.CreateNewMessageMetadata(), Id));
+            await Apply(new CounterIncrementedEvent(OperationContext.CreateNewMessageMetadata(), Id));
         }
 
-        public void HandleEvent(CounterInitialisedEvent @event)
+        private async Task HandleEvent(CounterInitialisedEvent @event)
         {
             Id = @event.Id;
+            await Task.CompletedTask;
         }
 
-        public void HandleEvent(CounterIncrementedEvent @event)
+        private async Task HandleEvent(CounterIncrementedEvent @event)
         {
             CurrentValue++;
             if (CurrentValue % 2 == 0)
             {
-                Apply(new CounterValueDivisibleByTwoEvent(OperationContext.CreateNewMessageMetadata(), Id, CurrentValue));
+                await Apply(new CounterValueDivisibleByTwoEvent(OperationContext.CreateNewMessageMetadata(), Id, CurrentValue));
             }
         }
     }

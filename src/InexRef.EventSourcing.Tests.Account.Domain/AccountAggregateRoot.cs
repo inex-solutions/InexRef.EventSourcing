@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Domain;
@@ -49,37 +50,38 @@ namespace InexRef.EventSourcing.Tests.Account.Domain
 
         public Balance Balance { get; private set; }
 
-        public void InitialiseAccount(MessageMetadata messageMetadata, Guid id, AccountId accountId)
+        public async Task InitialiseAccount(MessageMetadata messageMetadata, Guid id, AccountId accountId)
         {
-            Apply(new AccountInitialisedEvent(messageMetadata, id, accountId));
+            await Apply(new AccountInitialisedEvent(messageMetadata, id, accountId));
         }
 
-        public void AddAmount(MessageMetadata messageMetadata, MonetaryAmount amount)
+        public async Task AddAmount(MessageMetadata messageMetadata, MonetaryAmount amount)
         {
-            Apply(new AmountAddedEvent(messageMetadata, Id, amount));
+            await Apply(new AmountAddedEvent(messageMetadata, Id, amount));
         }
 
-        public void ResetBalance(MessageMetadata messageMetadata)
+        public async Task ResetBalance(MessageMetadata messageMetadata)
         {
-            Apply(new BalanceResetEvent(messageMetadata, Id));
+            await Apply(new BalanceResetEvent(messageMetadata, Id));
         }
 
-        public void HandleEvent(AccountInitialisedEvent @event)
+        private async Task HandleEvent(AccountInitialisedEvent @event)
         {
             Id = @event.Id;
             AccountId = @event.AccountId;
+            await Task.CompletedTask;
         }
 
-        public void HandleEvent(AmountAddedEvent @event)
+        private async Task HandleEvent(AmountAddedEvent @event)
         {
             Balance = _calculator.AddToBalance(Balance, @event.Amount);
-            Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event),  Id, AccountId, Balance));
+            await Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event),  Id, AccountId, Balance));
         }
 
-        public void HandleEvent(BalanceResetEvent @event)
+        private async Task HandleEvent(BalanceResetEvent @event)
         {
             Balance = Balance.Zero;
-            Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event), Id, AccountId, Balance));
+            await Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event), Id, AccountId, Balance));
         }
     }
 }

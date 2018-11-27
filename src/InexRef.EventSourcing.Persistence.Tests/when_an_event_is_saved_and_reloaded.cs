@@ -70,7 +70,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
             _messageMetadata = MessageMetadata.CreateDefault();
             _eventToSave = new CounterIncrementedEvent(_messageMetadata, _id);
 
-            EventStore.SaveEvents(_id, typeof(CounterAggregateRoot), new [] {_eventToSave }, 1, 0);
+            EventStore.SaveEvents(_id, typeof(CounterAggregateRoot), new [] {_eventToSave }, 1, 0).GetAwaiter().GetResult();
         }
 
         protected override void When() 

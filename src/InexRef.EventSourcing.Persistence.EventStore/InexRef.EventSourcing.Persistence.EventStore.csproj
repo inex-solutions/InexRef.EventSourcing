@@ -5,7 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="EventStore.ClientAPI.NetCore" Version="4.1.0.23" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InexRef.EventSourcing.Contracts\InexRef.EventSourcing.Contracts.csproj" />
+    <ProjectReference Include="..\InexRef.EventSourcing.Persistence.Common\InexRef.EventSourcing.Persistence.Common.csproj" />
   </ItemGroup>
 
 </Project>

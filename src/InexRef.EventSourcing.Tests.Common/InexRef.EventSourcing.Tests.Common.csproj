@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\InexRef.EventSourcing.Persistence.EventStore\InexRef.EventSourcing.Persistence.EventStore.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Persistence.InMemory\InexRef.EventSourcing.Persistence.InMemory.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Persistence.SqlServer\InexRef.EventSourcing.Persistence.SqlServer.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing\InexRef.EventSourcing.csproj" />

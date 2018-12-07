@@ -37,6 +37,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
 {
     [TestFixture("EventStorePersistence=InMemory", Category = "DomainOnly")]
     [TestFixture("EventStorePersistence=SqlServer", Category = "DomainHosting")]
+    [TestFixture("EventStorePersistence=EventStore", Category = "DomainHosting")]
     public abstract class AggregateRepositoryTestBase : SpecificationBaseAsync<IAggregateRepository<CounterAggregateRoot, Guid>>
     {
         private readonly IDictionary<string, string> _testFixtureOptions;

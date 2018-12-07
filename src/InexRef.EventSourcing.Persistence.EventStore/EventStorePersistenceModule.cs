@@ -20,30 +20,16 @@
 #endregion
 
 using Autofac;
-using InexRef.EventSourcing.Persistence.EventStore;
-using InexRef.EventSourcing.Persistence.InMemory;
-using InexRef.EventSourcing.Persistence.SqlServer;
+using InexRef.EventSourcing.Contracts.Persistence;
 
-namespace InexRef.EventSourcing.Tests.Common.Persistence
+namespace InexRef.EventSourcing.Persistence.EventStore
 {
-    public static class EventStorePersistenceModuleExtensions
+    public class EventStorePersistenceModule : Module
     {
-        public static void RegisterEventStorePersistenceModule(this ContainerBuilder containerBuilder, string persistenceProvider)
+        protected override void Load(ContainerBuilder builder)
         {
-            switch (persistenceProvider)
-            {
-                case "InMemory":
-                    containerBuilder.RegisterModule<EventSourcingInMemoryPersistenceModule>();
-                    break;
-                case "SqlServer":
-                    containerBuilder.RegisterModule<EventSourcingSqlServerPersistenceModule>();
-                    break;
-                case "EventStore":
-                    containerBuilder.RegisterModule<EventStorePersistenceModule>();
-                    break;
-                default:
-                    throw new TestSetupException($"Test setup failed. Persistence provider '{persistenceProvider}' not supported.");
-            }
+            builder.RegisterGeneric(typeof(EventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
+          //  builder.RegisterGeneric(typeof(EventStoreNaturalKeyToAggregateIdMap<,,>)).As(typeof(INaturalKeyToAggregateIdMap<,,>)).SingleInstance();
         }
     }
 }

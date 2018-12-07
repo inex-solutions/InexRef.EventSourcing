@@ -36,6 +36,8 @@ namespace InexRef.EventSourcing.Tests.Common
 {
     [TestFixture("EventStorePersistence=InMemory", Category = "DomainOnly")]
     [TestFixture("EventStorePersistence=SqlServer", Category = "DomainHosting")]
+    [TestFixture("EventStorePersistence=EventStore", Category = "DomainHosting")]
+
     public abstract class IntegrationTestBase <TAggregate, TNaturalKey>: SpecificationBaseAsync<IBus> 
         where TAggregate : IAggregateRoot<Guid>, IAggregateRootInternal<Guid>
         where TNaturalKey : IEquatable<TNaturalKey>, IComparable<TNaturalKey>

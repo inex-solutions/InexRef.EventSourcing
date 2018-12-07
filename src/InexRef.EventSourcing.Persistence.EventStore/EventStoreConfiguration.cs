@@ -18,32 +18,10 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
-
-using Autofac;
-using InexRef.EventSourcing.Persistence.EventStore;
-using InexRef.EventSourcing.Persistence.InMemory;
-using InexRef.EventSourcing.Persistence.SqlServer;
-
-namespace InexRef.EventSourcing.Tests.Common.Persistence
+namespace InexRef.EventSourcing.Persistence.EventStore
 {
-    public static class EventStorePersistenceModuleExtensions
+    public class EventStoreConfiguration
     {
-        public static void RegisterEventStorePersistenceModule(this ContainerBuilder containerBuilder, string persistenceProvider)
-        {
-            switch (persistenceProvider)
-            {
-                case "InMemory":
-                    containerBuilder.RegisterModule<EventSourcingInMemoryPersistenceModule>();
-                    break;
-                case "SqlServer":
-                    containerBuilder.RegisterModule<EventSourcingSqlServerPersistenceModule>();
-                    break;
-                case "EventStore":
-                    containerBuilder.RegisterModule<EventStorePersistenceModule>();
-                    break;
-                default:
-                    throw new TestSetupException($"Test setup failed. Persistence provider '{persistenceProvider}' not supported.");
-            }
-        }
+        public string EventStoreConnectionString { get; set; }
     }
 }

@@ -36,6 +36,8 @@ namespace InexRef.EventSourcing.Persistence.Tests
 {
     [TestFixture("EventStorePersistence=InMemory", Category = "DomainOnly")]
     [TestFixture("EventStorePersistence=SqlServer", Category = "DomainHosting")]
+    [TestFixture("EventStorePersistence=EventStore", Category = "DomainHosting")]
+
     public class when_an_event_is_saved_and_reloaded : SpecificationBase
     {
         private Event<Guid> _eventToSave;

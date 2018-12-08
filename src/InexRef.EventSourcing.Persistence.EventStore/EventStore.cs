@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
@@ -10,11 +10,9 @@ using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Persistence.Common;
 using Newtonsoft.Json;
-using es = global::EventStore.ClientAPI;
 
 namespace InexRef.EventSourcing.Persistence.EventStore
 {
-
     public class EventStore<TId> : IEventStore<TId> where TId : IEquatable<TId>, IComparable<TId>
     {
         private readonly EventStoreConfiguration _eventStoreConfiguration;
@@ -26,12 +24,14 @@ namespace InexRef.EventSourcing.Persistence.EventStore
 
         public IEnumerable<IEvent<TId>> LoadEvents(TId aggregateId, Type aggregateType, bool throwIfNotFound)
         {
-            var connection = EventStoreConnection.Create(_eventStoreConfiguration.EventStoreConnectionString);
+            var connection = EventStoreConnection.Create(_eventStoreConfiguration.TcpConnectionString);
             var streamName = AggregateRootUtils.GetAggregateRootName(aggregateType) + "-" + aggregateId;
 
             connection.ConnectAsync().Wait();
 
-            var streamEvents = connection.ReadStreamEventsForwardAsync(streamName, 0, 4095, false).Result; //TODO: RJL: remove the 4095 limit
+            var streamEvents =
+                connection.ReadStreamEventsForwardAsync(streamName, 0, 4095, false)
+                    .Result; //TODO: RJL: remove the 4095 limit
 
             if (!streamEvents.Events.Any())
             {
@@ -46,19 +46,33 @@ namespace InexRef.EventSourcing.Persistence.EventStore
             return streamEvents.Events.Select(e => (IEvent<TId>) FromJsonBytes(e.Event.Data));
         }
 
-        public async Task SaveEvents(TId id, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion, int expectedVersion)
+        public async Task SaveEvents(TId id, Type aggregateType, IEnumerable<IEvent<TId>> events, int currentVersion,
+            int expectedVersion)
         {
-            var connection = EventStoreConnection.Create(_eventStoreConfiguration.EventStoreConnectionString);
+            var connection = EventStoreConnection.Create(_eventStoreConfiguration.TcpConnectionString);
             var streamName = AggregateRootUtils.GetAggregateRootName(aggregateType) + "-" + id;
 
             await connection.ConnectAsync();
-            var eventData = events.Select(e => new EventData(Guid.NewGuid(), e.GetType().Name, true, ToJsonBytes(e), null));
+            var eventData = events.Select(e =>
+                new EventData(Guid.NewGuid(), e.GetType().Name, true, ToJsonBytes(e), null));
             await connection.AppendToStreamAsync(streamName, ExpectedVersion.Any, eventData);
         }
 
-        public Task DeleteEvents(TId id, Type aggregateType)
+        public async Task DeleteEvents(TId id, Type aggregateType)
         {
-            throw new NotSupportedException();
+            var streamName = AggregateRootUtils.GetAggregateRootName(aggregateType) + "-" + id;
+
+            var urlBase = $"http://{_eventStoreConfiguration.Host}:{_eventStoreConfiguration.HttpPort}";
+
+            var httpClient = new HttpClient();
+            var message = new HttpRequestMessage(HttpMethod.Delete, $"{urlBase}/streams/{streamName}");
+            message.Headers.Add("ES-HardDelete", "true");
+            var response = await httpClient.SendAsync(message);
+
+            if (response.StatusCode != HttpStatusCode.NoContent)
+            {
+                throw new EventStoreDeletionFailedException($"Deletion failed for id '{id}'. HttpStatusCode={response.StatusCode}, Body={await response.Content.ReadAsStringAsync()}");
+            }
         }
 
         private byte[] ToJsonBytes(object source)

@@ -22,6 +22,14 @@ namespace InexRef.EventSourcing.Persistence.EventStore
 {
     public class EventStoreConfiguration
     {
-        public string EventStoreConnectionString { get; set; }
+        public string Host { get; set; }
+        public int TcpPort { get; set; }
+        public int HttpPort { get; set; }
+        public int HeartBeatTimeoutMs { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+
+        public string TcpConnectionString =>
+            $"ConnectTo=tcp://{Username}:{Password}@{Host}:{TcpPort}; HeartBeatTimeout={HeartBeatTimeoutMs}";
     }
 }

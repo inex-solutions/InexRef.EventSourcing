@@ -46,7 +46,7 @@ namespace InexRef.EventSourcing.Tests.Domain
                     var naturalKeyDrivenRepository = operationScope.Get<INaturalKeyDrivenAggregateRepository<CounterAggregateRoot, Guid, string>>();
                     var item = await naturalKeyDrivenRepository.GetOrCreateNewByNaturalKey(
                         naturalKey: command.Id,
-                        onCreateNew: newItem => newItem.Initialise(newItem.Id));
+                        onCreateNew: async newItem => await newItem.Initialise(newItem.Id));
                     await naturalKeyDrivenRepository.Save(item);
                 }
             }
@@ -65,7 +65,7 @@ namespace InexRef.EventSourcing.Tests.Domain
                 {
                     var naturalKeyDrivenRepository = operationScope.Get<INaturalKeyDrivenAggregateRepository<CounterAggregateRoot, Guid, string>>();
                     var item = await naturalKeyDrivenRepository.GetByNaturalKey(command.Id);
-                    item.Increment();
+                    await item.Increment();
                     await naturalKeyDrivenRepository.Save(item);
                 }
             }

@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Threading.Tasks;
 using Autofac;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
@@ -26,7 +27,7 @@ using NUnit.Framework;
 
 namespace InexRef.EventSourcing.Tests.Account.Domain.Tests
 {
-    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBase
+    public abstract class AggregateRootTestBase<TAggregateRoot> : SpecificationBaseAsync
     {
         protected TAggregateRoot Subject { get; set; }
 
@@ -42,6 +43,10 @@ namespace InexRef.EventSourcing.Tests.Account.Domain.Tests
             var factory = container.Resolve<IAggregateRootFactory>();
             Subject = factory.Create<TAggregateRoot>();
         }
+
+        protected override async Task Given() => await Task.CompletedTask;
+
+        protected override async Task When() => await Task.CompletedTask;
 
         public void DirectlyReferenceNUnitToAidTestRunner()
         {

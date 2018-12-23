@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
@@ -28,9 +29,7 @@ namespace InexRef.EventSourcing.Tests.Account.Domain.Tests
 {
     public class when_I_add_an_one_pound_to_an_empty_account : AggregateRootTestBase<AccountAggregateRoot>
     {
-        protected override void Given() { }
-
-        protected override void When() => Subject.AddAmount(MessageMetadata.CreateDefault(), MonetaryAmount.Create(1.00M));
+        protected override async Task When() => await Subject.AddAmount(MessageMetadata.CreateDefault(), MonetaryAmount.Create(1.00M));
 
         [Then]
         public void the_balance_is_one_pound() => Subject.Balance.ShouldBe(Balance.FromDecimal(1.0M));

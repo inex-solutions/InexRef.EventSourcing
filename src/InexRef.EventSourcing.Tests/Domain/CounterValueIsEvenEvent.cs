@@ -20,24 +20,17 @@
 #endregion
 
 using System;
-using System.Threading.Tasks;
-using InexRef.EventSourcing.Contracts.Bus;
-using InexRef.EventSourcing.Tests.Domain;
+using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Tests
+namespace InexRef.EventSourcing.Tests.Domain
 {
-    public class CounterValueDivisibleByTwoEventHandler : IHandle<CounterValueDivisibleByTwoEvent>
+    public class CounterValueIsEvenEvent : Event<Guid>
     {
-        private readonly Func<CounterValueDivisibleByTwoEvent, Task> _onEventReceived;
+        public int CurrentValue { get; }
 
-        public CounterValueDivisibleByTwoEventHandler(Func<CounterValueDivisibleByTwoEvent, Task> onEventReceived)
+        public CounterValueIsEvenEvent(MessageMetadata metadata, Guid id, int currentValue) : base(metadata, id)
         {
-            _onEventReceived = onEventReceived;
-        }
-
-        public async Task Handle(CounterValueDivisibleByTwoEvent message)
-        {
-            await _onEventReceived(message);
+            CurrentValue = currentValue;
         }
     }
 }

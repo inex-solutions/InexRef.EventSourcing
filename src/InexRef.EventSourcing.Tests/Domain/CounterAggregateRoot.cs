@@ -59,7 +59,7 @@ namespace InexRef.EventSourcing.Tests.Domain
             CurrentValue++;
             if (CurrentValue % 2 == 0)
             {
-                await Apply(new CounterValueDivisibleByTwoEvent(OperationContext.CreateNewMessageMetadata(), Id, CurrentValue));
+                await Apply(new CounterValueIsEvenEvent(OperationContext.CreateNewMessageMetadata(), Id, CurrentValue));
             }
         }
     }

@@ -34,7 +34,7 @@ namespace InexRef.EventSourcing.Tests
     {
         public when_sending_an_increment_command_to_a_counter_with_a_current_value_of_one(string testFixtureOptions) : base(testFixtureOptions) { }
 
-        private readonly List<CounterValueDivisibleByTwoEvent> _counterValueDivisibleByTwoEvents = new List<CounterValueDivisibleByTwoEvent>();
+        private readonly List<CounterValueIsEvenEvent> _counterValueIsEventEvents = new List<CounterValueIsEvenEvent>();
 
         private MessageMetadata MetadataOnFinalIncrementCommand { get; set; }
 
@@ -42,13 +42,13 @@ namespace InexRef.EventSourcing.Tests
         protected override void RegisterWithContainerBuilder(ContainerBuilder containerBuilder)
         {
             base.RegisterWithContainerBuilder(containerBuilder);
-            var handler = new CounterValueDivisibleByTwoEventHandler(evt =>
+            var handler = new CounterValueIsEvenEventHandler(evt =>
             {
-                _counterValueDivisibleByTwoEvents.Add(evt);
+                _counterValueIsEventEvents.Add(evt);
                 return Task.CompletedTask;
             });
 
-            containerBuilder.RegisterInstance(handler).As<IHandle<CounterValueDivisibleByTwoEvent>>();
+            containerBuilder.RegisterInstance(handler).As<IHandle<CounterValueIsEvenEvent>>();
         }
 
         protected override async Task Given()
@@ -66,19 +66,19 @@ namespace InexRef.EventSourcing.Tests
             => (await Repository.GetByNaturalKey(NaturalId)).CurrentValue.ShouldBe(2);
 
         [Then]
-        public void a_single_divisible_by_two_event_was_sent()
-            => _counterValueDivisibleByTwoEvents.ShouldHaveACountOf(1);
+        public void a_single_counter_value_is_even_event_was_sent()
+            => _counterValueIsEventEvents.ShouldHaveACountOf(1);
 
         [Then]
         public void the_current_value_on_the_event_is_two()
-            => _counterValueDivisibleByTwoEvents[0].CurrentValue.ShouldBe(2);
+            => _counterValueIsEventEvents[0].CurrentValue.ShouldBe(2);
 
         [Then]
-        public void the_message_metadata_source_correlation_id_on_the_divisible_by_two_event_matches_the_source_command()
-            => _counterValueDivisibleByTwoEvents[0].MessageMetadata.SourceCorrelationId.ShouldBe(MetadataOnFinalIncrementCommand.SourceCorrelationId);
+        public void the_message_metadata_source_correlation_id_on_the_counter_value_even_event_matches_the_source_command()
+            => _counterValueIsEventEvents[0].MessageMetadata.SourceCorrelationId.ShouldBe(MetadataOnFinalIncrementCommand.SourceCorrelationId);
 
         [Then]
-        public void the_message_metadata_event_date_on_the_divisible_by_two_event_is_later_than_the_the_source_command()
-            => _counterValueDivisibleByTwoEvents[0].MessageMetadata.MessageDateTime.ShouldBeGreaterThan(MetadataOnFinalIncrementCommand.MessageDateTime);
+        public void the_message_metadata_event_date_on_the_counter_value_even_event_is_later_than_the_the_source_command()
+            => _counterValueIsEventEvents[0].MessageMetadata.MessageDateTime.ShouldBeGreaterThan(MetadataOnFinalIncrementCommand.MessageDateTime);
     };
 }

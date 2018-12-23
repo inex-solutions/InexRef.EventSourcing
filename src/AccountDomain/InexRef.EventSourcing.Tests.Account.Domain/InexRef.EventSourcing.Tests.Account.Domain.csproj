@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\InexRef.EventSourcing\InexRef.EventSourcing.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Tests.Account.Contract.Public\InexRef.EventSourcing.Tests.Account.Contract.Public.csproj" />
-    <ProjectReference Include="..\InexRef.EventSourcing\InexRef.EventSourcing.csproj" />
   </ItemGroup>
 
 </Project>

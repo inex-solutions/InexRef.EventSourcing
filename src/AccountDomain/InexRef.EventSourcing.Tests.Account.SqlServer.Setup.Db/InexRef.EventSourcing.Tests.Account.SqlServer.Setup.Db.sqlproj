@@ -7,7 +7,7 @@
     <Name>InexRef.EventSourcing.Tests.SqlServer.Setup.Db</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{bf592a7e-a5b9-4976-b71b-a9cad1840c0a}</ProjectGuid>
+    <ProjectGuid>{df35035d-4612-4249-80b0-509e2669078c}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
@@ -66,17 +66,18 @@
     <Folder Include="dbo\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
+    <Build Include="dbo\Tables\EventStore-Account.sql" />
+    <Build Include="dbo\Stored Procedures\usp_InsertAccountEvents.sql" />
     <Build Include="dbo\User Defined Types\EventStoreType.sql" />
-    <Build Include="dbo\Tables\EventStore-Counter.sql" />
+    <Build Include="dbo\Tables\NaturalKeyToAggregateIdMap-Account.sql" />
     <Build Include="dbo\Stored Procedures\usp_InsertCounterEvents.sql" />
-    <Build Include="dbo\Tables\NaturalKeyToAggregateIdMap-Counter.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.LOCAL.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.LOCAL.SA.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.238.SA.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.192.168.6.10.SA.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.192.168.126.15.SA.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.192.168.126.160.SA.publish.xml" />
+    <None Include="InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.192.168.6.10.SA.publish.xml" />
+    <None Include="InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.192.168.126.15.SA.publish.xml" />
+    <None Include="InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.238.SA.publish.xml" />
+    <None Include="InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.LOCAL.publish.xml" />
+    <None Include="InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.SA.publish.xml" />
+    <None Include="InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.192.168.126.160.SA.publish.xml" />
   </ItemGroup>
 </Project>

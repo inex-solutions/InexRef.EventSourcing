@@ -22,11 +22,12 @@
 using System;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Persistence.SqlServer.Persistence;
+using InexRef.EventSourcing.Persistence.Tests.SqlServer;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using NUnit.Framework;
 using Shouldly;
 
-namespace InexRef.EventSourcing.Persistence.Tests.SqlServer
+namespace InexRef.EventSourcing.Persistence.SqlServer.Tests
 {
     [TestFixture(Category = "DomainOnly")]
     public class SqlEventStoreJsonSerializerTests : SpecificationBase<SqlEventStoreJsonSerializer>
@@ -48,5 +49,10 @@ namespace InexRef.EventSourcing.Persistence.Tests.SqlServer
 
         [Then]
         public void the_rehydrated_event_is_equal_to_the_source_event() => SourceEvent.ShouldBe(RehydratedEvent);
+
+        public void DirectlyReferenceNUnitToAidTestRunner()
+        {
+            Assert.IsTrue(true);
+        }
     }
 }

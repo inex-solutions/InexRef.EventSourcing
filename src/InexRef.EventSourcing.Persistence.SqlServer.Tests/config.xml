@@ -1,0 +1,9 @@
+﻿<configuration>
+  <SqlEventStore>
+    <!--<DbConnectionString>Server=localhost;Database=InexRef.EventSourcing.Tests;Trusted_Connection=True;</DbConnectionString>-->
+    <!--<DbConnectionString>Server=localhost;Database=InexRef.EventSourcing.Tests;User Id=sa;Password=EventSourceT3st!</DbConnectionString>-->
+    <DbConnectionString>Server=192.168.126.160;Database=InexRef.EventSourcing.Tests;User Id=sa;Password=EventSourceT3st!</DbConnectionString>
+    <!--<DbConnectionString>Server=192.168.6.10;Database=InexRef.EventSourcing.Tests;User Id=sa;Password=EventSourceT3st!</DbConnectionString>-->
+    <!--<DbConnectionString>Server=192.168.126.15;Database=InexRef.EventSourcing.Tests;User Id=sa;Password=EventSourceT3st!</DbConnectionString>-->
+  </SqlEventStore>
+</configuration>

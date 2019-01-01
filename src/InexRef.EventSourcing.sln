@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db", "AccountDomain\InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db\InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.sqlproj", "{DF35035D-4612-4249-80B0-509E2669078C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InexRef.EventSourcing.Persistence.SqlServer.Tests", "InexRef.EventSourcing.Persistence.SqlServer.Tests\InexRef.EventSourcing.Persistence.SqlServer.Tests.csproj", "{2B0183AD-13F9-4983-A18E-5C2749D6DA08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{DF35035D-4612-4249-80B0-509E2669078C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF35035D-4612-4249-80B0-509E2669078C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DF35035D-4612-4249-80B0-509E2669078C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{2B0183AD-13F9-4983-A18E-5C2749D6DA08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B0183AD-13F9-4983-A18E-5C2749D6DA08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B0183AD-13F9-4983-A18E-5C2749D6DA08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B0183AD-13F9-4983-A18E-5C2749D6DA08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

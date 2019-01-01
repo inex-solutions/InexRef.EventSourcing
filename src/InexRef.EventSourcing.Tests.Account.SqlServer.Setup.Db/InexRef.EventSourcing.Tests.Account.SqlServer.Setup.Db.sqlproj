@@ -73,11 +73,7 @@
     <Build Include="dbo\Stored Procedures\usp_InsertCounterEvents.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.192.168.6.10.SA.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.192.168.126.15.SA.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.238.SA.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.LOCAL.publish.xml" />
+    <None Include="InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.DOCKER.publish.xml" />
     <None Include="InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.SA.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.192.168.126.160.SA.publish.xml" />
   </ItemGroup>
 </Project>

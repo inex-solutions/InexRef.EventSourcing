@@ -73,10 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.LOCAL.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.LOCAL.SA.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.238.SA.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.192.168.6.10.SA.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.192.168.126.15.SA.publish.xml" />
-    <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.192.168.126.160.SA.publish.xml" />
+    <None Include="InexRef.EventSourcing.Tests.SqlServer.Setup.Db.LOCAL.DOCKER.publish.xml" />
   </ItemGroup>
 </Project>

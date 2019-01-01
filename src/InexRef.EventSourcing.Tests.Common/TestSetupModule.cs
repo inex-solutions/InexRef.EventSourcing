@@ -33,7 +33,8 @@ namespace InexRef.EventSourcing.Tests.Common
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddXmlFile("config.xml", optional: false, reloadOnChange: false)
+                .AddXmlFile(new DirectoryInfo(@"..\..\..\..\InexRef.EventSourcing.config.xml").FullName, optional: false, reloadOnChange: false)
+                .AddXmlFile(new DirectoryInfo(@"..\..\..\..\InexRef.EventSourcing.local.config.xml").FullName, optional: true, reloadOnChange: false)
                 .Build();
 
             var sqlConfig = new SqlEventStoreConfiguration();

@@ -1,0 +1,5 @@
+﻿<configuration>
+  <SqlEventStore>
+    <DbConnectionString>Server=localhost;Database=InexRef.EventSourcing.Tests;Trusted_Connection=True;</DbConnectionString>
+  </SqlEventStore>
+</configuration>

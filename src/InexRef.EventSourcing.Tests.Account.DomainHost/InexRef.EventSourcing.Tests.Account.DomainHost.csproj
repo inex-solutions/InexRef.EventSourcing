@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\InexRef.EventSourcing.Persistence.SqlServer\InexRef.EventSourcing.Persistence.SqlServer.csproj" />
+    <ProjectReference Include="..\InexRef.EventSourcing.Persistence.SqlServer\InexRef.EventSourcing.Persistence.SqlServer.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Tests.Account.Domain\InexRef.EventSourcing.Tests.Account.Domain.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Tests.Account.ReadModels\InexRef.EventSourcing.Tests.Account.ReadModels.csproj" />
   </ItemGroup>

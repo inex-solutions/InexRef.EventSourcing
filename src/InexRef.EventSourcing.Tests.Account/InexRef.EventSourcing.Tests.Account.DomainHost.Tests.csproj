@@ -11,16 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\InexRef.EventSourcing.Tests.Common\InexRef.EventSourcing.Tests.Common.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Tests.Account.DomainHost\InexRef.EventSourcing.Tests.Account.DomainHost.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Tests.Account.Domain\InexRef.EventSourcing.Tests.Account.Domain.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Tests.Account.ReadModels\InexRef.EventSourcing.Tests.Account.ReadModels.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="config.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\InexRef.EventSourcing.Tests.Common\InexRef.EventSourcing.Tests.Common.csproj" />
   </ItemGroup>
 
 </Project>

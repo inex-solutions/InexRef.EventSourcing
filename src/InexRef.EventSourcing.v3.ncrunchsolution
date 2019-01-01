@@ -1,5 +1,8 @@
 ﻿<SolutionConfiguration>
   <Settings>
+    <AdditionalFilesToIncludeForSolution>
+      <Value>*.config.xml</Value>
+    </AdditionalFilesToIncludeForSolution>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
     <SolutionConfigured>True</SolutionConfigured>
     <TestFilter>HasCategory 'DomainOnly'</TestFilter>

@@ -19,27 +19,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "InexRef.EventSourcing.Tests.SqlServer.Setup.Db", "InexRef.EventSourcing.Tests.SqlServer.Setup.Db\InexRef.EventSourcing.Tests.SqlServer.Setup.Db.sqlproj", "{BF592A7E-A5B9-4976-B71B-A9CAD1840C0A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Account Domain", "Account Domain", "{082FCFF7-2018-486B-8236-DA8A1D251765}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.Domain", "AccountDomain\InexRef.EventSourcing.Tests.Account.Domain\InexRef.EventSourcing.Tests.Account.Domain.csproj", "{FCF0EEFC-1E5A-4596-923F-A5C316AF830F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.DomainHost", "AccountDomain\InexRef.EventSourcing.Tests.Account.DomainHost\InexRef.EventSourcing.Tests.Account.DomainHost.csproj", "{FE4320F4-4AD9-4B9A-B269-8817B05760DF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.ReadModels", "AccountDomain\InexRef.EventSourcing.Tests.Account.ReadModels\InexRef.EventSourcing.Tests.Account.ReadModels.csproj", "{4BB29364-48BF-401A-A30F-C652CB87A4C9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.DomainHost.Tests", "AccountDomain\InexRef.EventSourcing.Tests.Account\InexRef.EventSourcing.Tests.Account.DomainHost.Tests.csproj", "{6457CF1C-3CC7-4202-AAA2-6BC4944C4C54}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.Domain.Tests", "AccountDomain\InexRef.EventSourcing.Tests.Account.Domain.Tests\InexRef.EventSourcing.Tests.Account.Domain.Tests.csproj", "{A1819AE0-2376-41A2-887C-8F0DEC55928A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests", "InexRef.EventSourcing.Tests\InexRef.EventSourcing.Tests.csproj", "{9C674B23-F652-4AB6-B710-B8C493E2FA44}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Common", "InexRef.EventSourcing.Common\InexRef.EventSourcing.Common.csproj", "{75FA0DBA-64D6-44AA-A7A4-63B500B9E340}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.Contract.Public", "AccountDomain\InexRef.EventSourcing.Tests.Account.Contract.Public\InexRef.EventSourcing.Tests.Account.Contract.Public.csproj", "{BF6BD087-3E62-4F5F-A66A-FE5360802B31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Persistence.SqlServer.Tests", "InexRef.EventSourcing.Persistence.SqlServer.Tests\InexRef.EventSourcing.Persistence.SqlServer.Tests.csproj", "{2B0183AD-13F9-4983-A18E-5C2749D6DA08}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db", "AccountDomain\InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db\InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.sqlproj", "{DF35035D-4612-4249-80B0-509E2669078C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5C12DF36-05CC-4904-B51A-E45F0B039BB1}"
+	ProjectSection(SolutionItems) = preProject
+		InexRef.EventSourcing.config.xml = InexRef.EventSourcing.config.xml
+		InexRef.EventSourcing.local.config.xml = InexRef.EventSourcing.local.config.xml
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InexRef.EventSourcing.Persistence.SqlServer.Tests", "InexRef.EventSourcing.Persistence.SqlServer.Tests\InexRef.EventSourcing.Persistence.SqlServer.Tests.csproj", "{2B0183AD-13F9-4983-A18E-5C2749D6DA08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.DomainHost.Tests", "InexRef.EventSourcing.Tests.Account\InexRef.EventSourcing.Tests.Account.DomainHost.Tests.csproj", "{29506956-B162-4EFE-90C9-53C274A814A0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.Contract.Public", "InexRef.EventSourcing.Tests.Account.Contract.Public\InexRef.EventSourcing.Tests.Account.Contract.Public.csproj", "{8D0B8CEA-F21B-40AB-891E-202B71317C75}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.Domain", "InexRef.EventSourcing.Tests.Account.Domain\InexRef.EventSourcing.Tests.Account.Domain.csproj", "{EBA6A80B-72A6-4B76-A3A9-310C195BC754}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.DomainHost", "InexRef.EventSourcing.Tests.Account.DomainHost\InexRef.EventSourcing.Tests.Account.DomainHost.csproj", "{07CC6194-BE8B-44A1-B088-FF65177BAF4F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Tests.Account.ReadModels", "InexRef.EventSourcing.Tests.Account.ReadModels\InexRef.EventSourcing.Tests.Account.ReadModels.csproj", "{BF1811FB-B8AE-456B-B15A-7481E04173AA}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db", "InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db\InexRef.EventSourcing.Tests.Account.SqlServer.Setup.Db.sqlproj", "{DF35035D-4612-4249-80B0-509E2669078C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,26 +83,6 @@ Global
 		{BF592A7E-A5B9-4976-B71B-A9CAD1840C0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF592A7E-A5B9-4976-B71B-A9CAD1840C0A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BF592A7E-A5B9-4976-B71B-A9CAD1840C0A}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{FCF0EEFC-1E5A-4596-923F-A5C316AF830F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FCF0EEFC-1E5A-4596-923F-A5C316AF830F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FCF0EEFC-1E5A-4596-923F-A5C316AF830F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FCF0EEFC-1E5A-4596-923F-A5C316AF830F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE4320F4-4AD9-4B9A-B269-8817B05760DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE4320F4-4AD9-4B9A-B269-8817B05760DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE4320F4-4AD9-4B9A-B269-8817B05760DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE4320F4-4AD9-4B9A-B269-8817B05760DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4BB29364-48BF-401A-A30F-C652CB87A4C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4BB29364-48BF-401A-A30F-C652CB87A4C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4BB29364-48BF-401A-A30F-C652CB87A4C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4BB29364-48BF-401A-A30F-C652CB87A4C9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6457CF1C-3CC7-4202-AAA2-6BC4944C4C54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6457CF1C-3CC7-4202-AAA2-6BC4944C4C54}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6457CF1C-3CC7-4202-AAA2-6BC4944C4C54}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6457CF1C-3CC7-4202-AAA2-6BC4944C4C54}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A1819AE0-2376-41A2-887C-8F0DEC55928A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A1819AE0-2376-41A2-887C-8F0DEC55928A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A1819AE0-2376-41A2-887C-8F0DEC55928A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1819AE0-2376-41A2-887C-8F0DEC55928A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9C674B23-F652-4AB6-B710-B8C493E2FA44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9C674B23-F652-4AB6-B710-B8C493E2FA44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C674B23-F652-4AB6-B710-B8C493E2FA44}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -109,32 +91,39 @@ Global
 		{75FA0DBA-64D6-44AA-A7A4-63B500B9E340}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75FA0DBA-64D6-44AA-A7A4-63B500B9E340}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75FA0DBA-64D6-44AA-A7A4-63B500B9E340}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF6BD087-3E62-4F5F-A66A-FE5360802B31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF6BD087-3E62-4F5F-A66A-FE5360802B31}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF6BD087-3E62-4F5F-A66A-FE5360802B31}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF6BD087-3E62-4F5F-A66A-FE5360802B31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B0183AD-13F9-4983-A18E-5C2749D6DA08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B0183AD-13F9-4983-A18E-5C2749D6DA08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B0183AD-13F9-4983-A18E-5C2749D6DA08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B0183AD-13F9-4983-A18E-5C2749D6DA08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29506956-B162-4EFE-90C9-53C274A814A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29506956-B162-4EFE-90C9-53C274A814A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29506956-B162-4EFE-90C9-53C274A814A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29506956-B162-4EFE-90C9-53C274A814A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D0B8CEA-F21B-40AB-891E-202B71317C75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D0B8CEA-F21B-40AB-891E-202B71317C75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D0B8CEA-F21B-40AB-891E-202B71317C75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D0B8CEA-F21B-40AB-891E-202B71317C75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBA6A80B-72A6-4B76-A3A9-310C195BC754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBA6A80B-72A6-4B76-A3A9-310C195BC754}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBA6A80B-72A6-4B76-A3A9-310C195BC754}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBA6A80B-72A6-4B76-A3A9-310C195BC754}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07CC6194-BE8B-44A1-B088-FF65177BAF4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07CC6194-BE8B-44A1-B088-FF65177BAF4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07CC6194-BE8B-44A1-B088-FF65177BAF4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07CC6194-BE8B-44A1-B088-FF65177BAF4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF1811FB-B8AE-456B-B15A-7481E04173AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF1811FB-B8AE-456B-B15A-7481E04173AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF1811FB-B8AE-456B-B15A-7481E04173AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF1811FB-B8AE-456B-B15A-7481E04173AA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DF35035D-4612-4249-80B0-509E2669078C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DF35035D-4612-4249-80B0-509E2669078C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF35035D-4612-4249-80B0-509E2669078C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{DF35035D-4612-4249-80B0-509E2669078C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF35035D-4612-4249-80B0-509E2669078C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DF35035D-4612-4249-80B0-509E2669078C}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{2B0183AD-13F9-4983-A18E-5C2749D6DA08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B0183AD-13F9-4983-A18E-5C2749D6DA08}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B0183AD-13F9-4983-A18E-5C2749D6DA08}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B0183AD-13F9-4983-A18E-5C2749D6DA08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{FCF0EEFC-1E5A-4596-923F-A5C316AF830F} = {082FCFF7-2018-486B-8236-DA8A1D251765}
-		{FE4320F4-4AD9-4B9A-B269-8817B05760DF} = {082FCFF7-2018-486B-8236-DA8A1D251765}
-		{4BB29364-48BF-401A-A30F-C652CB87A4C9} = {082FCFF7-2018-486B-8236-DA8A1D251765}
-		{6457CF1C-3CC7-4202-AAA2-6BC4944C4C54} = {082FCFF7-2018-486B-8236-DA8A1D251765}
-		{A1819AE0-2376-41A2-887C-8F0DEC55928A} = {082FCFF7-2018-486B-8236-DA8A1D251765}
-		{BF6BD087-3E62-4F5F-A66A-FE5360802B31} = {082FCFF7-2018-486B-8236-DA8A1D251765}
-		{DF35035D-4612-4249-80B0-509E2669078C} = {082FCFF7-2018-486B-8236-DA8A1D251765}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {838452C3-B710-4762-9037-4C0E0F750D56}

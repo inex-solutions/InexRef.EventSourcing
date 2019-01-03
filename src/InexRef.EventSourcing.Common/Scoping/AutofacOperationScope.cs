@@ -20,7 +20,8 @@
 #endregion
 
 using System;
-using Autofac;
+using SimpleInjector;
+using SimpleInjector.Lifestyles;
 
 namespace InexRef.EventSourcing.Common.Scoping
 {
@@ -29,11 +30,10 @@ namespace InexRef.EventSourcing.Common.Scoping
         public string OperationCorrelationId { get; private set; }
         public DateTime OperationStartDateTime { get; private set; }
 
-        private readonly ILifetimeScope _lifetimeScope;
+        private readonly Scope _lifetimeScope;
 
-        public AutofacOperationScope(ILifetimeScope lifetimeScope)
+        public AutofacOperationScope(Scope lifetimeScope)
         {
-
             _lifetimeScope = lifetimeScope;
         }
 
@@ -42,9 +42,9 @@ namespace InexRef.EventSourcing.Common.Scoping
             _lifetimeScope.Dispose();
         }
 
-        public T Get<T>()
+        public T Get<T>() where T : class
         {
-            return _lifetimeScope.Resolve<T>();
+            return _lifetimeScope.GetInstance<T>();
         }
 
         void IOperationScopeInternal.InitialiseScope(string operationCorrelationId, DateTime operationStartDateTime)

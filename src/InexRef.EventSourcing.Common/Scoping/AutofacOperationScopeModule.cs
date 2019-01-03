@@ -19,24 +19,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Autofac;
+using InexRef.EventSourcing.Common.SimpleInjector;
+using SimpleInjector;
 
 namespace InexRef.EventSourcing.Common.Scoping
 {
 
     public class AutofacOperationScopeModule : Module
     {
-        protected override void Load(ContainerBuilder containerBuilder)
+        protected override void Load(Container containerBuilder)
         {
-            containerBuilder
-                .RegisterType<AutofacOperationScopeManager>()
-                .As<IOperationScopeManager>();
+            containerBuilder.Register<IOperationScopeManager, IOperationScopeManager>();
 
-            containerBuilder
-                .RegisterType<AutofacOperationScope>()
-                .As<IOperationScope>()
-                .As<IOperationScopeInternal>()
-                .InstancePerLifetimeScope();
+            containerBuilder.Register<IOperationScope, AutofacOperationScope>(Lifestyle.Scoped);
+            containerBuilder.Register<IOperationScopeInternal, AutofacOperationScope>(Lifestyle.Scoped);
         }
     }
 }

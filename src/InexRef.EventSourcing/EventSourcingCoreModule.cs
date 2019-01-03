@@ -20,26 +20,27 @@
 #endregion
 
 using System;
-using Autofac;
 using InexRef.EventSourcing.Bus;
 using InexRef.EventSourcing.Common;
 using InexRef.EventSourcing.Common.Scoping;
+using InexRef.EventSourcing.Common.SimpleInjector;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Domain;
 using InexRef.EventSourcing.NaturalKey;
 using InexRef.EventSourcing.Persistence.Common;
+using SimpleInjector;
 
 namespace InexRef.EventSourcing
 {
     public class EventSourcingCoreModule : Module
     {
-        protected override void Load(ContainerBuilder builder)
+        protected override void Load(Container builder)
         {
-            builder.RegisterType<InMemoryBus>().As<IBus>();
-            builder.RegisterType<AggregateRootFactory>().As<IAggregateRootFactory>();
-            builder.RegisterType<GuidAggregateIdCreator>().As<IAggregateIdCreator<Guid>>();
+            builder.Register<IBus, InMemoryBus>();
+            builder.Register<IAggregateRootFactory, AggregateRootFactory>();
+            builder.Register<IAggregateIdCreator<Guid>, GuidAggregateIdCreator>();
             builder.RegisterGeneric(typeof(AggregateRepository<,>)).As(typeof(IAggregateRepository<,>));
             builder.RegisterGeneric(typeof(NaturalKeyDrivenAggregateRepository<,,>)).As(typeof(INaturalKeyDrivenAggregateRepository<,,>));
 

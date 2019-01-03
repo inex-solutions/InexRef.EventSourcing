@@ -22,10 +22,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
-using Autofac.Core;
+
 using InexRef.EventSourcing.Common.Hosting.ConfigurationElements;
 using Microsoft.Extensions.Configuration;
+using SimpleInjector;
 
 namespace InexRef.EventSourcing.Common.Hosting
 {
@@ -61,7 +61,7 @@ namespace InexRef.EventSourcing.Common.Hosting
         public static IEnumerable<string> AvailableFlavours { get; }
 
 
-        public static void ConfigureContainerForHostEnvironmentFlavour(ContainerBuilder builder, string flavour)
+        public static void ConfigureContainerForHostEnvironmentFlavour(Container builder, string flavour)
         {
             foreach (var item in HostingFlavoursConfiguration.HostingFlavour.First(f => f.Name == flavour).AutofacContainerBuilder)
             {

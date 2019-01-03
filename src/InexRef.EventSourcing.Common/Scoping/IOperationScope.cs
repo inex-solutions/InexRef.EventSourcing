@@ -25,7 +25,7 @@ namespace InexRef.EventSourcing.Common.Scoping
 {
     public interface IOperationScope : IDisposable
     {
-        T Get<T>();
+        T Get<T>() where T : class;
 
         string OperationCorrelationId { get; }
 

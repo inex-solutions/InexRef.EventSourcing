@@ -19,27 +19,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using SimpleInjector;
-using SimpleInjector.Lifestyles;
 
-namespace InexRef.EventSourcing.Common.Scoping
+namespace InexRef.EventSourcing.Common.SimpleInjector
 {
-    public class AutofacOperationScopeManager : IOperationScopeManager
+    public abstract class Module
     {
-        private readonly Container _lifetimeScope;
-
-        public AutofacOperationScopeManager(Container lifetimeScope)
-        {
-            _lifetimeScope = lifetimeScope;
-        }
-
-        public IOperationScope CreateScope(string operationCorrelationId, DateTime operationStartDateTime)
-        {
-            var childContainerScope = AsyncScopedLifestyle.BeginScope(_lifetimeScope);
-            var operationScope = childContainerScope.Get<IOperationScopeInternal>();
-            operationScope.InitialiseScope(operationCorrelationId, operationStartDateTime);
-            return operationScope;
-        }
+        protected abstract void Load(Container containerBuilder);
     }
 }

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InexRef.EventSourcing.Contracts\InexRef.EventSourcing.Contracts.csproj" />
+    <ProjectReference Include="..\InexRef.EventSourcing.Account.Contract.Public\InexRef.EventSourcing.Account.Contract.Public.csproj" />
+    <ProjectReference Include="..\InexRef.EventSourcing\InexRef.EventSourcing.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -9,12 +9,12 @@
     <Name>InexRef.EventSourcing.Persistence.InMemory</Name>
     <Name>InexRef.EventSourcing.Persistence.Tests</Name>
     <Name>InexRef.EventSourcing.Tests.Common</Name>
-    <Name>InexRef.EventSourcing.Tests.Account.Domain</Name>
-    <Name>InexRef.EventSourcing.Tests.Account.Messages</Name>
-    <Name>InexRef.EventSourcing.Tests.Account.DomainHost</Name>
-    <Name>InexRef.EventSourcing.Tests.Account.ReadModels</Name>
-    <Name>InexRef.EventSourcing.Tests.Account.DomainHost.Tests</Name>
-    <Name>InexRef.EventSourcing.Tests.Account.Domain.Tests</Name>
+    <Name>InexRef.EventSourcing.Account.Domain</Name>
+    <Name>InexRef.EventSourcing.Account.Messages</Name>
+    <Name>InexRef.EventSourcing.Account.DomainHost</Name>
+    <Name>InexRef.EventSourcing.Account.ReadModels</Name>
+    <Name>InexRef.EventSourcing.Account.DomainHost.Tests</Name>
+    <Name>InexRef.EventSourcing.Account.Domain.Tests</Name>
   </Assemblies>
   <FrameworkAssemblies>
     <Name>System.Runtime</Name>
@@ -58,12 +58,12 @@
     <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Persistence.InMemory\bin\debug\netcoreapp2.1</Dir>
     <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Persistence.Tests\bin\debug\netcoreapp2.1</Dir>
     <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Tests.Common\bin\debug\netcoreapp2.1</Dir>
-    <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Tests.Account.Domain\bin\debug\netcoreapp2.1</Dir>
-    <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Tests.Account.Contract.Public\bin\debug\netcoreapp2.1</Dir>
-    <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Tests.Account.DomainHost\bin\debug\netcoreapp2.1</Dir>
-    <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Tests.Account.ReadModels\bin\debug\netcoreapp2.1</Dir>
-    <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Tests.Account\bin\debug\netcoreapp2.1</Dir>
-    <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Tests.Account.Domain.Tests\bin\debug\netcoreapp2.1</Dir>
+    <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account.Domain\bin\debug\netcoreapp2.1</Dir>
+    <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account.Contract.Public\bin\debug\netcoreapp2.1</Dir>
+    <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account.DomainHost\bin\debug\netcoreapp2.1</Dir>
+    <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account.ReadModels\bin\debug\netcoreapp2.1</Dir>
+    <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account\bin\debug\netcoreapp2.1</Dir>
+    <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account.Domain.Tests\bin\debug\netcoreapp2.1</Dir>
   </Dirs>
   <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
   <Report Kind="0" SectionsEnabled="110591" XslPath="" Flags="261120" />

@@ -9,45 +9,51 @@
     <Name>InexRef.EventSourcing.Persistence.InMemory</Name>
     <Name>InexRef.EventSourcing.Persistence.Tests</Name>
     <Name>InexRef.EventSourcing.Tests.Common</Name>
+    <Name>InexRef.EventSourcing.Tests</Name>
+    <Name>InexRef.EventSourcing.Common</Name>
+    <Name>InexRef.EventSourcing.Persistence.SqlServer.Tests</Name>
+    <Name>InexRef.EventSourcing.Account.DomainHost.Tests</Name>
+    <Name>InexRef.EventSourcing.Account.Contract.Public</Name>
     <Name>InexRef.EventSourcing.Account.Domain</Name>
-    <Name>InexRef.EventSourcing.Account.Messages</Name>
     <Name>InexRef.EventSourcing.Account.DomainHost</Name>
     <Name>InexRef.EventSourcing.Account.ReadModels</Name>
-    <Name>InexRef.EventSourcing.Account.DomainHost.Tests</Name>
-    <Name>InexRef.EventSourcing.Account.Domain.Tests</Name>
   </Assemblies>
   <FrameworkAssemblies>
     <Name>System.Runtime</Name>
+    <Name>System.Diagnostics.Debug</Name>
+    <Name>System.Threading.Tasks</Name>
     <Name>System.Collections</Name>
     <Name>System.Linq</Name>
     <Name>Autofac</Name>
+    <Name>System.Data.SqlClient</Name>
     <Name>System.Data.Common</Name>
     <Name>Newtonsoft.Json</Name>
-    <Name>System.Data.SqlClient</Name>
     <Name>System.Runtime.Extensions</Name>
-    <Name>System.Diagnostics.Debug</Name>
+    <Name>Microsoft.Extensions.Configuration.Abstractions</Name>
+    <Name>Microsoft.Extensions.Configuration.Binder</Name>
+    <Name>System.Runtime.Serialization.Formatters</Name>
     <Name>System.Linq.Expressions</Name>
     <Name>Microsoft.CSharp</Name>
     <Name>System.Collections.Concurrent</Name>
+    <Name>Microsoft.VisualStudio.TestPlatform.ObjectModel</Name>
     <Name>nunit.framework</Name>
     <Name>Shouldly</Name>
-    <Name>Microsoft.Extensions.Configuration.Abstractions</Name>
-    <Name>System.Threading.Tasks</Name>
     <Name>System.Threading</Name>
     <Name>System.Diagnostics.Process</Name>
     <Name>System.Threading.Thread</Name>
+    <Name>System.Console</Name>
+    <Name>System.Xml.ReaderWriter</Name>
     <Name>Microsoft.Extensions.Configuration</Name>
     <Name>System.IO.FileSystem</Name>
     <Name>Microsoft.Extensions.Configuration.FileExtensions</Name>
     <Name>Microsoft.Extensions.Configuration.Xml</Name>
-    <Name>Microsoft.Extensions.Configuration.Binder</Name>
-    <Name>System.Console</Name>
+    <Name>Microsoft.Extensions.Configuration.EnvironmentVariables</Name>
   </FrameworkAssemblies>
   <Dirs>
-    <Dir>C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.4</Dir>
-    <Dir>C:\Program Files\dotnet\store\x64\netcoreapp2.1</Dir>
+    <Dir>C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.6</Dir>
+    <Dir>C:\Program Files\dotnet\store\x64\netcoreapp2.0</Dir>
     <Dir>C:\Program Files\dotnet\sdk\NuGetFallbackFolder</Dir>
-    <Dir>C:\Users\Rob Levine\.nuget\packages</Dir>
+    <Dir>C:\Users\robdev\.nuget\packages</Dir>
     <Dir>C:\Dev\git\Rob.EventSourcing\src\InexRef.EventSourcing.Persistence.Common\bin\debug\netcoreapp2.1</Dir>
     <Dir>C:\Dev\git\Rob.EventSourcing\src\InexRef.EventSourcing.Persistence.SqlServer\bin\debug\netcoreapp2.1</Dir>
     <Dir>C:\Dev\git\Rob.EventSourcing\src\InexRef.EventSourcing.Tests\bin\debug\netcoreapp2.1</Dir>
@@ -64,6 +70,21 @@
     <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account.ReadModels\bin\debug\netcoreapp2.1</Dir>
     <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account\bin\debug\netcoreapp2.1</Dir>
     <Dir>C:\Dev\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account.Domain.Tests\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Persistence.Common\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Persistence.SqlServer\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Contracts\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Persistence.InMemory\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Persistence.Tests\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Tests.Common\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Tests\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Common\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Persistence.SqlServer.Tests\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account.Contract.Public\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account.Domain\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account.DomainHost\bin\debug\netcoreapp2.1</Dir>
+    <Dir>D:\git\InexRef.EventSourcing\src\InexRef.EventSourcing.Account.ReadModels\bin\debug\netcoreapp2.1</Dir>
   </Dirs>
   <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
   <Report Kind="0" SectionsEnabled="110591" XslPath="" Flags="261120" />

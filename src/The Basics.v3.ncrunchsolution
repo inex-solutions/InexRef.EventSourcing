@@ -1,0 +1,12 @@
+﻿<SolutionConfiguration>
+  <Settings>
+    <AdditionalFilesToIncludeForSolution>
+      <Value>*.config.xml</Value>
+    </AdditionalFilesToIncludeForSolution>
+    <AllowParallelTestExecution>True</AllowParallelTestExecution>
+    <CustomEnvironmentVariables>
+      <Value>INEXREFEVTSRC_HostingFlavours__availableFlavours = InMemory</Value>
+    </CustomEnvironmentVariables>
+    <SolutionConfigured>True</SolutionConfigured>
+  </Settings>
+</SolutionConfiguration>

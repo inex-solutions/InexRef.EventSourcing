@@ -29,7 +29,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
 {
     public class when_a_saved_counter_is_resaved_but_with_the_wrong_version_number : AggregateRepositoryTestBase
     {
-        public when_a_saved_counter_is_resaved_but_with_the_wrong_version_number(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_a_saved_counter_is_resaved_but_with_the_wrong_version_number(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task Given()
         {

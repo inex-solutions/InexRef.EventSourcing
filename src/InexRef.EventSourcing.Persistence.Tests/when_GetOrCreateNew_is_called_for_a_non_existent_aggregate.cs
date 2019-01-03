@@ -27,7 +27,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
 {
     public class when_GetOrCreateNew_is_called_for_a_non_existent_aggregate : AggregateRepositoryTestBase
     {
-        public when_GetOrCreateNew_is_called_for_a_non_existent_aggregate(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_GetOrCreateNew_is_called_for_a_non_existent_aggregate(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task When() => ReloadedCounterAggregateRoot = await Subject.GetOrCreateNew(AggregateId, null);
 

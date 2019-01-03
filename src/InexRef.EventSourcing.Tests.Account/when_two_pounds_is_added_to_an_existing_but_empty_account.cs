@@ -30,7 +30,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
     public class when_two_pounds_is_added_to_an_existing_but_empty_account : AccountDomainTestBase
     {
-        public when_two_pounds_is_added_to_an_existing_but_empty_account(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_two_pounds_is_added_to_an_existing_but_empty_account(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task Given()
         {

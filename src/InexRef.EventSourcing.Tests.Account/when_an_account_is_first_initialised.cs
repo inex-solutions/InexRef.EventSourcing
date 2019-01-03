@@ -30,7 +30,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
     public class when_an_account_is_first_initialised : AccountDomainTestBase
     {
-        public when_an_account_is_first_initialised(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_an_account_is_first_initialised(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task When() => await Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
 

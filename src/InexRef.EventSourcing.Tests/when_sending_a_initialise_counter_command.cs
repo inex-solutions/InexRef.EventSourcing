@@ -29,7 +29,7 @@ namespace InexRef.EventSourcing.Tests
 {
     public class when_sending_a_initialise_counter_command : CounterTestBase
     {
-        public when_sending_a_initialise_counter_command(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_sending_a_initialise_counter_command(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task When() => await Subject.Send(new InitialiseCounterCommand(MessageMetadata.CreateDefault(), NaturalId));
 

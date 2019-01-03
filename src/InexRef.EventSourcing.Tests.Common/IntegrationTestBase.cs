@@ -20,28 +20,24 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Autofac;
 using InexRef.EventSourcing.Common;
 using InexRef.EventSourcing.Common.Scoping;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Persistence;
-using InexRef.EventSourcing.Tests.Common.Persistence;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using NUnit.Framework;
 
 namespace InexRef.EventSourcing.Tests.Common
 {
-    [TestFixture("EventStorePersistence=InMemory", Category = "DomainOnly")]
-    [TestFixture("EventStorePersistence=SqlServer", Category = "DomainHosting")]
+    [TestFixtureSource(typeof(NUnitTestFixtureSource), "TestFlavours")]
     public abstract class IntegrationTestBase <TAggregate, TNaturalKey>: SpecificationBaseAsync<IBus> 
         where TAggregate : IAggregateRoot<Guid>, IAggregateRootInternal<Guid>
         where TNaturalKey : IEquatable<TNaturalKey>, IComparable<TNaturalKey>
     {
-        private readonly IDictionary<string, string> _testFixtureOptions;
         private IContainer _container;
+        private string _flavour;
 
         protected TNaturalKey NaturalId { get; set; }
 
@@ -49,20 +45,17 @@ namespace InexRef.EventSourcing.Tests.Common
 
         protected IOperationScope OperationScope { get; private set; }
 
-        protected IntegrationTestBase(string testFixtureOptions)
+        protected IntegrationTestBase(string flavour)
         {
-            _testFixtureOptions = testFixtureOptions
-                .Split(',')
-                .ToDictionary(item => item.Split('=')[0].Trim(), item => item.Split('=')[1].Trim());
+            _flavour = flavour;
         }
 
         protected override void SetUp()
         {
             var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
-            containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
-            containerBuilder.RegisterModule<TestSetupModule>();
+            TestEnvironmentSetup.ConfigureContainerForHostEnvironmentFlavour(containerBuilder, _flavour);
 
+            containerBuilder.RegisterModule<EventSourcingCoreModule>();
             containerBuilder.RegisterType<TAggregate>();
 
             RegisterWithContainerBuilder(containerBuilder);

@@ -21,40 +21,34 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Autofac;
 using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Tests.Common;
-using InexRef.EventSourcing.Tests.Common.Persistence;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using InexRef.EventSourcing.Tests.Domain;
 using NUnit.Framework;
 
 namespace InexRef.EventSourcing.Persistence.Tests
 {
-    [TestFixture("EventStorePersistence=InMemory", Category = "DomainOnly")]
-    [TestFixture("EventStorePersistence=SqlServer", Category = "DomainHosting")]
+    [TestFixtureSource(typeof(NUnitTestFixtureSource), "TestFlavours")]
     public abstract class NaturalKeyDrivenRepositoryTestBase : SpecificationBase<INaturalKeyDrivenAggregateRepository<CounterAggregateRoot, Guid, string>>
     {
-        private readonly IDictionary<string, string> _testFixtureOptions;
+        private readonly string _flavour;
 
         private IContainer _container;
 
         protected List<string> CreatedIds { get; } = new List<string>();
 
-        protected NaturalKeyDrivenRepositoryTestBase(string testFixtureOptions)
+        protected NaturalKeyDrivenRepositoryTestBase(string flavour)
         {
-            _testFixtureOptions = testFixtureOptions
-                .Split(',')
-                .ToDictionary(item => item.Split('=')[0].Trim(), item => item.Split('=')[1].Trim());
+            _flavour = flavour;
         }
 
         protected override void SetUp()
         {
             var containerBuilder = new ContainerBuilder();
+            TestEnvironmentSetup.ConfigureContainerForHostEnvironmentFlavour(containerBuilder, _flavour);
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
-            containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
-            containerBuilder.RegisterModule<TestSetupModule>();
             containerBuilder.RegisterType<CounterAggregateRoot>();
             containerBuilder.RegisterType<NonDisposingCounterAggregateRoot>();
 

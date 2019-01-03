@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\InexRef.EventSourcing.Common\InexRef.EventSourcing.Common.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Contracts\InexRef.EventSourcing.Contracts.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Persistence.Common\InexRef.EventSourcing.Persistence.Common.csproj" />
   </ItemGroup>

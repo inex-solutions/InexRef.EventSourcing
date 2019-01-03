@@ -21,25 +21,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Autofac;
 using InexRef.EventSourcing.Common;
 using InexRef.EventSourcing.Common.Scoping;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Tests.Common;
-using InexRef.EventSourcing.Tests.Common.Persistence;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using InexRef.EventSourcing.Tests.Domain;
 using NUnit.Framework;
 
 namespace InexRef.EventSourcing.Persistence.Tests
 {
-    [TestFixture("EventStorePersistence=InMemory", Category = "DomainOnly")]
-    [TestFixture("EventStorePersistence=SqlServer", Category = "DomainHosting")]
+    [TestFixtureSource(typeof(NUnitTestFixtureSource), "TestFlavours")]
     public abstract class AggregateRepositoryTestBase : SpecificationBaseAsync<IAggregateRepository<CounterAggregateRoot, Guid>>
     {
-        private readonly IDictionary<string, string> _testFixtureOptions;
+        private readonly string _testFlavour;
         private IContainer _container;
 
         protected Guid AggregateId { get; private set; }
@@ -50,11 +47,9 @@ namespace InexRef.EventSourcing.Persistence.Tests
 
         protected IAggregateRootFactory AggregateRootFactory { get; private set; }
 
-        protected AggregateRepositoryTestBase(string testFixtureOptions)
+        protected AggregateRepositoryTestBase(string testFlavour)
         {
-            _testFixtureOptions = testFixtureOptions
-                .Split(',')
-                .ToDictionary(item => item.Split('=')[0].Trim(), item => item.Split('=')[1].Trim());
+            _testFlavour = testFlavour;
         }
 
         protected void CreateNewScope()
@@ -72,9 +67,8 @@ namespace InexRef.EventSourcing.Persistence.Tests
         protected override void SetUp()
         {
             var containerBuilder = new ContainerBuilder();
+            TestEnvironmentSetup.ConfigureContainerForHostEnvironmentFlavour(containerBuilder, _testFlavour);
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
-            containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
-            containerBuilder.RegisterModule<TestSetupModule>();
             containerBuilder.RegisterType<CounterAggregateRoot>();
             containerBuilder.RegisterType<NonDisposingCounterAggregateRoot>();
 

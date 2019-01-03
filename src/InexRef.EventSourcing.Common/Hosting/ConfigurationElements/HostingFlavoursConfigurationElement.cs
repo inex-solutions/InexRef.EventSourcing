@@ -19,32 +19,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.IO;
-using Autofac;
-using InexRef.EventSourcing.Common;
-using InexRef.EventSourcing.Persistence.SqlServer.Persistence;
-using Microsoft.Extensions.Configuration;
+using System.Xml.Serialization;
 
-namespace InexRef.EventSourcing.Tests.Common
+namespace InexRef.EventSourcing.Common.Hosting.ConfigurationElements
 {
-    public class TestSetupModule : Module
+    public class HostingFlavoursConfigurationElement
     {
-        protected override void Load(ContainerBuilder builder)
-        {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddXmlFile(new DirectoryInfo(@"..\..\..\..\InexRef.EventSourcing.config.xml").FullName, optional: false, reloadOnChange: false)
-                .AddXmlFile(new DirectoryInfo(@"..\..\..\..\InexRef.EventSourcing.local.config.xml").FullName, optional: true, reloadOnChange: false)
-                .Build();
+        [XmlAttribute]
+        public string AvailableFlavours { get; set; }
 
-            var sqlConfig = new SqlEventStoreConfiguration();
-            config.GetSection("SqlEventStore").Bind(sqlConfig);
-            builder.RegisterInstance(sqlConfig).As<SqlEventStoreConfiguration>();
-
-            builder
-                .RegisterType<DeterministicallyIncreasingDateTimeProvider>()
-                .As<IDateTimeProvider>()
-                .SingleInstance();
-        }
+        [XmlElement]
+        public HostingFlavourElement[] HostingFlavour { get; set; }
     }
 }

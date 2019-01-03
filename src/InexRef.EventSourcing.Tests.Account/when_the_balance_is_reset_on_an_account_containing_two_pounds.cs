@@ -30,7 +30,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
     public class when_the_balance_is_reset_on_an_account_containing_two_pounds : AccountDomainTestBase
     {
-        public when_the_balance_is_reset_on_an_account_containing_two_pounds(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_the_balance_is_reset_on_an_account_containing_two_pounds(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task Given()
         {

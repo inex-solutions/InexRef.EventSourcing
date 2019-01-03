@@ -22,7 +22,7 @@
 using System;
 using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Persistence.Tests.SqlServer
+namespace InexRef.EventSourcing.Persistence.SqlServer.Tests
 {
     public class TestEvent : Event<Guid>
     {

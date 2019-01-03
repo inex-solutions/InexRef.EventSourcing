@@ -29,7 +29,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
 {
     public class when_an_aggregate_is_saved_but_then_subsequently_accessed : AggregateRepositoryTestBase
     {
-        public when_an_aggregate_is_saved_but_then_subsequently_accessed(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_an_aggregate_is_saved_but_then_subsequently_accessed(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task Given()
         {

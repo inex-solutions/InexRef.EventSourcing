@@ -33,7 +33,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
     {
         private AccountAggregateRoot Aggregate { get; set; }
 
-        public when_an_existing_account_aggregate_containing_four_pounds_is_reloaded(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_an_existing_account_aggregate_containing_four_pounds_is_reloaded(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task Given()
         {

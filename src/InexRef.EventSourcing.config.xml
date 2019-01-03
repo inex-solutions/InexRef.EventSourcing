@@ -2,4 +2,14 @@
   <SqlEventStore>
     <DbConnectionString>Server=localhost;Database=InexRef.EventSourcing.Tests;Trusted_Connection=True;</DbConnectionString>
   </SqlEventStore>
+
+  <HostingFlavours availableFlavours="InMemory,SqlServer">
+    <HostingFlavour name="InMemory">
+      <AutofacContainerBuilder name="1" type="InexRef.EventSourcing.Persistence.InMemory.EventSourcingInMemoryPersistenceModule, InexRef.EventSourcing.Persistence.InMemory"/>
+    </HostingFlavour>
+    <HostingFlavour name="SqlServer">
+      <AutofacContainerBuilder name="1" type="InexRef.EventSourcing.Persistence.SqlServer.EventSourcingSqlServerPersistenceModule, InexRef.EventSourcing.Persistence.SqlServer"/>
+    </HostingFlavour>
+  </HostingFlavours>
+
 </configuration>

@@ -21,6 +21,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using InexRef.EventSourcing.Common;
 
 namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
 {
@@ -39,41 +40,18 @@ namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
 
         public static void ShouldContainOnly<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
         {
-            var originalActualList = actual.ToList();
-            var originalExpectedList = expected.ToList();
+            var comparisonResult = actual.CheckContainsOnly(expected);
 
-            var actualList = originalActualList.ToList();
-            var expectedList = originalExpectedList.ToList();
-
-            var unexpected = new List<T>();
-
-            foreach (var actualItem in actualList)
-            {
-                if (!expectedList.Remove(actualItem))
-                {
-                    unexpected.Add(actualItem);
-                }
-            }
-
-            if (expectedList.Count > 0 || unexpected.Count > 0)
+            if (!comparisonResult.CollectionsMatch)
             {
                 var msg =
-                    $"Expected list to contain: {originalExpectedList.ToBulletList()}\nbut contained: {originalActualList.ToBulletList()}\nMissing: {expectedList.ToBulletList()}\nUnexpected: {unexpected.ToBulletList()}";
+                    $"Expected list to contain: {comparisonResult.ExpectedItems.ToBulletList()}\n" +
+                    $"but contained: {comparisonResult.ActualItems.ToBulletList()}\n" +
+                    $"Missing: {comparisonResult.MissingItems.ToBulletList()}\n" +
+                    $"Unexpected: {comparisonResult.UnexpectedItems.ToBulletList()}";
 
                 throw new SpecificationException(msg);
             }
-        }
-
-        public static string ToBulletList<T>(this IEnumerable<T> list)
-        {
-            var bulletList = string.Join("\n - ", list);
-
-            if (bulletList.Length > 0)
-            {
-                bulletList = "\n - " + bulletList;
-            }
-
-            return bulletList;
         }
     }
 }

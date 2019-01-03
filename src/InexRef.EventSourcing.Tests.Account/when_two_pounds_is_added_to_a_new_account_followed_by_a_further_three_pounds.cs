@@ -30,7 +30,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
     public class when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds : AccountDomainTestBase
     {
-        public when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task Given()
         {

@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2018 INEX Solutions Ltd
@@ -19,27 +19,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Threading.Tasks;
-using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
-using InexRef.EventSourcing.Tests.Domain;
-using Shouldly;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace InexRef.EventSourcing.Tests
+namespace InexRef.EventSourcing.Common
 {
-    public class when_sending_an_increment_command_to_a_newly_initialised_counter : CounterTestBase
+    public static class StringExtensions
     {
-        public when_sending_an_increment_command_to_a_newly_initialised_counter(string hostingFlavour) : base(hostingFlavour) { }
-
-        protected override async Task Given()
+        public static IEnumerable<string> SplitAndTrim(this string source, string separator)
         {
-            await Subject.Send(new InitialiseCounterCommand(MessageMetadata.CreateDefault(), NaturalId));
+            return source.Split(separator).Select(s => s.Trim());
         }
 
-        protected override async Task When() => await Subject.Send(new IncrementCounterCommand (MessageMetadata.CreateDefault(), NaturalId));
+        public static string ToBulletList<T>(this IEnumerable<T> list)
+        {
+            var bulletList = string.Join("\n - ", list);
 
-        [Then]
-        public async Task the_counter_value_is_one()
-            => (await Repository.GetByNaturalKey(NaturalId)).CurrentValue.ShouldBe(1);
+            if (bulletList.Length > 0)
+            {
+                bulletList = "\n - " + bulletList;
+            }
+
+            return bulletList;
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
 {
     public class when_a_counter_with_a_count_of_one_is_saved_and_reloaded : AggregateRepositoryTestBase
     {
-        public when_a_counter_with_a_count_of_one_is_saved_and_reloaded(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_a_counter_with_a_count_of_one_is_saved_and_reloaded(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task Given()
         {

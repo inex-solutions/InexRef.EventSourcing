@@ -6,9 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Xml" Version="2.1.1" />
     <PackageReference Include="NUnit" Version="3.11.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
     <PackageReference Include="Shouldly" Version="3.0.1" />
@@ -18,12 +15,6 @@
     <ProjectReference Include="..\InexRef.EventSourcing.Persistence.InMemory\InexRef.EventSourcing.Persistence.InMemory.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing.Persistence.SqlServer\InexRef.EventSourcing.Persistence.SqlServer.csproj" />
     <ProjectReference Include="..\InexRef.EventSourcing\InexRef.EventSourcing.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.Extensions.Configuration">
-      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.configuration\2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

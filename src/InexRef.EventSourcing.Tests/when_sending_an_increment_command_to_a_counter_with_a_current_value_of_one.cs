@@ -32,7 +32,7 @@ namespace InexRef.EventSourcing.Tests
 {
     public class when_sending_an_increment_command_to_a_counter_with_a_current_value_of_one : CounterTestBase
     {
-        public when_sending_an_increment_command_to_a_counter_with_a_current_value_of_one(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_sending_an_increment_command_to_a_counter_with_a_current_value_of_one(string hostingFlavour) : base(hostingFlavour) { }
 
         private readonly List<CounterValueIsEvenEvent> _counterValueIsEventEvents = new List<CounterValueIsEvenEvent>();
 

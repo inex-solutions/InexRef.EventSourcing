@@ -21,22 +21,28 @@
 
 using System;
 using Autofac;
+using InexRef.EventSourcing.Common.Hosting;
 using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Persistence.SqlServer.NaturalKey;
 using InexRef.EventSourcing.Persistence.SqlServer.Persistence;
 using InexRef.EventSourcing.Persistence.SqlServer.Utils;
+using Microsoft.Extensions.Configuration;
 
 namespace InexRef.EventSourcing.Persistence.SqlServer
 {
     public class EventSourcingSqlServerPersistenceModule : Module
     {
-        protected override void Load(ContainerBuilder builder)
+        protected override void Load(ContainerBuilder containerBuilder)
         {
-            builder.RegisterType<SqlEventStoreJsonSerializer>().As<ISqlEventStoreJsonSerializer>();
-            builder.RegisterGeneric(typeof(SqlEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
-            builder.RegisterGeneric(typeof(SqlServerNaturalKeyToAggregateIdMap<,,>)).As(typeof(INaturalKeyToAggregateIdMap<,,>)).SingleInstance();
-            builder.RegisterType<StringSqlParameterCreator>().As<ISqlParameterCreator<string>>();
-            builder.RegisterType<GuidSqlParameterCreator>().As<ISqlParameterCreator<Guid>>();
+            containerBuilder.RegisterType<SqlEventStoreJsonSerializer>().As<ISqlEventStoreJsonSerializer>();
+            containerBuilder.RegisterGeneric(typeof(SqlEventStore<>)).As(typeof(IEventStore<>)).SingleInstance();
+            containerBuilder.RegisterGeneric(typeof(SqlServerNaturalKeyToAggregateIdMap<,,>)).As(typeof(INaturalKeyToAggregateIdMap<,,>)).SingleInstance();
+            containerBuilder.RegisterType<StringSqlParameterCreator>().As<ISqlParameterCreator<string>>();
+            containerBuilder.RegisterType<GuidSqlParameterCreator>().As<ISqlParameterCreator<Guid>>();
+
+            var sqlConfig = new SqlEventStoreConfiguration();
+            HostedEnvironmentConfiguration.ConfigurationRoot.GetSection("SqlEventStore").Bind(sqlConfig);
+            containerBuilder.RegisterInstance(sqlConfig).As<SqlEventStoreConfiguration>();
         }
     }
 }

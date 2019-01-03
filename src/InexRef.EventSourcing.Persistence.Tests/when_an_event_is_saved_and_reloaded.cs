@@ -20,13 +20,11 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Tests.Common;
-using InexRef.EventSourcing.Tests.Common.Persistence;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using InexRef.EventSourcing.Tests.Domain;
 using NUnit.Framework;
@@ -34,30 +32,26 @@ using Shouldly;
 
 namespace InexRef.EventSourcing.Persistence.Tests
 {
-    [TestFixture("EventStorePersistence=InMemory", Category = "DomainOnly")]
-    [TestFixture("EventStorePersistence=SqlServer", Category = "DomainHosting")]
+    [TestFixtureSource(typeof(NUnitTestFixtureSource), "TestFlavours")]
     public class when_an_event_is_saved_and_reloaded : SpecificationBase
     {
+        private readonly string _testFlavour;
         private Event<Guid> _eventToSave;
         private MessageMetadata _messageMetadata;
         private Guid _id;
-        private readonly Dictionary<string, string> _testFixtureOptions;
         private IEventStore<Guid> EventStore { get; set; }
         private IEvent<Guid> ReloadedEvent { get; set; }
 
-        public when_an_event_is_saved_and_reloaded(string testFixtureOptions)
+        public when_an_event_is_saved_and_reloaded(string testFlavour)
         {
-            _testFixtureOptions = testFixtureOptions
-                .Split(',')
-                .ToDictionary(item => item.Split('=')[0].Trim(), item => item.Split('=')[1].Trim());
+            _testFlavour = testFlavour;
         }
 
         protected override void SetUp()
         {
             var containerBuilder = new ContainerBuilder();
+            TestEnvironmentSetup.ConfigureContainerForHostEnvironmentFlavour(containerBuilder, _testFlavour);
             containerBuilder.RegisterModule<EventSourcingCoreModule>();
-            containerBuilder.RegisterEventStorePersistenceModule(_testFixtureOptions["EventStorePersistence"]);
-            containerBuilder.RegisterModule<TestSetupModule>();
 
             var container = containerBuilder.Build();
 

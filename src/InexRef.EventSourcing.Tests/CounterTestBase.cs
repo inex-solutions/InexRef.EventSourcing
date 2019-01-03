@@ -28,7 +28,7 @@ namespace InexRef.EventSourcing.Tests
 {
     public abstract class CounterTestBase : IntegrationTestBase<CounterAggregateRoot, string>
     {
-        protected CounterTestBase(string testFixtureOptions) : base(testFixtureOptions)
+        protected CounterTestBase(string hostingFlavour) : base(hostingFlavour)
         {
             NaturalId = new IdGenerator("my-root").CreateAggregateId();
         }

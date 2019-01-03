@@ -28,7 +28,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
 {
     public class when_get_is_called_for_a_non_existent_aggregate : AggregateRepositoryTestBase
     {
-        public when_get_is_called_for_a_non_existent_aggregate(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_get_is_called_for_a_non_existent_aggregate(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task When() => CaughtException = await Catch.AsyncException(() => Subject.Get(AggregateId));
 

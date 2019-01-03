@@ -22,14 +22,13 @@
 using System;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Persistence.SqlServer.Persistence;
-using InexRef.EventSourcing.Persistence.Tests.SqlServer;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using NUnit.Framework;
 using Shouldly;
 
 namespace InexRef.EventSourcing.Persistence.SqlServer.Tests
 {
-    [TestFixture(Category = "DomainOnly")]
+    [TestFixture]
     public class SqlEventStoreJsonSerializerTests : SpecificationBase<SqlEventStoreJsonSerializer>
     {
         private IEvent<Guid> SourceEvent { get; set; }

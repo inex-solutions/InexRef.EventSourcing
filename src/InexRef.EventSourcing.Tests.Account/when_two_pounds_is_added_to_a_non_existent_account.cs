@@ -31,7 +31,7 @@ namespace InexRef.EventSourcing.Tests.Account.DomainHost.Tests
 {
     public class when_two_pounds_is_added_to_a_non_existent_account : AccountDomainTestBase
     {
-        public when_two_pounds_is_added_to_a_non_existent_account(string testFixtureOptions) : base(testFixtureOptions) { }
+        public when_two_pounds_is_added_to_a_non_existent_account(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task When() 
             => CaughtException = await Catch.AsyncException(() 

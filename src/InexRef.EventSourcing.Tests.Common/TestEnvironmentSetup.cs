@@ -22,6 +22,8 @@
 using Autofac;
 using InexRef.EventSourcing.Common;
 using InexRef.EventSourcing.Common.Hosting;
+using InexRef.EventSourcing.Persistence.InMemory;
+using InexRef.EventSourcing.Persistence.SqlServer;
 
 namespace InexRef.EventSourcing.Tests.Common
 {
@@ -29,12 +31,21 @@ namespace InexRef.EventSourcing.Tests.Common
     {
         public static void ConfigureContainerForHostEnvironmentFlavour(ContainerBuilder containerBuilder, string flavour)
         {
+            ImportAssemblyContaining<InMemoryPersistenceModule>();
+            ImportAssemblyContaining<EventSourcingSqlServerPersistenceModule>();
+
             HostedEnvironmentFlavour.ConfigureContainerForHostEnvironmentFlavour(containerBuilder, flavour);
 
             containerBuilder
                 .RegisterType<DeterministicallyIncreasingDateTimeProvider>()
                 .As<IDateTimeProvider>()
                 .SingleInstance();
+        }
+
+        private static void ImportAssemblyContaining<T>()
+        {
+            // workaround - does nothing, but the explicit reference to type T ensures the assembly is imported. The 
+            // alternative is to dynamically load the assembly from, or copy it into the current directory. 
         }
     }
 }

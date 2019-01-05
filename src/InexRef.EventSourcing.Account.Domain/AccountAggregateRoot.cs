@@ -26,6 +26,7 @@ using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Domain;
 using InexRef.EventSourcing.Account.Contract.Public.Messages;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
+using InexRef.EventSourcing.Contracts.OperationContext;
 
 namespace InexRef.EventSourcing.Account.Domain
 {

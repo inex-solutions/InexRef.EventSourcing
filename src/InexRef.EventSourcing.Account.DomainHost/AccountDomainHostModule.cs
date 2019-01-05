@@ -25,27 +25,27 @@ using InexRef.EventSourcing.Persistence.SqlServer.Utils;
 using InexRef.EventSourcing.Account.Contract.Public.Messages;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Account.ReadModels;
+using InexRef.EventSourcing.Common.Container;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace InexRef.EventSourcing.Account.DomainHost
 {
-    public class AccountDomainHostModule : Module
+    public class AccountDomainHostModule : ContainerConfigurationModule
     {
-        protected override void Load(ContainerBuilder containerBuilder)
+        protected override void Load(IServiceCollection containerBuilder)
         {
             containerBuilder
-                .RegisterType<BalanceReadModel>()
-                .As<BalanceReadModel>()
-                .As<IHandle<BalanceUpdatedEvent>>()
-                .As<IHandle<AccountInitialisedEvent>>()
-                .SingleInstance();
+                .AddSingleton<BalanceReadModel>()
+                .AddSingleton<IHandle<BalanceUpdatedEvent>>(provider => provider.GetRequiredService<BalanceReadModel>())
+                .AddSingleton<IHandle<AccountInitialisedEvent>>(provider => provider.GetRequiredService<BalanceReadModel>());
 
             containerBuilder
-                .RegisterType<AccountDomainHandlers>()
-                .As<IHandle<CreateAccountCommand>>()
-                .As<IHandle<AddAmountCommand>>()
-                .As<IHandle<ResetBalanceCommand>>();
+                .AddScoped<AccountDomainHandlers>()
+                .AddScoped<IHandle<CreateAccountCommand>>(provider => provider.GetRequiredService<AccountDomainHandlers>())
+                .AddScoped<IHandle<AddAmountCommand>>(provider => provider.GetRequiredService<AccountDomainHandlers>())
+                .AddScoped<IHandle<ResetBalanceCommand>>(provider => provider.GetRequiredService<AccountDomainHandlers>());
 
-            containerBuilder.RegisterType<AccountIdSqlParameterCreator>().As<ISqlParameterCreator<AccountId>>();
+            containerBuilder.AddTransient<ISqlParameterCreator<AccountId>, AccountIdSqlParameterCreator>();
         }
     }
 }

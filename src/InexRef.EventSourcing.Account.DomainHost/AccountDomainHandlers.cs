@@ -21,7 +21,6 @@
 
 using System;
 using System.Threading.Tasks;
-using InexRef.EventSourcing.Common.Scoping;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Contracts.Persistence;
@@ -31,29 +30,24 @@ using InexRef.EventSourcing.Account.Domain;
 
 namespace InexRef.EventSourcing.Account.DomainHost
 {
-
-
     public class AccountDomainHandlers : IHandle<CreateAccountCommand>, IHandle<AddAmountCommand>, IHandle<ResetBalanceCommand>
     {
-        private IOperationScopeManager OperationScopeManager { get; }
+        private readonly INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId> _naturalKeyDrivenAggregateRepository;
 
-        public AccountDomainHandlers(IOperationScopeManager operationScopeManager)
+        public AccountDomainHandlers(INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId> naturalKeyDrivenAggregateRepository)
         {
-            OperationScopeManager = operationScopeManager;
+            _naturalKeyDrivenAggregateRepository = naturalKeyDrivenAggregateRepository;
         }
 
         public async Task Handle(CreateAccountCommand command)
         {
             try
             {
-                using (var operationScope = OperationScopeManager.CreateScopeFromMessage(command))
-                {
-                    var naturalKeyDrivenRepository = operationScope.Get<INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId>>();
-                    var item = await naturalKeyDrivenRepository.CreateNewByNaturalKey(
-                        naturalKey: command.Id,
-                        onCreateNew: async newItem =>await newItem.InitialiseAccount(MessageMetadata.CreateFromMessage(command), newItem.Id, command.Id));
-                    await naturalKeyDrivenRepository.Save(item);
-                }
+                var item = await _naturalKeyDrivenAggregateRepository.CreateNewByNaturalKey(
+                    naturalKey: command.Id,
+                    onCreateNew: async newItem => await newItem.InitialiseAccount(MessageMetadata.CreateFromMessage(command), newItem.Id,
+                            command.Id));
+                await _naturalKeyDrivenAggregateRepository.Save(item);
             }
             catch
             {
@@ -66,13 +60,9 @@ namespace InexRef.EventSourcing.Account.DomainHost
         {
             try
             {
-                using (var operationScope = OperationScopeManager.CreateScopeFromMessage(command))
-                {
-                    var naturalKeyDrivenRepository = operationScope.Get< INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId> >();
-                    var item = await naturalKeyDrivenRepository.GetByNaturalKey(command.Id);
-                    await item.AddAmount(MessageMetadata.CreateFromMessage(command), command.Amount);
-                    await naturalKeyDrivenRepository.Save(item);
-                }
+                var item = await _naturalKeyDrivenAggregateRepository.GetByNaturalKey(command.Id);
+                await item.AddAmount(MessageMetadata.CreateFromMessage(command), command.Amount);
+                await _naturalKeyDrivenAggregateRepository.Save(item);
             }
             catch
             {
@@ -85,13 +75,9 @@ namespace InexRef.EventSourcing.Account.DomainHost
         {
             try
             {
-                using (var operationScope = OperationScopeManager.CreateScopeFromMessage(command))
-                {
-                    var naturalKeyDrivenRepository = operationScope.Get<INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId>>();
-                    var item = await naturalKeyDrivenRepository.GetByNaturalKey(command.Id);
-                    await item.ResetBalance(MessageMetadata.CreateFromMessage(command));
-                    await naturalKeyDrivenRepository.Save(item);
-                }
+                var item = await _naturalKeyDrivenAggregateRepository.GetByNaturalKey(command.Id);
+                await item.ResetBalance(MessageMetadata.CreateFromMessage(command));
+                await _naturalKeyDrivenAggregateRepository.Save(item);
             }
             catch
             {

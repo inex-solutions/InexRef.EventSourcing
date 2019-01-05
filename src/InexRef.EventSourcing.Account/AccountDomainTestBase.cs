@@ -24,7 +24,9 @@ using Autofac;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Account.Domain;
 using InexRef.EventSourcing.Account.ReadModels;
+using InexRef.EventSourcing.Common.Container;
 using InexRef.EventSourcing.Tests.Common;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 namespace InexRef.EventSourcing.Account.DomainHost.Tests
@@ -38,16 +40,16 @@ namespace InexRef.EventSourcing.Account.DomainHost.Tests
 
         protected BalanceReadModel BalanceReadModel { get; private set; }
 
-        protected override void RegisterWithContainerBuilder(ContainerBuilder containerBuilder)
+        protected override void RegisterWithContainerBuilder(IServiceCollection containerBuilder)
         {
             containerBuilder.RegisterModule<AccountDomainHostModule>();
-            containerBuilder.RegisterType<Calculator>().As<ICalculator>();
-            containerBuilder.RegisterType<AccountAggregateRoot>();
+            containerBuilder.AddTransient<ICalculator, Calculator>();
+            containerBuilder.AddTransient<AccountAggregateRoot>();
         }
 
-        protected override void ResolveFromContainer(IContainer container)
+        protected override void ResolveFromContainer(IServiceProvider container)
         {
-            BalanceReadModel = container.Resolve<BalanceReadModel>();
+            BalanceReadModel = container.GetRequiredService<BalanceReadModel>();
         }
 
         public void DirectlyReferenceNUnitToAidTestRunner()

@@ -37,7 +37,7 @@ namespace InexRef.EventSourcing.Tests.Common
     {
         private ServiceProvider _container;
 
-        private string _flavour;
+        private readonly string _flavour;
 
         protected TNaturalKey NaturalId { get; set; }
 

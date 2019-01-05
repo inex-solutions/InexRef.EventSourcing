@@ -1,31 +1,10 @@
-﻿#region Copyright & License
-// The MIT License (MIT)
-// 
-// Copyright 2017-2018 INEX Solutions Ltd
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software
-// and associated documentation files (the "Software"), to deal in the Software without
-// restriction, including without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
-// Software is furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all copies or
-// substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
-// BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#endregion
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
-using Autofac.Core;
+using InexRef.EventSourcing.Common.Container;
 using InexRef.EventSourcing.Common.Hosting.ConfigurationElements;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace InexRef.EventSourcing.Common.Hosting
 {
@@ -61,13 +40,13 @@ namespace InexRef.EventSourcing.Common.Hosting
         public static IEnumerable<string> AvailableFlavours { get; }
 
 
-        public static void ConfigureContainerForHostEnvironmentFlavour(ContainerBuilder builder, string flavour)
+        public static void ConfigureContainerForHostEnvironmentFlavour(ServiceCollection builder, string flavour)
         {
             foreach (var item in HostingFlavoursConfiguration.HostingFlavour.First(f => f.Name == flavour).AutofacContainerBuilder)
             {
                 var type = Type.GetType(item.Type);
-                var module = (IModule)Activator.CreateInstance(type);
-                builder.RegisterModule(module);
+                var module = (ContainerConfigurationModule)Activator.CreateInstance(type);
+                module.ConfigureContainer(builder);
             }
         }
     }

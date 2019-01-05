@@ -63,7 +63,7 @@ namespace InexRef.EventSourcing.Common.Hosting
 
         public static void ConfigureContainerForHostEnvironmentFlavour(ServiceCollection builder, string flavour)
         {
-            foreach (var item in HostingFlavoursConfiguration.HostingFlavour.First(f => f.Name == flavour).AutofacContainerBuilder)
+            foreach (var item in HostingFlavoursConfiguration.HostingFlavour.First(f => f.Name == flavour).ContainerBuilder)
             {
                 var type = Type.GetType(item.Type);
                 var module = (ContainerConfigurationModule)Activator.CreateInstance(type);

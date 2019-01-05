@@ -25,7 +25,7 @@ namespace InexRef.EventSourcing.Common.Container
 {
     public static class ContainerExtensions
     {
-        public static void RegisterModule<TModule>(this IServiceCollection serviceCollection)
+        public static void ConfigureFrom<TModule>(this IServiceCollection serviceCollection)
             where TModule : ContainerConfigurationModule, new()
         {
             var module = new TModule();

@@ -19,13 +19,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace InexRef.EventSourcing.Common.Container
 {
     public abstract class ContainerConfigurationModule
     {
-        //RJL - put check to ensure never loaded twice
         public void ConfigureContainer(IServiceCollection serviceCollection)
         {
             Load(serviceCollection);

@@ -41,7 +41,7 @@ namespace InexRef.EventSourcing.Account.DomainHost.Tests
 
         protected override void RegisterWithContainerBuilder(IServiceCollection containerBuilder)
         {
-            containerBuilder.RegisterModule<AccountDomainHostModule>();
+            containerBuilder.ConfigureFrom<AccountDomainHostModule>();
             containerBuilder.AddTransient<ICalculator, Calculator>();
             containerBuilder.AddTransient<AccountAggregateRoot>();
         }

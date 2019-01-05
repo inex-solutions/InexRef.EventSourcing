@@ -28,7 +28,7 @@ namespace InexRef.EventSourcing.Persistence.InMemory
     {
         protected override void Load(IServiceCollection builder)
         {
-            builder.RegisterModule<InMemoryPersistenceModule>();
+            builder.ConfigureFrom<InMemoryPersistenceModule>();
         }
     }
 }

@@ -37,7 +37,7 @@ namespace InexRef.EventSourcing.Tests
 
         protected override void RegisterWithContainerBuilder(IServiceCollection containerBuilder)
         {
-            containerBuilder.RegisterModule<CounterDomainHostModule>();
+            containerBuilder.ConfigureFrom<CounterDomainHostModule>();
             containerBuilder.AddTransient<CounterAggregateRoot>();
         }
 

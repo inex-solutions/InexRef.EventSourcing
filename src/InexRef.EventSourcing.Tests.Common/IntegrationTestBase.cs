@@ -53,7 +53,7 @@ namespace InexRef.EventSourcing.Tests.Common
             var serviceCollection = new ServiceCollection();
             TestEnvironmentSetup.ConfigureContainerForHostEnvironmentFlavour(serviceCollection, _flavour);
 
-            serviceCollection.RegisterModule<EventSourcingCoreModule>();
+            serviceCollection.ConfigureFrom<EventSourcingCoreModule>();
             serviceCollection.AddTransient<TAggregate>();
 
             RegisterWithContainerBuilder(serviceCollection);

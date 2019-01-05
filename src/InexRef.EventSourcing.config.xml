@@ -5,10 +5,10 @@
 
   <HostingFlavours availableFlavours="InMemory,SqlServer">
     <HostingFlavour name="InMemory">
-      <AutofacContainerBuilder name="1" type="InexRef.EventSourcing.Persistence.InMemory.EventSourcingInMemoryPersistenceModule, InexRef.EventSourcing.Persistence.InMemory"/>
+      <ContainerBuilder name="1" type="InexRef.EventSourcing.Persistence.InMemory.EventSourcingInMemoryPersistenceModule, InexRef.EventSourcing.Persistence.InMemory"/>
     </HostingFlavour>
     <HostingFlavour name="SqlServer">
-      <AutofacContainerBuilder name="1" type="InexRef.EventSourcing.Persistence.SqlServer.EventSourcingSqlServerPersistenceModule, InexRef.EventSourcing.Persistence.SqlServer"/>
+      <ContainerBuilder name="1" type="InexRef.EventSourcing.Persistence.SqlServer.EventSourcingSqlServerPersistenceModule, InexRef.EventSourcing.Persistence.SqlServer"/>
     </HostingFlavour>
   </HostingFlavours>
 

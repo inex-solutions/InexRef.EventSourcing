@@ -29,7 +29,7 @@ namespace InexRef.EventSourcing.Tests.Domain
     {
         protected override void Load(IServiceCollection containerBuilder)
         {
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            containerBuilder.ConfigureFrom<EventSourcingCoreModule>();
 
             containerBuilder.AddTransient<CounterDomainTestHandlers>();
             containerBuilder

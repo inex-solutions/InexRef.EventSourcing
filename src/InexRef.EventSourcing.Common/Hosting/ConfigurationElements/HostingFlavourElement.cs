@@ -29,6 +29,6 @@ namespace InexRef.EventSourcing.Common.Hosting.ConfigurationElements
         public string Name { get; set; }
 
         [XmlElement]
-        public ContainerBuilderElement[] AutofacContainerBuilder { get; set; }
+        public ContainerBuilderElement[] ContainerBuilder { get; set; }
     }
 }

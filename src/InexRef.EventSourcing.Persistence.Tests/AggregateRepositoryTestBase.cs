@@ -55,7 +55,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
         {
             var containerBuilder = new ServiceCollection();
             TestEnvironmentSetup.ConfigureContainerForHostEnvironmentFlavour(containerBuilder, _testFlavour);
-            containerBuilder.RegisterModule<EventSourcingCoreModule>();
+            containerBuilder.ConfigureFrom<EventSourcingCoreModule>();
             containerBuilder.AddTransient<CounterAggregateRoot>();
             containerBuilder.AddTransient<NonDisposingCounterAggregateRoot>();
 

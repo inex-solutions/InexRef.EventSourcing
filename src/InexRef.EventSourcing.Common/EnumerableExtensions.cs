@@ -57,13 +57,13 @@ namespace InexRef.EventSourcing.Common
                 UnexpectedItems = unexpectedItems.ToArray();
             }
 
-            public T[] UnexpectedItems { get; set; }
+            public T[] UnexpectedItems { get; }
 
-            public T[] MissingItems { get; set; }
+            public T[] MissingItems { get; }
 
-            public T[] ActualItems { get; set; }
+            public T[] ActualItems { get; }
 
-            public T[] ExpectedItems { get; set; }
+            public T[] ExpectedItems { get; }
 
             public bool CollectionsMatch => !MissingItems.Any() && !UnexpectedItems.Any();
         }

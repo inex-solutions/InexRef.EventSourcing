@@ -6,7 +6,7 @@
 	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderRegionName/@EntryValue">Copyright &amp; License</s:String>
 	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">The MIT License (MIT)&#xD;
 &#xD;
-Copyright 2017-2018 INEX Solutions Ltd&#xD;
+Copyright 2017-2019 INEX Solutions Ltd&#xD;
 &#xD;
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software&#xD;
 and associated documentation files (the "Software"), to deal in the Software without&#xD;

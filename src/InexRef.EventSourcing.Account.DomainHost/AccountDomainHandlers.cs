@@ -1,7 +1,7 @@
 #region Copyright & License
 // The MIT License (MIT)
 // 
-// Copyright 2017-2018 INEX Solutions Ltd
+// Copyright 2017-2019 INEX Solutions Ltd
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 // and associated documentation files (the "Software"), to deal in the Software without
@@ -21,12 +21,12 @@
 
 using System;
 using System.Threading.Tasks;
-using InexRef.EventSourcing.Contracts.Bus;
-using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Contracts.Persistence;
 using InexRef.EventSourcing.Account.Contract.Public.Messages;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Account.Domain;
+using InexRef.EventSourcing.Contracts.Bus;
+using InexRef.EventSourcing.Contracts.Messages;
+using InexRef.EventSourcing.Contracts.Persistence;
 
 namespace InexRef.EventSourcing.Account.DomainHost
 {

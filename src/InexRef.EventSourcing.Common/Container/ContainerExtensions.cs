@@ -19,7 +19,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace InexRef.EventSourcing.Common.Container
 {
@@ -30,6 +33,62 @@ namespace InexRef.EventSourcing.Common.Container
         {
             var module = new TModule();
             module.ConfigureContainer(serviceCollection);
+        }
+
+        public static IServiceCollection AddDecorator<TService>(this IServiceCollection services, Func<TService, TService> decoratorFactory)
+        {
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+
+            if (decoratorFactory == null)
+            {
+                throw new ArgumentNullException(nameof(decoratorFactory));
+            }
+
+            var serviceType = typeof(TService);
+
+            var matchingTypeDescriptors = services.Where(d => d.ServiceType == serviceType).ToArray();
+
+            if (matchingTypeDescriptors.Length == 0)
+            {
+                throw new DecoratorSetupException($"Decorator setup failed, service type not registered: {serviceType.FullName}");
+            }
+
+            if (matchingTypeDescriptors.Length > 1)
+            {
+                throw new DecoratorSetupException($"Decorator setup failed, multiple registrations for service type: {serviceType.FullName}");
+            }
+
+            var originalDescriptor = matchingTypeDescriptors[0];
+            var redirectionOfOriginalType = typeof(RedirectedType<>).MakeGenericType(typeof(TService));
+            var redirectionOfOriginalTypeDescriptor = new ServiceDescriptor(
+                redirectionOfOriginalType,
+                originalDescriptor.ImplementationType,
+                originalDescriptor.Lifetime);
+
+            services.Add(redirectionOfOriginalTypeDescriptor);
+
+            var decoratorDescriptor = new ServiceDescriptor(
+                serviceType,
+                sp => decoratorFactory.Invoke((TService)sp.GetService(redirectionOfOriginalType)),
+                originalDescriptor.Lifetime);
+            services.Replace(decoratorDescriptor);
+
+            return services;
+        }
+
+        private class RedirectedType<TOriginalType>
+        {
+        }
+
+        public class DecoratorSetupException : InvalidOperationException
+        {
+            public DecoratorSetupException(string message) : base(message)
+            {
+
+            }
         }
     }
 }

@@ -1,0 +1,5 @@
+﻿{
+  "SqlEventStore": {
+    "DbConnectionString": "Server=<server name or ip>" Database=InexRef.EventSourcing.Tests;User Id=sa;Password=EventSourceT3st!"
+  }
+}

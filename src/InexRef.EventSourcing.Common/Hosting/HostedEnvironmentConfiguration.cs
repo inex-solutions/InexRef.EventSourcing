@@ -30,8 +30,8 @@ namespace InexRef.EventSourcing.Common.Hosting
         {
             ConfigurationRoot = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddXmlFile(new DirectoryInfo(@"..\..\..\..\InexRef.EventSourcing.config.xml").FullName, optional: false, reloadOnChange: false)
-                .AddXmlFile(new DirectoryInfo(@"..\..\..\..\InexRef.EventSourcing.local.config.xml").FullName, optional: true, reloadOnChange: false)
+                .AddJsonFile(new DirectoryInfo(@"..\..\..\..\InexRef.EventSourcing.config.json").FullName, optional: false, reloadOnChange: false)
+                .AddJsonFile(new DirectoryInfo(@"..\..\..\..\InexRef.EventSourcing.local.config.json").FullName, optional: true, reloadOnChange: false)
                 .AddEnvironmentVariables("INEXREFEVTSRC_")
                 .Build();
         }

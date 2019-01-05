@@ -27,8 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Persi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration FIles", "Configuration FIles", "{5C12DF36-05CC-4904-B51A-E45F0B039BB1}"
 	ProjectSection(SolutionItems) = preProject
-		InexRef.EventSourcing.config.xml = InexRef.EventSourcing.config.xml
-		InexRef.EventSourcing.local.config.xml = InexRef.EventSourcing.local.config.xml
+		InexRef.EventSourcing.config.json = InexRef.EventSourcing.config.json
+		InexRef.EventSourcing.local.config.json = InexRef.EventSourcing.local.config.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InexRef.EventSourcing.Account.DomainHost.Tests", "InexRef.EventSourcing.Account\InexRef.EventSourcing.Account.DomainHost.Tests.csproj", "{29506956-B162-4EFE-90C9-53C274A814A0}"

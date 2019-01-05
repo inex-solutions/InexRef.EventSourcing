@@ -1,0 +1,22 @@
+﻿{
+  "SqlEventStore": {
+    "DbConnectionString": "Server=localhost;Database=InexRef.EventSourcing.Tests;Trusted_Connection=True;"
+  },
+  "HostingFlavours": {
+    "AvailableFlavours": "InMemory,SqlServer",
+    "HostingFlavour": [
+      {
+        "Name": "InMemory",
+        "ContainerBuilders": [
+          { "Type": "InexRef.EventSourcing.Persistence.InMemory.EventSourcingInMemoryPersistenceModule, InexRef.EventSourcing.Persistence.InMemory" }
+        ]
+      },
+      {
+        "Name": "SqlServer",
+        "ContainerBuilders": [
+          { "Type": "InexRef.EventSourcing.Persistence.SqlServer.EventSourcingSqlServerPersistenceModule, InexRef.EventSourcing.Persistence.SqlServer" }
+        ]
+      }
+    ]
+  }
+}

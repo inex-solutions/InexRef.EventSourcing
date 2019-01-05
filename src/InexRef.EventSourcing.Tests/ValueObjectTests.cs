@@ -20,8 +20,12 @@
 #endregion
 
 using System;
+using System.IO;
+using InexRef.EventSourcing.Common.Hosting.ConfigurationElements;
 using InexRef.EventSourcing.Contracts;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
+using Newtonsoft.Json;
+using NUnit.Framework;
 using Shouldly;
 
 namespace InexRef.EventSourcing.Tests
@@ -127,5 +131,50 @@ namespace InexRef.EventSourcing.Tests
         [Then]
         public void get_hash_code_returns_the_difference_value_to_a_an_instance_with_different_values()
             => GetHashCodeResult.ShouldNotBe(MonetaryAmount.Create(2.00M, "GBP").GetHashCode());
+    }
+
+    [TestFixture]
+    public class SerializerTest
+    {
+        [Test]
+        public void JsonConfigTest()
+        {
+            var cfg = new HostingFlavoursConfigurationElement
+            {
+                AvailableFlavours = "InMemory, SqlServer",
+                HostingFlavour = new[]
+                {
+                    new HostingFlavourElement
+                    {
+                        Name = "InMemory",
+                        ContainerBuilders = new[]
+                        {
+                            new ContainerBuilderElement {Type = "T1"}
+                        }
+                    },
+                    new HostingFlavourElement
+                    {
+                        Name = "SqlServer",
+                        ContainerBuilders = new[]
+                        {
+                            new ContainerBuilderElement {Type = "T2"}
+                        }
+                    }
+                }
+            };
+
+            var converter = new JsonSerializer();
+
+            using (var ms = new MemoryStream())
+            using (var writer = new StreamWriter(ms))
+            using (var reader = new StreamReader(ms))
+            {
+                converter.Serialize(writer, cfg);
+                writer.Flush();
+                ms.Position = 0;
+                var json = reader.ReadToEnd();
+                Console.WriteLine(json);
+            }
+        }
     }
 }

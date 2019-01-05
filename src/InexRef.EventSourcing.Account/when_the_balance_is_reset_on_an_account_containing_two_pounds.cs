@@ -21,6 +21,7 @@
 
 using System.Threading.Tasks;
 using InexRef.EventSourcing.Account.Contract.Public.Messages;
+using InexRef.EventSourcing.Account.Contract.Public.Messages.Commands;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;

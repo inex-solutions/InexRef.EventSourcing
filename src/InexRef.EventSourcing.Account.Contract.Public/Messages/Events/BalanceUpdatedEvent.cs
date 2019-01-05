@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2019 INEX Solutions Ltd
@@ -23,20 +23,24 @@ using System;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Account.Contract.Public.Messages
+namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Events
 {
-    public class AmountAddedEvent : Event<Guid>
+    public class BalanceUpdatedEvent : Event<Guid>
     {
-        public MonetaryAmount Amount { get; }
+        public Balance Balance { get; }
 
-        public AmountAddedEvent(MessageMetadata messageMetadata, Guid id, MonetaryAmount amount) : base(messageMetadata, id)
+        public AccountId AccountId { get; }
+
+        public BalanceUpdatedEvent(MessageMetadata messageMetadata, Guid aggregateId, AccountId accountId, Balance balance) 
+            : base(messageMetadata, aggregateId)
         {
-            Amount = amount;
+            Balance = balance;
+            AccountId = accountId;
         }
 
         public override string ToString()
         {
-            return $"AmountAddedEvent: MessageMetadata={MessageMetadata}, Id={Id}, Amount={Amount}, Version={Version}";
+            return $"BalanceUpdatedEvent: MessageMetadata={MessageMetadata}, AccountId={AccountId} Balance={Balance}, Version={Version} (AggregateId={Id})";
         }
     }
 }

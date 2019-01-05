@@ -22,26 +22,24 @@
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Account.Contract.Public.Messages
+namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Commands
 {
-    public class AddAmountCommand : ICommand<AccountId>
+    public class CreateAccountCommand : ICommand<AccountId>
     {
         public MessageMetadata MessageMetadata { get; }
 
         public AccountId Id { get; }
 
-        public MonetaryAmount Amount { get; }
 
-        public AddAmountCommand(MessageMetadata messageMetadata, AccountId id, MonetaryAmount amount)
+        public CreateAccountCommand(MessageMetadata messageMetadata, AccountId id)
         {
             MessageMetadata = messageMetadata;
             Id = id;
-            Amount = amount;
         }
 
         public override string ToString()
         {
-            return $"AddAmountCommand: messageMetadata={MessageMetadata}, id={Id}, amount={Amount}";
+            return $"CreateAccountCommand: messageMetadata={MessageMetadata}, id={Id}";
         }
     }
 }

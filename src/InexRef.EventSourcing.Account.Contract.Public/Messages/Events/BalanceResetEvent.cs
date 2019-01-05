@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2019 INEX Solutions Ltd
@@ -19,26 +19,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using InexRef.EventSourcing.Account.Contract.Public.Types;
+using System;
 using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Account.Contract.Public.Messages
+namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Events
 {
-    public class ResetBalanceCommand : ICommand<AccountId>
+    public class BalanceResetEvent : Event<Guid>
     {
-        public MessageMetadata MessageMetadata { get; }
-
-        public AccountId Id { get; }
-
-        public ResetBalanceCommand(MessageMetadata messageMetadata, AccountId id)
+        public BalanceResetEvent(MessageMetadata messageMetadata, Guid id) : base(messageMetadata, id)
         {
-            MessageMetadata = messageMetadata;
-            Id = id;
         }
 
         public override string ToString()
         {
-            return $"ResetBalanceCommand: messageMetadata={MessageMetadata}, id={Id}";
+            return $"BalanceResetEvent: MessageMetadata={MessageMetadata}, Id={Id}, Version={Version}";
+
         }
     }
 }

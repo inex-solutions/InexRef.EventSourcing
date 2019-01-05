@@ -20,6 +20,8 @@
 #endregion
 
 using InexRef.EventSourcing.Account.Contract.Public.Messages;
+using InexRef.EventSourcing.Account.Contract.Public.Messages.Commands;
+using InexRef.EventSourcing.Account.Contract.Public.Messages.Events;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Account.ReadModels;
 using InexRef.EventSourcing.Common.Container;

@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2019 INEX Solutions Ltd
@@ -22,16 +22,15 @@
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Account.Contract.Public.Messages
+namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Commands
 {
-    public class CreateAccountCommand : ICommand<AccountId>
+    public class ResetBalanceCommand : ICommand<AccountId>
     {
         public MessageMetadata MessageMetadata { get; }
 
         public AccountId Id { get; }
 
-
-        public CreateAccountCommand(MessageMetadata messageMetadata, AccountId id)
+        public ResetBalanceCommand(MessageMetadata messageMetadata, AccountId id)
         {
             MessageMetadata = messageMetadata;
             Id = id;
@@ -39,7 +38,7 @@ namespace InexRef.EventSourcing.Account.Contract.Public.Messages
 
         public override string ToString()
         {
-            return $"CreateAccountCommand: messageMetadata={MessageMetadata}, id={Id}";
+            return $"ResetBalanceCommand: messageMetadata={MessageMetadata}, id={Id}";
         }
     }
 }

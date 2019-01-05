@@ -23,20 +23,20 @@ using System;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Account.Contract.Public.Messages
+namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Events
 {
-    public class AccountInitialisedEvent : Event<Guid>
+    public class AmountAddedEvent : Event<Guid>
     {
-        public AccountId AccountId { get; }
+        public MonetaryAmount Amount { get; }
 
-        public AccountInitialisedEvent(MessageMetadata messageMetadata, Guid id, AccountId accountId) : base(messageMetadata, id)
+        public AmountAddedEvent(MessageMetadata messageMetadata, Guid id, MonetaryAmount amount) : base(messageMetadata, id)
         {
-            AccountId = accountId;
+            Amount = amount;
         }
 
         public override string ToString()
         {
-            return $"AccountInitialisedEvent: MessageMetadata={MessageMetadata}, Id={Id}, AccountId={AccountId}, Version={Version}";
+            return $"AmountAddedEvent: MessageMetadata={MessageMetadata}, Id={Id}, Amount={Amount}, Version={Version}";
         }
     }
 }

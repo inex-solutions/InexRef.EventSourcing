@@ -1,7 +1,6 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AdditionalFilesToIncludeForSolution>
-      <Value>*.config.xml</Value>
       <Value>*.config.json</Value>
     </AdditionalFilesToIncludeForSolution>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>

@@ -19,7 +19,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using InexRef.EventSourcing.Contracts.Bus;
@@ -27,7 +26,6 @@ using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using InexRef.EventSourcing.Tests.Domain;
 using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
 using Shouldly;
 
 namespace InexRef.EventSourcing.Tests
@@ -94,30 +92,5 @@ namespace InexRef.EventSourcing.Tests
 
     public class FooBar : IFoo, IBar
     {
-    }
-
-    [TestFixture]
-    public class Scoping
-    {
-        [Test]
-        public void WhenRegisteredAsForwardedSingleton_InstancesAreTheSame()
-        {
-            var services = new ServiceCollection();
-
-            services.AddScoped<FooBar>(); // We must explicitly register Foo
-            services.AddScoped<IFoo>(x => x.GetRequiredService<FooBar>()); // Forward requests to Foo
-            services.AddScoped<IBar>(x => x.GetRequiredService<FooBar>()); // Forward requests to Foo
-
-            IServiceProvider provider = services.BuildServiceProvider();
-
-            provider = provider.CreateScope().ServiceProvider;
-
-            var foo1 = provider.GetService<FooBar>(); // An instance of Foo
-            var foo2 = provider.GetService<IFoo>(); // An instance of Foo
-            var foo3 = provider.GetService<IBar>(); // An instance of Foo
-
-            Assert.AreSame(foo1, foo2); // PASSES
-            Assert.AreSame(foo1, foo3); // PASSES
-        }
     }
 }

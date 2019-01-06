@@ -38,9 +38,9 @@ namespace InexRef.EventSourcing.Account.Contract.Public.Types
 
         public static explicit operator AccountId(string idValue) => Parse(idValue);
 
-        public static AccountId Parse(string idValue) => new AccountId(idValue);
-
         public static implicit operator string(AccountId accountId) => accountId._accountId;
+
+        public static AccountId Parse(string idValue) => new AccountId(idValue);
 
         public static AccountId Null => new AccountId(string.Empty);
 

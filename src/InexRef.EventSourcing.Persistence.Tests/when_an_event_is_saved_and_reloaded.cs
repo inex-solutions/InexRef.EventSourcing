@@ -56,7 +56,7 @@ namespace InexRef.EventSourcing.Persistence.Tests
 
             var container = containerBuilder.BuildServiceProvider();
 
-            EventStore = container.GetService<IEventStore<Guid>>();
+            EventStore = container.GetRequiredService<IEventStore<Guid>>();
         }
 
         protected override void Given()

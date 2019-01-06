@@ -21,7 +21,6 @@
 
 using System;
 using System.Threading.Tasks;
-using InexRef.EventSourcing.Account.Contract.Public.Messages;
 using InexRef.EventSourcing.Account.Contract.Public.Messages.Events;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Contracts.Messages;
@@ -42,7 +41,6 @@ namespace InexRef.EventSourcing.Account.Domain
 
             RegisterEventHandler<AccountInitialisedEvent>(HandleEvent);
             RegisterEventHandler<AmountAddedEvent>(HandleEvent);
-            RegisterEventHandler<BalanceResetEvent>(HandleEvent);
         }
 
         public AccountId AccountId { get; private set; }
@@ -61,11 +59,6 @@ namespace InexRef.EventSourcing.Account.Domain
             await Apply(new AmountAddedEvent(messageMetadata, Id, amount));
         }
 
-        public async Task ResetBalance(MessageMetadata messageMetadata)
-        {
-            await Apply(new BalanceResetEvent(messageMetadata, Id));
-        }
-
         private async Task HandleEvent(AccountInitialisedEvent @event)
         {
             Id = @event.Id;
@@ -77,12 +70,6 @@ namespace InexRef.EventSourcing.Account.Domain
         {
             Balance = _calculator.AddToBalance(Balance, @event.Amount);
             await Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event),  Id, AccountId, Balance));
-        }
-
-        private async Task HandleEvent(BalanceResetEvent @event)
-        {
-            Balance = Balance.Zero;
-            await Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event), Id, AccountId, Balance));
         }
     }
 }

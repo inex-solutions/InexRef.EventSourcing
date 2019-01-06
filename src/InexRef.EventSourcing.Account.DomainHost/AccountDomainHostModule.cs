@@ -19,7 +19,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using InexRef.EventSourcing.Account.Contract.Public.Messages;
 using InexRef.EventSourcing.Account.Contract.Public.Messages.Commands;
 using InexRef.EventSourcing.Account.Contract.Public.Messages.Events;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
@@ -40,11 +39,11 @@ namespace InexRef.EventSourcing.Account.DomainHost
                 .AddSingleton<IHandle<BalanceUpdatedEvent>>(provider => provider.GetRequiredService<BalanceReadModel>())
                 .AddSingleton<IHandle<AccountInitialisedEvent>>(provider => provider.GetRequiredService<BalanceReadModel>());
 
+            //RJL: below is wrong - no need for chaining - they are single use - also check same for counter handlers
             containerBuilder
                 .AddScoped<AccountDomainHandlers>()
                 .AddScoped<IHandle<CreateAccountCommand>>(provider => provider.GetRequiredService<AccountDomainHandlers>())
-                .AddScoped<IHandle<AddAmountCommand>>(provider => provider.GetRequiredService<AccountDomainHandlers>())
-                .AddScoped<IHandle<ResetBalanceCommand>>(provider => provider.GetRequiredService<AccountDomainHandlers>());
+                .AddScoped<IHandle<AddAmountCommand>>(provider => provider.GetRequiredService<AccountDomainHandlers>());
 
             containerBuilder.AddTransient<ISqlParameterCreator<AccountId>, AccountIdSqlParameterCreator>();
         }

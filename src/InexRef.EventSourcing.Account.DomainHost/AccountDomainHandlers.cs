@@ -21,7 +21,6 @@
 
 using System;
 using System.Threading.Tasks;
-using InexRef.EventSourcing.Account.Contract.Public.Messages;
 using InexRef.EventSourcing.Account.Contract.Public.Messages.Commands;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Account.Domain;
@@ -31,7 +30,7 @@ using InexRef.EventSourcing.Contracts.Persistence;
 
 namespace InexRef.EventSourcing.Account.DomainHost
 {
-    public class AccountDomainHandlers : IHandle<CreateAccountCommand>, IHandle<AddAmountCommand>, IHandle<ResetBalanceCommand>
+    public class AccountDomainHandlers : IHandle<CreateAccountCommand>, IHandle<AddAmountCommand>//, IHandle<ResetBalanceCommand>
     {
         private readonly INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId> _naturalKeyDrivenAggregateRepository;
 
@@ -72,19 +71,19 @@ namespace InexRef.EventSourcing.Account.DomainHost
             }
         }
 
-        public async Task Handle(ResetBalanceCommand command)
-        {
-            try
-            {
-                var item = await _naturalKeyDrivenAggregateRepository.GetByNaturalKey(command.Id);
-                await item.ResetBalance(MessageMetadata.CreateFromMessage(command));
-                await _naturalKeyDrivenAggregateRepository.Save(item);
-            }
-            catch
-            {
-                Console.WriteLine($"Exception while handling {command}");
-                throw;
-            }
-        }
+        //public async Task Handle(ResetBalanceCommand command)
+        //{
+        //    try
+        //    {
+        //        var item = await _naturalKeyDrivenAggregateRepository.GetByNaturalKey(command.Id);
+        //        await item.ResetBalance(MessageMetadata.CreateFromMessage(command));
+        //        await _naturalKeyDrivenAggregateRepository.Save(item);
+        //    }
+        //    catch
+        //    {
+        //        Console.WriteLine($"Exception while handling {command}");
+        //        throw;
+        //    }
+        //}
     }
 }

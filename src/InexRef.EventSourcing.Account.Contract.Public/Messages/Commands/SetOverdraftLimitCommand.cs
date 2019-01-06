@@ -19,30 +19,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Threading.Tasks;
-using InexRef.EventSourcing.Account.Contract.Public.Messages.Commands;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
-using Shouldly;
 
-namespace InexRef.EventSourcing.Account.DomainHost.Tests
+namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Commands
 {
-    public class when_two_pounds_is_added_to_an_existing_but_empty_account : AccountDomainTestBase
+    public class SetOverdraftLimitCommand : ICommand<AccountId>
     {
-        public when_two_pounds_is_added_to_an_existing_but_empty_account(string hostingFlavour) : base(hostingFlavour) { }
+        public MessageMetadata MessageMetadata { get; }
 
-        protected override async Task Given()
+        public AccountId Id { get; }
+
+        public Balance NewLimit { get; }
+
+        public SetOverdraftLimitCommand(MessageMetadata messageMetadata, AccountId id, Balance newLimit)
         {
-            await Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
+            MessageMetadata = messageMetadata;
+            Id = id;
+            NewLimit = newLimit;
         }
 
-        protected override async Task When() => await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
-
-        [Then]
-        public async Task the_account_balance_is_two_pounds() => (await Repository.GetByNaturalKey(NaturalId)).Balance.ShouldBe(Balance.FromDecimal(2.0M));
-
-        [Then]
-        public void the_account_balance_on_the_read_model_is_two_pounds() => BalanceReadModel[NaturalId].ShouldBe(2.00M);
+        public override string ToString()
+        {
+            return $"AddAmountCommand: MessageMetadata={MessageMetadata}, Id={Id}, NewLimit={NewLimit}";
+        }
     }
 }

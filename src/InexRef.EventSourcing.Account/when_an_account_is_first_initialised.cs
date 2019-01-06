@@ -20,8 +20,8 @@
 #endregion
 
 using System.Threading.Tasks;
-using InexRef.EventSourcing.Account.Contract.Public.Messages;
 using InexRef.EventSourcing.Account.Contract.Public.Messages.Commands;
+using InexRef.EventSourcing.Account.Contract.Public.Messages.Events;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
@@ -40,5 +40,9 @@ namespace InexRef.EventSourcing.Account.DomainHost.Tests
 
         [Then]
         public void the_account_balance_on_the_read_model_is_zero() => BalanceReadModel[NaturalId].ShouldBe(0.00M);
+
+        [Then]
+        public void an_account_initialised_event_was_sent()
+            => RecordedMessages.RecordedEvents.ShouldContainOnlyItemsWithTypes(typeof(AccountInitialisedEvent));
     }
 }

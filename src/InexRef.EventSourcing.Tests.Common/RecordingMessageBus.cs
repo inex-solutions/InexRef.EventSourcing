@@ -19,30 +19,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using System.Threading.Tasks;
-using InexRef.EventSourcing.Account.Contract.Public.Messages.Commands;
-using InexRef.EventSourcing.Account.Contract.Public.Types;
+using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
-using Shouldly;
 
-namespace InexRef.EventSourcing.Account.DomainHost.Tests
+namespace InexRef.EventSourcing.Tests.Common
 {
-    public class when_two_pounds_is_added_to_an_existing_but_empty_account : AccountDomainTestBase
+    public class RecordingMessageBus : IBus
     {
-        public when_two_pounds_is_added_to_an_existing_but_empty_account(string hostingFlavour) : base(hostingFlavour) { }
+        private readonly IBus _innerBus;
+        private readonly Action<IMessage> _onMessage;
 
-        protected override async Task Given()
+        public RecordingMessageBus(IBus innerBus, Action<IMessage> onMessage)
         {
-            await Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
+            _innerBus = innerBus;
+            _onMessage = onMessage;
         }
 
-        protected override async Task When() => await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
+        public async Task Send(ICommand command)
+        {
+            _onMessage(command);
+            await _innerBus.Send(command);
+        }
 
-        [Then]
-        public async Task the_account_balance_is_two_pounds() => (await Repository.GetByNaturalKey(NaturalId)).Balance.ShouldBe(Balance.FromDecimal(2.0M));
-
-        [Then]
-        public void the_account_balance_on_the_read_model_is_two_pounds() => BalanceReadModel[NaturalId].ShouldBe(2.00M);
+        public async Task PublishEvent(IEvent @event)
+        {
+            _onMessage(@event);
+            await _innerBus.PublishEvent(@event);
+        }
     }
 }

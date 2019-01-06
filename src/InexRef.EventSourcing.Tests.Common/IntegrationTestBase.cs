@@ -43,6 +43,8 @@ namespace InexRef.EventSourcing.Tests.Common
 
         protected INaturalKeyDrivenAggregateRepository<TAggregate, Guid, TNaturalKey> Repository { get; private set; }
 
+        protected IRecordedBusMessages RecordedMessages { get; private set; }
+
         protected IntegrationTestBase(string flavour)
         {
             _flavour = flavour;
@@ -50,16 +52,20 @@ namespace InexRef.EventSourcing.Tests.Common
 
         protected override void SetUp()
         {
+            RecordedMessages = new MessageRecorder();
+
             var serviceCollection = new ServiceCollection();
             TestEnvironmentSetup.ConfigureContainerForHostEnvironmentFlavour(serviceCollection, _flavour);
 
             serviceCollection.ConfigureFrom<EventSourcingCoreModule>();
             serviceCollection.AddTransient<TAggregate>();
 
+            serviceCollection.AddDecorator<IBus>(bus => new RecordingMessageBus(bus, RecordedMessages.OnMessage));
+
             RegisterWithContainerBuilder(serviceCollection);
 
             _container = serviceCollection.BuildServiceProvider();
-
+            
             ResolveFromContainer(_container);
 
             Subject = _container.GetRequiredService<IBus>();

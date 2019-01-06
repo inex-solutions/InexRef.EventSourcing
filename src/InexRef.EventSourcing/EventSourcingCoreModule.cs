@@ -39,6 +39,7 @@ namespace InexRef.EventSourcing
         protected override void Load(IServiceCollection builder)
         {
             builder.AddTransient<IBus, InMemoryBus>();
+
             builder.AddTransient<IAggregateRootFactory, AggregateRootFactory>();
             builder.AddTransient<IAggregateIdCreator<Guid>, GuidAggregateIdCreator>();
             builder.AddTransient(typeof(IAggregateRepository<,>), typeof(AggregateRepository<,>));

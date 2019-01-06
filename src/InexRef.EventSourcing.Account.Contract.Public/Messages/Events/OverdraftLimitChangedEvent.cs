@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2019 INEX Solutions Ltd
@@ -19,30 +19,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Threading.Tasks;
-using InexRef.EventSourcing.Account.Contract.Public.Messages.Commands;
+using System;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Contracts.Messages;
-using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
-using Shouldly;
 
-namespace InexRef.EventSourcing.Account.DomainHost.Tests
+namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Events
 {
-    public class when_two_pounds_is_added_to_an_existing_but_empty_account : AccountDomainTestBase
+    public class OverdraftLimitChangedEvent : Event<Guid>
     {
-        public when_two_pounds_is_added_to_an_existing_but_empty_account(string hostingFlavour) : base(hostingFlavour) { }
+        public Balance NewOverdraftLimit { get; }
 
-        protected override async Task Given()
+        public OverdraftLimitChangedEvent(MessageMetadata messageMetadata, Guid id, Balance newOverdraftLimit) : base(messageMetadata, id)
         {
-            await Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
+            NewOverdraftLimit = newOverdraftLimit;
         }
 
-        protected override async Task When() => await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
-
-        [Then]
-        public async Task the_account_balance_is_two_pounds() => (await Repository.GetByNaturalKey(NaturalId)).Balance.ShouldBe(Balance.FromDecimal(2.0M));
-
-        [Then]
-        public void the_account_balance_on_the_read_model_is_two_pounds() => BalanceReadModel[NaturalId].ShouldBe(2.00M);
+        public override string ToString()
+        {
+            return $"AmountAddedEvent: MessageMetadata={MessageMetadata}, Id={Id}, NewOverdraftLimit={NewOverdraftLimit}, Version={Version}";
+        }
     }
 }

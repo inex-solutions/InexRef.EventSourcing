@@ -19,26 +19,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using InexRef.EventSourcing.Account.Contract.Public.Types;
+using System.Collections.Generic;
+using System.Linq;
 using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Commands
+namespace InexRef.EventSourcing.Tests.Common
 {
-    public class ResetBalanceCommand : ICommand<AccountId>
+    public class MessageRecorder : IRecordedBusMessages
     {
-        public MessageMetadata MessageMetadata { get; }
+        private readonly List<IMessage> _recordedMessages = new List<IMessage>();
 
-        public AccountId Id { get; }
+        public IEnumerable<IMessage> AllRecordedMessages => _recordedMessages.ToArray();
 
-        public ResetBalanceCommand(MessageMetadata messageMetadata, AccountId id)
+        public IEnumerable<ICommand> RecordedCommands => _recordedMessages.OfType<ICommand>();
+
+        public IEnumerable<IEvent> RecordedEvents => _recordedMessages.OfType<IEvent>();
+
+        public void OnMessage(IMessage message)
         {
-            MessageMetadata = messageMetadata;
-            Id = id;
-        }
-
-        public override string ToString()
-        {
-            return $"ResetBalanceCommand: messageMetadata={MessageMetadata}, id={Id}";
+            _recordedMessages.Add(message);
         }
     }
 }

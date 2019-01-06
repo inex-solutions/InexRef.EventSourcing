@@ -10,4 +10,8 @@
     <ProjectReference Include="..\InexRef.EventSourcing\InexRef.EventSourcing.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="InternalEvents\" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,4 @@
-#region Copyright & License
+﻿#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2019 INEX Solutions Ltd
@@ -19,21 +19,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+using System.Collections.Generic;
 using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Events
+namespace InexRef.EventSourcing.Tests.Common
 {
-    public class BalanceResetEvent : Event<Guid>
+    public interface IRecordedBusMessages
     {
-        public BalanceResetEvent(MessageMetadata messageMetadata, Guid id) : base(messageMetadata, id)
-        {
-        }
+        IEnumerable<IMessage> AllRecordedMessages { get; }
 
-        public override string ToString()
-        {
-            return $"BalanceResetEvent: MessageMetadata={MessageMetadata}, Id={Id}, Version={Version}";
+        IEnumerable<ICommand> RecordedCommands { get; }
 
-        }
+        IEnumerable<IEvent> RecordedEvents { get; }
+
+        void OnMessage(IMessage message);
     }
 }

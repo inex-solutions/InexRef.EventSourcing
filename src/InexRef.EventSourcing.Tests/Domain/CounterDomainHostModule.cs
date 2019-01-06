@@ -29,8 +29,6 @@ namespace InexRef.EventSourcing.Tests.Domain
     {
         protected override void Load(IServiceCollection containerBuilder)
         {
-            containerBuilder.ConfigureFrom<EventSourcingCoreModule>();
-
             containerBuilder.AddTransient<CounterDomainTestHandlers>();
             containerBuilder
                 .AddTransient<IHandle<InitialiseCounterCommand>>(container => container.GetRequiredService<CounterDomainTestHandlers>())

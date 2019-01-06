@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using InexRef.EventSourcing.Common;
@@ -41,6 +42,22 @@ namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
         public static void ShouldContainOnly<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
         {
             var comparisonResult = actual.CheckContainsOnly(expected);
+
+            if (!comparisonResult.CollectionsMatch)
+            {
+                var msg =
+                    $"Expected list to contain: {comparisonResult.ExpectedItems.ToBulletList()}\n" +
+                    $"but contained: {comparisonResult.ActualItems.ToBulletList()}\n" +
+                    $"Missing: {comparisonResult.MissingItems.ToBulletList()}\n" +
+                    $"Unexpected: {comparisonResult.UnexpectedItems.ToBulletList()}";
+
+                throw new SpecificationException(msg);
+            }
+        }
+
+        public static void ShouldContainOnlyItemsWithTypes(this IEnumerable<object> actual, params Type[] expected)
+        {
+            var comparisonResult = actual.Select(item => item.GetType()).CheckContainsOnly(expected);
 
             if (!comparisonResult.CollectionsMatch)
             {

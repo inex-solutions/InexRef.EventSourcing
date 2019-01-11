@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using InexRef.EventSourcing.Contracts;
 using Newtonsoft.Json;
 
@@ -27,12 +28,20 @@ namespace InexRef.EventSourcing.Account.Contract.Public.Types
     public class MonetaryAmount : ValueObject<MonetaryAmount>
     {
         [JsonConstructor]
-        private MonetaryAmount(decimal amount)
+        private MonetaryAmount(decimal value)
         {
-            Amount = amount;
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(value),
+                    $"{nameof(value)} argument cannot be less than zero -  {GetType().Name} " +
+                    $"can only represent a zero or positive monetary amount.");
+            }
+
+            Value = value;
         }
 
-        public decimal Amount { get; }
+        public decimal Value { get; }
 
         public static MonetaryAmount Create(decimal amount)
             => new MonetaryAmount(amount);

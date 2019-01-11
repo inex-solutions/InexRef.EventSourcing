@@ -19,29 +19,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Commands
+namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Events
 {
-    public class AddAmountCommand : ICommand<AccountId>
+    public class UnauthorisedOverdraftAccessed : Event<Guid>
     {
-        public MessageMetadata MessageMetadata { get; }
+        public Balance Balance { get; }
 
-        public AccountId Id { get; }
-
-        public MonetaryAmount Amount { get; }
-
-        public AddAmountCommand(MessageMetadata messageMetadata, AccountId id, MonetaryAmount amount)
+        public UnauthorisedOverdraftAccessed(MessageMetadata messageMetadata, Guid id, Balance balance) : base(messageMetadata, id)
         {
-            MessageMetadata = messageMetadata;
-            Id = id;
-            Amount = amount;
+            Balance = balance;
         }
 
         public override string ToString()
         {
-            return $"AddAmountCommand: messageMetadata={MessageMetadata}, id={Id}, amount={Amount}";
+            return $"{GetType().Name}: MessageMetadata={MessageMetadata}, Id={Id}, Balance={Balance}, Version={Version}";
         }
     }
 }

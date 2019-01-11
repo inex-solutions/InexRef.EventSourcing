@@ -19,30 +19,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Threading.Tasks;
-using InexRef.EventSourcing.Account.Contract.Public.Messages.Commands;
+using System;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
-using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
 
-namespace InexRef.EventSourcing.Account.DomainHost.Tests
+namespace InexRef.EventSourcing.Account.DomainHost.Tests.ValueTypes
 {
-    public class when_two_pounds_is_added_to_an_existing_but_empty_account : AccountDomainTestBase
+    public class MonetaryAmountTests : SpecificationBase
     {
-        public when_two_pounds_is_added_to_an_existing_but_empty_account(string hostingFlavour) : base(hostingFlavour) { }
-
-        protected override async Task Given()
-        {
-            await Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
-        }
-
-        protected override async Task When() => await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
+        [Then]
+        public void a_MonetaryAmount_created_from_zero_decimal_should_have_a_value_of_zero() 
+            => MonetaryAmount.Create(0).Value.ShouldBe(0);
 
         [Then]
-        public async Task the_account_balance_is_two_pounds() => (await Repository.GetByNaturalKey(NaturalId)).Balance.ShouldBe(Balance.FromDecimal(2.0M));
+        public void a_MonetaryAmount_created_from_five_decimal_should_have_a_value_of_five()
+            => MonetaryAmount.Create(5).Value.ShouldBe(5);
 
         [Then]
-        public void the_account_balance_on_the_read_model_is_two_pounds() => BalanceReadModel[NaturalId].ShouldBe(2.00M);
+        public void a_MonetaryAmount_created_from_a_negative_number_throws_an_ArgumentOutOfRangeException()
+            => Catch.Exception(() => MonetaryAmount.Create(-1)).ShouldBeOfType<ArgumentOutOfRangeException>();
     }
 }

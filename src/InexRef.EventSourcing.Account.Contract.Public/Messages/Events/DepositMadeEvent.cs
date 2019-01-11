@@ -25,18 +25,18 @@ using InexRef.EventSourcing.Contracts.Messages;
 
 namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Events
 {
-    public class AmountAddedEvent : Event<Guid>
+    public class DepositMadeEvent : Event<Guid>
     {
         public MonetaryAmount Amount { get; }
 
-        public AmountAddedEvent(MessageMetadata messageMetadata, Guid id, MonetaryAmount amount) : base(messageMetadata, id)
+        public DepositMadeEvent(MessageMetadata messageMetadata, Guid id, MonetaryAmount amount) : base(messageMetadata, id)
         {
             Amount = amount;
         }
 
         public override string ToString()
         {
-            return $"AmountAddedEvent: MessageMetadata={MessageMetadata}, Id={Id}, Amount={Amount}, Version={Version}";
+            return $"DepositMadeEvent: MessageMetadata={MessageMetadata}, Id={Id}, Amount={Amount}, Version={Version}";
         }
     }
 }

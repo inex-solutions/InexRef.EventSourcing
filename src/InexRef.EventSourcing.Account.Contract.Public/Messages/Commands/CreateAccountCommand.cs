@@ -39,7 +39,7 @@ namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Commands
 
         public override string ToString()
         {
-            return $"CreateAccountCommand: messageMetadata={MessageMetadata}, id={Id}";
+            return $"{GetType().Name}: messageMetadata={MessageMetadata}, id={Id}";
         }
     }
 }

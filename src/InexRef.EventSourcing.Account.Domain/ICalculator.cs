@@ -26,5 +26,7 @@ namespace InexRef.EventSourcing.Account.Domain
     public interface ICalculator
     {
         Balance AddToBalance(Balance x, MonetaryAmount y);
+
+        Balance SubtractFromToBalance(Balance x, MonetaryAmount y);
     }
 }

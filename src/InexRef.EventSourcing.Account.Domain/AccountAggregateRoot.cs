@@ -40,7 +40,8 @@ namespace InexRef.EventSourcing.Account.Domain
             AccountId = AccountId.Null;
 
             RegisterEventHandler<AccountInitialisedEvent>(HandleEvent);
-            RegisterEventHandler<AmountAddedEvent>(HandleEvent);
+            RegisterEventHandler<DepositMadeEvent>(HandleEvent);
+            RegisterEventHandler<WithdrawalMadeEvent>(HandleEvent);
         }
 
         public AccountId AccountId { get; private set; }
@@ -54,9 +55,14 @@ namespace InexRef.EventSourcing.Account.Domain
             await Apply(new AccountInitialisedEvent(messageMetadata, id, accountId));
         }
 
-        public async Task AddAmount(MessageMetadata messageMetadata, MonetaryAmount amount)
+        public async Task MakeDeposit(MessageMetadata messageMetadata, MonetaryAmount amount)
         {
-            await Apply(new AmountAddedEvent(messageMetadata, Id, amount));
+            await Apply(new DepositMadeEvent(messageMetadata, Id, amount));
+        }
+
+        public async Task MakeWithdrawal(MessageMetadata messageMetadata, MonetaryAmount amount)
+        {
+            await Apply(new WithdrawalMadeEvent(messageMetadata, Id, amount));
         }
 
         private async Task HandleEvent(AccountInitialisedEvent @event)
@@ -66,10 +72,24 @@ namespace InexRef.EventSourcing.Account.Domain
             await Task.CompletedTask;
         }
 
-        private async Task HandleEvent(AmountAddedEvent @event)
+        private async Task HandleEvent(DepositMadeEvent @event)
         {
             Balance = _calculator.AddToBalance(Balance, @event.Amount);
-            await Apply(new BalanceUpdatedEvent(MessageMetadata.CreateFromMessage(@event),  Id, AccountId, Balance));
+            await Apply(new BalanceUpdatedEvent(OperationContext.CreateNewMessageMetadata(), Id, AccountId, Balance));
+        }
+
+        private async Task HandleEvent(WithdrawalMadeEvent @event)
+        {
+            Balance = _calculator.SubtractFromToBalance(Balance, @event.Amount);
+            if (Balance.Value < 0)
+            {
+                await Apply(new UnauthorisedOverdraftAccessed(
+                    OperationContext.CreateNewMessageMetadata(), 
+                    Id,
+                    Balance));
+            }
+
+            await Apply(new BalanceUpdatedEvent(OperationContext.CreateNewMessageMetadata(), Id, AccountId, Balance));
         }
     }
 }

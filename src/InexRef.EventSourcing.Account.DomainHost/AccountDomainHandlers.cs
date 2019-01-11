@@ -24,25 +24,35 @@ using System.Threading.Tasks;
 using InexRef.EventSourcing.Account.Contract.Public.Messages.Commands;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Account.Domain;
+using InexRef.EventSourcing.Common;
 using InexRef.EventSourcing.Contracts.Bus;
 using InexRef.EventSourcing.Contracts.Messages;
+using InexRef.EventSourcing.Contracts.OperationContext;
 using InexRef.EventSourcing.Contracts.Persistence;
 
 namespace InexRef.EventSourcing.Account.DomainHost
 {
-    public class AccountDomainHandlers : IHandle<CreateAccountCommand>, IHandle<AddAmountCommand>//, IHandle<ResetBalanceCommand>
+    public class AccountDomainHandlers : IHandle<CreateAccountCommand>, IHandle<MakeDepositCommand>, IHandle<MakeWithdrawalCommand>
     {
         private readonly INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId> _naturalKeyDrivenAggregateRepository;
+        private readonly IUpdateOperationContext _operationContextUpdater;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
-        public AccountDomainHandlers(INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId> naturalKeyDrivenAggregateRepository)
+        public AccountDomainHandlers(
+            INaturalKeyDrivenAggregateRepository<AccountAggregateRoot, Guid, AccountId> naturalKeyDrivenAggregateRepository,
+            IUpdateOperationContext operationContextUpdater,
+            IDateTimeProvider dateTimeProvider)
         {
             _naturalKeyDrivenAggregateRepository = naturalKeyDrivenAggregateRepository;
+            _operationContextUpdater = operationContextUpdater;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task Handle(CreateAccountCommand command)
         {
             try
             {
+                _operationContextUpdater.SetMessageMetadataOnOperationContext(command.MessageMetadata.SourceCorrelationId, _dateTimeProvider.GetUtcNow());
                 var item = await _naturalKeyDrivenAggregateRepository.CreateNewByNaturalKey(
                     naturalKey: command.Id,
                     onCreateNew: async newItem => await newItem.InitialiseAccount(MessageMetadata.CreateFromMessage(command), newItem.Id,
@@ -56,12 +66,29 @@ namespace InexRef.EventSourcing.Account.DomainHost
             }
         }
 
-        public async Task Handle(AddAmountCommand command)
+        public async Task Handle(MakeDepositCommand command)
         {
             try
             {
+                _operationContextUpdater.SetMessageMetadataOnOperationContext(command.MessageMetadata.SourceCorrelationId, _dateTimeProvider.GetUtcNow());
                 var item = await _naturalKeyDrivenAggregateRepository.GetByNaturalKey(command.Id);
-                await item.AddAmount(MessageMetadata.CreateFromMessage(command), command.Amount);
+                await item.MakeDeposit(MessageMetadata.CreateFromMessage(command), command.Amount);
+                await _naturalKeyDrivenAggregateRepository.Save(item);
+            }
+            catch
+            {
+                Console.WriteLine($"Exception while handling {command}");
+                throw;
+            }
+        }
+
+        public async Task Handle(MakeWithdrawalCommand command)
+        {
+            try
+            {
+                _operationContextUpdater.SetMessageMetadataOnOperationContext(command.MessageMetadata.SourceCorrelationId, _dateTimeProvider.GetUtcNow());
+                var item = await _naturalKeyDrivenAggregateRepository.GetByNaturalKey(command.Id);
+                await item.MakeWithdrawal(MessageMetadata.CreateFromMessage(command), command.Amount);
                 await _naturalKeyDrivenAggregateRepository.Save(item);
             }
             catch

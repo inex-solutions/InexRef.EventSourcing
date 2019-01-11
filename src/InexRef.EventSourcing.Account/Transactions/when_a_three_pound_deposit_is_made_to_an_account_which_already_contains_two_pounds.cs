@@ -21,38 +21,62 @@
 
 using System.Threading.Tasks;
 using InexRef.EventSourcing.Account.Contract.Public.Messages.Commands;
+using InexRef.EventSourcing.Account.Contract.Public.Messages.Events;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Contracts.Messages;
+using InexRef.EventSourcing.Tests.Common;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
 
-namespace InexRef.EventSourcing.Account.DomainHost.Tests
+namespace InexRef.EventSourcing.Account.DomainHost.Tests.Transactions
 {
-    public class when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds : AccountDomainTestBase
+    public class when_a_three_pound_deposit_is_made_to_an_account_which_already_contains_two_pounds : AccountDomainTestBase
     {
-        public when_two_pounds_is_added_to_a_new_account_followed_by_a_further_three_pounds(string hostingFlavour) : base(hostingFlavour) { }
+        private MakeDepositCommand _makeDepositCommand;
+
+        public when_a_three_pound_deposit_is_made_to_an_account_which_already_contains_two_pounds(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task Given()
         {
             await Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
-            await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
+            await Subject.Send(new MakeDepositCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
+            RecordedMessages.Clear();
         }
 
-        protected override async Task When() => await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(3.00M)));
+        protected override async Task When() 
+            => await Subject.Send(_makeDepositCommand = new MakeDepositCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(3.00M)));
 
         [Then]
         public async Task the_account_balance_is_five_pounds() 
             => (await Repository.GetByNaturalKey(NaturalId)).Balance.ShouldBe(Balance.FromDecimal(5.0M));
 
         [Then]
-        public async Task the_aggregate_version_is_at_least_3_being_the_previous_version_plus_the_add_amount_action() 
+        public async Task the_aggregate_version_is_at_least_3_being_the_previous_version_plus_the_deposit_action() 
             => (await Repository.GetByNaturalKey(NaturalId)).Version.ShouldBeGreaterThanOrEqualTo(3);
 
         [Then]
         public void the_account_balance_on_the_read_model_is_five_pounds() => BalanceReadModel[NaturalId].ShouldBe(5.00M);
 
         [Then]
-        public void the_version_on_the_read_model_is_at_least_3_being_the_previous_version_plus_the_add_amount_action() 
+        public void the_version_on_the_read_model_is_at_least_3_being_the_previous_version_plus_the_deposit_action() 
             => BalanceReadModel.GetVersion(NaturalId).ShouldBeGreaterThanOrEqualTo(3);
+
+        [Then]
+        public void only_two_event_were_sent_in_response_to_the_deposit_action()
+            => RecordedMessages.RecordedEvents.ShouldHaveACountOf(2);
+
+        [Then]
+        public void an_event_was_sent_indicating_the_deposit_of_three_pounds()
+            => RecordedMessages
+                .ContainsEvent<DepositMadeEvent>()
+                .GeneratedBy(_makeDepositCommand)
+                .Where(@event => @event.Amount == _makeDepositCommand.Amount);
+
+        [Then]
+        public void an_event_was_sent_indicating_the_balance_had_changed_to_five_pounds()
+            => RecordedMessages
+                .ContainsEvent<BalanceUpdatedEvent>()
+                .GeneratedBy(_makeDepositCommand)
+                .Where(@event => @event.Balance == Balance.FromDecimal(5));
     }
 }

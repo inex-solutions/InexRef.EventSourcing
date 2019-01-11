@@ -36,8 +36,8 @@ namespace InexRef.EventSourcing.Tests.Domain
         private readonly IUpdateOperationContext _operationContextUpdater;
 
         public CounterDomainTestHandlers(
-            IUpdateOperationContext operationContextUpdater,
             INaturalKeyDrivenAggregateRepository<CounterAggregateRoot, Guid, string> naturalKeyDrivenRepository,
+            IUpdateOperationContext operationContextUpdater,
             IDateTimeProvider dateTimeProvider)
         {
             _naturalKeyDrivenRepository = naturalKeyDrivenRepository;

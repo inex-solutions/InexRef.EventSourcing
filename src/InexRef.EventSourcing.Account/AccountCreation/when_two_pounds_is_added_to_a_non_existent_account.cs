@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2019 INEX Solutions Ltd
@@ -19,30 +19,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using InexRef.EventSourcing.Account.Contract.Public.Messages.Commands;
-using InexRef.EventSourcing.Account.Contract.Public.Messages.Events;
 using InexRef.EventSourcing.Account.Contract.Public.Types;
 using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
 
-namespace InexRef.EventSourcing.Account.DomainHost.Tests
+namespace InexRef.EventSourcing.Account.DomainHost.Tests.AccountCreation
 {
-    public class when_an_account_is_first_initialised : AccountDomainTestBase
+    public class when_two_pounds_is_added_to_a_non_existent_account : AccountDomainTestBase
     {
-        public when_an_account_is_first_initialised(string hostingFlavour) : base(hostingFlavour) { }
+        public when_two_pounds_is_added_to_a_non_existent_account(string hostingFlavour) : base(hostingFlavour) { }
 
-        protected override async Task When() => await Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
-
-        [Then]
-        public async Task the_account_balance_is_zero() => (await Repository.GetByNaturalKey(NaturalId)).Balance.ShouldBe(Balance.FromDecimal(0.0M));
-
-        [Then]
-        public void the_account_balance_on_the_read_model_is_zero() => BalanceReadModel[NaturalId].ShouldBe(0.00M);
+        protected override async Task When() 
+            => CaughtException = await Catch.AsyncException(() 
+                => Subject.Send(new MakeDepositCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M))));
 
         [Then]
-        public void an_account_initialised_event_was_sent()
-            => RecordedMessages.RecordedEvents.ShouldContainOnlyItemsWithTypes(typeof(AccountInitialisedEvent));
+        public void a_KeyNotFoundException_is_thrown()
+            => CaughtException.ShouldBeOfType<KeyNotFoundException>();
+
+        [Then]
+        public void no_events_were_sent()
+            => RecordedMessages.RecordedEvents.ShouldBeEmpty();
     }
 }

@@ -70,5 +70,33 @@ namespace InexRef.EventSourcing.Tests.Common.SpecificationFramework
                 throw new SpecificationException(msg);
             }
         }
+
+        public static void ShouldContain<TEnumerable, TItem>(this IEnumerable<TEnumerable> collection, Func<TItem, bool> criteria)
+            where TItem : TEnumerable
+        {
+            var list = collection.ToList();
+            var matchingTypes = list.OfType<TItem>();
+            var actualMatches = matchingTypes.Where(criteria);
+
+            if (!actualMatches.Any())
+            {
+                var msg = $"No items in the collection met the specified criteria.\nActual items were:\n{list.ToBulletList()}\n\n";
+                throw new SpecificationException(msg);
+            }
+        }
+
+        public static void ShouldContainItemWithType<T>(this IEnumerable<object> actual)
+        {
+            ShouldContainItemWithType(actual, typeof(T));
+        }
+
+        public static void ShouldContainItemWithType(this IEnumerable<object> actual, Type expected)
+        {
+            if (!actual.Any(evt => evt.GetType() == expected))
+            {
+                var msg = $"Expected list to contain: {expected.Namespace}, but didn't";
+                throw new SpecificationException(msg);
+            }
+        }
     }
 }

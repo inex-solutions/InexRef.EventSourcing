@@ -39,5 +39,10 @@ namespace InexRef.EventSourcing.Tests.Common
         {
             _recordedMessages.Add(message);
         }
+
+        public void Clear()
+        {
+            _recordedMessages.Clear();;
+        }
     }
 }

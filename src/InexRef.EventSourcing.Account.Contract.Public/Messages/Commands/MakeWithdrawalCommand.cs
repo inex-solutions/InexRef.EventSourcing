@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+#region Copyright & License
 // The MIT License (MIT)
 // 
 // Copyright 2017-2019 INEX Solutions Ltd
@@ -18,3 +18,30 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endregion
+
+using InexRef.EventSourcing.Account.Contract.Public.Types;
+using InexRef.EventSourcing.Contracts.Messages;
+
+namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Commands
+{
+    public class MakeWithdrawalCommand : ICommand<AccountId>
+    {
+        public MessageMetadata MessageMetadata { get; }
+
+        public AccountId Id { get; }
+
+        public MonetaryAmount Amount { get; }
+
+        public MakeWithdrawalCommand(MessageMetadata messageMetadata, AccountId id, MonetaryAmount amount)
+        {
+            MessageMetadata = messageMetadata;
+            Id = id;
+            Amount = amount;
+        }
+
+        public override string ToString()
+        {
+            return $"{GetType().Name}: messageMetadata={MessageMetadata}, id={Id}, amount={Amount}";
+        }
+    }
+}

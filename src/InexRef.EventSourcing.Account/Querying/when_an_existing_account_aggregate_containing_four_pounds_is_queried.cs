@@ -27,27 +27,38 @@ using InexRef.EventSourcing.Contracts.Messages;
 using InexRef.EventSourcing.Tests.Common.SpecificationFramework;
 using Shouldly;
 
-namespace InexRef.EventSourcing.Account.DomainHost.Tests
+namespace InexRef.EventSourcing.Account.DomainHost.Tests.Querying
 {
-    public class when_an_existing_account_aggregate_containing_four_pounds_is_reloaded : AccountDomainTestBase
+    public class when_an_existing_account_aggregate_containing_four_pounds_is_queried : AccountDomainTestBase
     {
         private AccountAggregateRoot Aggregate { get; set; }
 
-        public when_an_existing_account_aggregate_containing_four_pounds_is_reloaded(string hostingFlavour) : base(hostingFlavour) { }
+        public when_an_existing_account_aggregate_containing_four_pounds_is_queried(string hostingFlavour) : base(hostingFlavour) { }
 
         protected override async Task Given()
         {
             await Subject.Send(new CreateAccountCommand(MessageMetadata.CreateDefault(), NaturalId));
-            await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
-            await Subject.Send(new AddAmountCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
+            await Subject.Send(new MakeDepositCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
+            await Subject.Send(new MakeDepositCommand(MessageMetadata.CreateDefault(), NaturalId, MonetaryAmount.Create(2.00M)));
         }
 
-        protected override async Task When() => Aggregate = await Repository.GetByNaturalKey(NaturalId);
+        protected override async Task When() 
+            => Aggregate = await Repository.GetByNaturalKey(NaturalId);
 
         [Then]
-        public void the_reloaded_aggregate_has_a_balance_of_four_pounds() => Aggregate.Balance.ShouldBe(Balance.FromDecimal(4.0M));
+        public void the_aggregate_returned_from_the_repo_has_a_balance_of_four_pounds() 
+            => Aggregate.Balance.ShouldBe(Balance.FromDecimal(4.0M));
 
         [Then]
-        public void the_reloaded_aggregate_version_is_at_least_3_being_the_initial_version_plus_two_actions() => Aggregate.Version.ShouldBeGreaterThanOrEqualTo(3);
+        public void the_aggregate_returned_from_the_repo_has_a_version_is_at_least_3_being_the_initial_version_plus_two_actions() 
+            => Aggregate.Version.ShouldBeGreaterThanOrEqualTo(3);
+
+        [Then]
+        public void the_aggregate_returned_from_the_read_model_has_a_balance_of_four_pounds() =>
+            BalanceReadModel[NaturalId].ShouldBe(4M);
+
+        [Then]
+        public void the_aggregate_returned_from_the_rad_model_has_a_version_is_at_least_3_being_the_initial_version_plus_two_actions()
+            => BalanceReadModel.GetVersion(NaturalId).ShouldBeGreaterThanOrEqualTo(3);
     }
 }

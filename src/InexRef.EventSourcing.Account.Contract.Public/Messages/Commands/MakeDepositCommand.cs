@@ -20,20 +20,28 @@
 #endregion
 
 using InexRef.EventSourcing.Account.Contract.Public.Types;
+using InexRef.EventSourcing.Contracts.Messages;
 
-namespace InexRef.EventSourcing.Account.Domain
+namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Commands
 {
-    public class Calculator : ICalculator
+    public class MakeDepositCommand : ICommand<AccountId>
     {
-        public Balance AddToBalance(Balance x, MonetaryAmount y)
-        {
-            return x.AddDecimal(y.Value);
+        public MessageMetadata MessageMetadata { get; }
 
+        public AccountId Id { get; }
+
+        public MonetaryAmount Amount { get; }
+
+        public MakeDepositCommand(MessageMetadata messageMetadata, AccountId id, MonetaryAmount amount)
+        {
+            MessageMetadata = messageMetadata;
+            Id = id;
+            Amount = amount;
         }
 
-        public Balance SubtractFromToBalance(Balance x, MonetaryAmount y)
+        public override string ToString()
         {
-            return x.AddDecimal(-y.Value);
+            return $"{GetType().Name}: messageMetadata={MessageMetadata}, id={Id}, amount={Amount}";
         }
     }
 }

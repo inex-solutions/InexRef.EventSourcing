@@ -36,7 +36,7 @@ namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Events
 
         public override string ToString()
         {
-            return $"AmountAddedEvent: MessageMetadata={MessageMetadata}, Id={Id}, NewOverdraftLimit={NewOverdraftLimit}, Version={Version}";
+            return $"DepositMadeEvent: MessageMetadata={MessageMetadata}, Id={Id}, NewOverdraftLimit={NewOverdraftLimit}, Version={Version}";
         }
     }
 }

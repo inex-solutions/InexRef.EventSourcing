@@ -41,7 +41,7 @@ namespace InexRef.EventSourcing.Account.Contract.Public.Messages.Commands
 
         public override string ToString()
         {
-            return $"AddAmountCommand: MessageMetadata={MessageMetadata}, Id={Id}, NewLimit={NewLimit}";
+            return $"{GetType().Name}: MessageMetadata={MessageMetadata}, Id={Id}, NewLimit={NewLimit}";
         }
     }
 }

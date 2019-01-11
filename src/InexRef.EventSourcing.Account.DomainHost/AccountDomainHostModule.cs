@@ -39,11 +39,9 @@ namespace InexRef.EventSourcing.Account.DomainHost
                 .AddSingleton<IHandle<BalanceUpdatedEvent>>(provider => provider.GetRequiredService<BalanceReadModel>())
                 .AddSingleton<IHandle<AccountInitialisedEvent>>(provider => provider.GetRequiredService<BalanceReadModel>());
 
-            //RJL: below is wrong - no need for chaining - they are single use - also check same for counter handlers
-            containerBuilder
-                .AddScoped<AccountDomainHandlers>()
-                .AddScoped<IHandle<CreateAccountCommand>>(provider => provider.GetRequiredService<AccountDomainHandlers>())
-                .AddScoped<IHandle<AddAmountCommand>>(provider => provider.GetRequiredService<AccountDomainHandlers>());
+            containerBuilder.AddScoped<IHandle<CreateAccountCommand>, AccountDomainHandlers>();
+            containerBuilder.AddScoped<IHandle<MakeDepositCommand>, AccountDomainHandlers>();
+            containerBuilder.AddScoped<IHandle<MakeWithdrawalCommand>, AccountDomainHandlers>();
 
             containerBuilder.AddTransient<ISqlParameterCreator<AccountId>, AccountIdSqlParameterCreator>();
         }

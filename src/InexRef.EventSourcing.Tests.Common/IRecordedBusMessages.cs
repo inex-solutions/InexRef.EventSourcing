@@ -33,5 +33,7 @@ namespace InexRef.EventSourcing.Tests.Common
         IEnumerable<IEvent> RecordedEvents { get; }
 
         void OnMessage(IMessage message);
+
+        void Clear();
     }
 }

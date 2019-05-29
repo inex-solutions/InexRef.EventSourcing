@@ -1,4 +1,4 @@
-﻿#region Copyright & License
+﻿#region Copyright & Licence
 // The MIT License (MIT)
 // 
 // Copyright 2017-2019 INEX Solutions Ltd

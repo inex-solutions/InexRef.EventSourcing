@@ -22,7 +22,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
@@ -137,7 +137,7 @@ SELECT [Payload] FROM [dbo].[EventStore-{aggName}] WHERE [AggregateId] = @aggreg
 
                 using (var command = new SqlCommand(getLatestVersionSql, connection))
                 {
-                    command.Parameters.Add("@aggregateId", SqlDbTypeUtils.GetSqlDbType<TId>()).Value = id;
+                    command.Parameters.Add("@aggregateid", SqlDbTypeUtils.GetSqlDbType<TId>()).Value = id;
                     command.ExecuteNonQuery();
                 }
             }

@@ -29,7 +29,8 @@ namespace Rob.EventSourcing.Tests
     public class IdGenerator
     {
         private static int _count;
-        private readonly SynchronizedCollection<string> _generatedIds = new SynchronizedCollection<string>();
+        private readonly List<string> _generatedIds = new List<string>();
+        private readonly object _lock = new object();
         private readonly string _prefix;
 
         public IdGenerator(string prefix)
@@ -41,10 +42,22 @@ namespace Rob.EventSourcing.Tests
         {
             var count = Interlocked.Increment(ref _count);
             var id = $"{_prefix}-{DateTime.Now:yyyyMMddHHmmss}-{count:D2}-{Process.GetCurrentProcess().Id}-{Thread.CurrentThread.ManagedThreadId}";
-            _generatedIds.Add(id);
+            lock (_lock)
+            {
+                _generatedIds.Add(id);
+            }
             return id;
         }
 
-        public string this[int index] => _generatedIds[index];
+        public string this[int index]
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return _generatedIds[index];
+                }
+            }
+        }
     }
 }

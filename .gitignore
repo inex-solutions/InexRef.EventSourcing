@@ -238,3 +238,5 @@ src/NDependOut/
 *.ncrunchproject
 Referenced Assemblies/
 *.jfm
+
+.NCrunch*
